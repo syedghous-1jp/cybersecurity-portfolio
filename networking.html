@@ -1,163 +1,364 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Networking | Cybersecurity</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
+
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
   background:#020510;
   color:#d0e8f8;
   font-family:'Rajdhani',sans-serif;
+  overflow-x:hidden;
 }
 
 /* HEADER */
+
 header{
   text-align:center;
-  padding:2rem;
-  font-family:'Orbitron';
-  color:#00f0ff;
-  letter-spacing:5px;
-  font-size:22px;
+  padding:4rem 1rem 3rem;
 }
 
-/* GRID */
-.container{
-  max-width:1100px;
+header h1{
+  color:#00f0ff;
+  font-family:'Orbitron';
+  letter-spacing:6px;
+  font-size:42px;
+  margin-bottom:15px;
+  text-shadow:0 0 20px rgba(0,240,255,0.3);
+}
+
+header p{
+  color:#7cb6d8;
+  font-size:17px;
+  max-width:700px;
   margin:auto;
-  padding:2rem;
+  line-height:1.7;
+}
+
+/* CONTAINER */
+
+.container{
+  width:90%;
+  max-width:1200px;
+  margin:auto;
+  padding-bottom:5rem;
+
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
 }
 
 /* CARD */
+
 .card{
-  background:#0b1225;
+  background:linear-gradient(180deg,#09101f,#0c1730);
   border:1px solid rgba(0,240,255,0.15);
-  padding:1.5rem;
-  border-radius:12px;
-  transition:0.3s;
-  min-height:170px;
+  border-radius:18px;
+  padding:1.7rem;
+  transition:0.35s;
+  min-height:260px;
+
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:2px;
+  background:#00f0ff;
+  transition:0.5s;
+}
+
+.card:hover::before{
+  left:0;
 }
 
 .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 0 25px rgba(0,240,255,0.2);
+  transform:translateY(-8px);
+  border-color:#00f0ff66;
+  box-shadow:0 0 30px rgba(0,240,255,0.12);
 }
 
-h2{
+/* CARD TEXT */
+
+.card h2{
   color:#00f0ff;
   font-family:'Space Mono';
-  font-size:16px;
-  margin-bottom:10px;
+  font-size:19px;
+  margin-bottom:14px;
 }
 
-p{
-  font-size:14px;
-  color:#b7d7e8;
+.card p{
+  color:#bfdbea;
+  font-size:15px;
+  line-height:1.7;
 }
 
-/* BUTTON */
+/* BUTTONS */
+
+.buttons{
+  margin-top:25px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
 .btn{
-  margin-top:15px;
-  padding:8px 12px;
   border:1px solid #00f0ff;
-  background:transparent;
   color:#00f0ff;
-  font-size:12px;
-  cursor:pointer;
-  border-radius:6px;
-  transition:0.3s;
   text-decoration:none;
-  display:inline-block;
-  text-align:center;
+  padding:10px 18px;
+  border-radius:8px;
+  transition:0.3s;
+  font-size:14px;
+  font-weight:600;
 }
 
 .btn:hover{
   background:#00f0ff;
   color:#000;
-  box-shadow:0 0 15px #00f0ff66;
+  box-shadow:0 0 15px rgba(0,240,255,0.4);
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:2rem;
+  color:#6f9ab3;
+  font-size:14px;
+  border-top:1px solid rgba(0,240,255,0.08);
 }
 
 /* RESPONSIVE */
-@media(max-width:900px){
-  .container{
-    grid-template-columns:repeat(2, 1fr);
+
+@media(max-width:768px){
+
+  header h1{
+    font-size:30px;
+    letter-spacing:3px;
   }
+
+  header p{
+    font-size:15px;
+  }
+
 }
 
-@media(max-width:600px){
-  .container{
-    grid-template-columns:1fr;
-  }
-}
 </style>
 </head>
 
 <body>
 
 <header>
-NETWORKING NOTES
+
+  <h1>NETWORKING NOTES</h1>
+
+  <p>
+    Learn networking fundamentals, protocols, subnetting, DNS, IP addressing and cybersecurity networking concepts.
+  </p>
+
 </header>
 
 <div class="container">
 
+  <!-- OSI MODEL -->
+
   <div class="card">
+
     <div>
+
       <h2>OSI Model</h2>
-      <p>7 layers communication system.</p>
+
+      <p>
+        Learn all 7 layers of the OSI model and understand how data travels through networks.
+      </p>
+
     </div>
-    <a href="#" class="btn">Read More</a>
+
+    <div class="buttons">
+
+      <a href="OSI Model Presentation by Syed Ghous.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="OSI Model Presentation by Syed Ghous.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
+  <!-- TCP UDP -->
+
   <div class="card">
+
     <div>
+
       <h2>TCP vs UDP</h2>
-      <p>TCP reliable, UDP fast but no guarantee.</p>
+
+      <p>
+        Learn the differences between TCP and UDP protocols with practical examples and networking use cases.
+      </p>
+
     </div>
-    <a href="#" class="btn">Read More</a>
+
+    <div class="buttons">
+
+      <a href="TCP_vs_UDP_SG.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="TCP_vs_UDP_SG.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
+  <!-- IP ADDRESS -->
+
   <div class="card">
+
     <div>
+
       <h2>IP Addressing</h2>
-      <p>Device identification system in networks.</p>
+
+      <p>
+        Understand IPv4, IPv6 and how systems communicate using IP addresses in networks.
+      </p>
+
     </div>
-    <a href="#" class="btn">Read More</a>
+
+    <div class="buttons">
+
+      <a href="ip-address.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="ip-address.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <div>
-      <h2>Ports</h2>
-      <p>Communication endpoints like 80, 443, 22.</p>
-    </div>
-    <a href="#" class="btn">Read More</a>
-  </div>
+  <!-- PORTS -->
 
   <div class="card">
+
     <div>
+
+      <h2>Ports & Protocols</h2>
+
+      <p>
+        Learn important networking ports like 80, 443, 21, 22 and their real-world usage.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <a href="ports_notes.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="ports_notes.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- DNS -->
+
+  <div class="card">
+
+    <div>
+
       <h2>DNS</h2>
-      <p>Domain name → IP conversion system.</p>
+
+      <p>
+        Learn how DNS converts domain names into IP addresses and powers internet browsing.
+      </p>
+
     </div>
-    <a href="#" class="btn">Read More</a>
+
+    <div class="buttons">
+
+      <a href="DNS_Presentation_Note-SG.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="DNS_Presentation_Note-SG.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
+  <!-- SUBNETTING -->
+
   <div class="card">
+
     <div>
+
       <h2>Subnetting</h2>
-      <p>Network ko smaller parts me divide karna.</p>
+
+      <p>
+        Learn subnet masks, CIDR notation and how networks are divided efficiently.
+      </p>
+
     </div>
-    <a href="#" class="btn">Read More</a>
+
+    <div class="buttons">
+
+      <a href="Subnetting_Notes_.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Subnetting_Notes_.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
 </div>
 
+<footer>
+  © 2026 Syed Ghous | Cybersecurity Portfolio
+</footer>
+
 </body>
 </html>
+```
+
