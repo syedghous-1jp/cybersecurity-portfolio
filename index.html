@@ -377,6 +377,56 @@ canvas{contain:layout paint;}
   #cur,#cur-ring,#cur-dot{display:none!important;}
   body{cursor:auto!important;}
 }
+.terminal-box{
+margin-top:2rem;
+background:rgba(2,5,16,0.75);
+border:1px solid rgba(0,240,255,0.15);
+backdrop-filter:blur(12px);
+overflow:hidden;
+box-shadow:0 0 25px rgba(0,240,255,0.08);
+border-radius:20px;
+transition:0.4s ease;
+}
+
+.terminal-box:hover{
+transform:translateY(-6px);
+box-shadow:0 0 35px rgba(0,240,255,0.15);
+}
+
+.terminal-top{
+display:flex;
+align-items:center;
+gap:8px;
+padding:0.8rem 1rem;
+border-bottom:1px solid rgba(0,240,255,0.08);
+background:rgba(0,240,255,0.03);
+}
+
+.t-dot{
+width:8px;
+height:8px;
+border-radius:50%;
+}
+
+.red{background:#ff4d4d;}
+.yellow{background:#ffaa00;}
+.green{background:#00ff99;}
+
+.terminal-title{
+font-family:'Space Mono',monospace;
+font-size:0.6rem;
+letter-spacing:2px;
+color:#00f0ff;
+margin-left:8px;
+}
+
+.terminal-body{
+padding:1.4rem;
+font-family:'Space Mono',monospace;
+font-size:0.85rem;
+line-height:2;
+color:#d0e8f8;
+}
 </style>
 </head>
 <body>
