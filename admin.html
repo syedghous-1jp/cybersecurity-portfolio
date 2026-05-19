@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin | Syed Ghous Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#020510;color:#d0e8f8;font-family:'Space Mono',monospace;min-height:100vh;padding:2rem;}
+.wrap{max-width:900px;margin:0 auto;}
+h1{font-family:Orbitron,sans-serif;color:#00f0ff;font-size:1.4rem;margin-bottom:0.5rem;letter-spacing:2px;}
+.sub{color:#6a8fa8;font-size:0.65rem;margin-bottom:2rem;letter-spacing:2px;}
+.card{background:#080f20;border:1px solid #00f0ff1a;padding:1.5rem;margin-bottom:1.5rem;}
+label{display:block;font-size:0.55rem;color:#007a8a;letter-spacing:2px;text-transform:uppercase;margin-bottom:0.4rem;}
+input,textarea{width:100%;padding:0.8rem;background:#08101f;border:1px solid #00f0ff1a;color:#fff;font-family:inherit;font-size:0.75rem;margin-bottom:1rem;}
+textarea{min-height:80px;resize:vertical;}
+.btn{font-family:inherit;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;padding:0.7rem 1.4rem;border:1px solid #00f0ff;color:#00f0ff;background:transparent;cursor:pointer;margin-right:0.5rem;margin-top:0.3rem;}
+.btn:hover{background:#00f0ff;color:#020510;}
+.btn-danger{border-color:#ff6666;color:#ff8888;}
+.item{border:1px solid #0a2030;padding:1rem;margin-bottom:0.8rem;background:#050a18;}
+.item h3{font-family:Orbitron,sans-serif;font-size:0.75rem;color:#00f0ff;margin-bottom:0.4rem;}
+.item p{font-size:0.7rem;color:#6a8fa8;line-height:1.7;}
+.hidden{display:none;}
+a{color:#00c4d4;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>SG:// ADMIN</h1>
+  <p class="sub">Approve feedback for your portfolio · <a href="index.html">← Back to site</a></p>
+
+  <div id="loginBox" class="card">
+    <label>Admin PIN (default: sg2025)</label>
+    <input type="password" id="adminPin" placeholder="Enter PIN">
+    <button type="button" class="btn" id="loginBtn">Login</button>
+    <p id="loginErr" style="color:#ff7777;font-size:0.65rem;margin-top:0.5rem;display:none;">Wrong PIN</p>
+  </div>
+
+  <div id="dash" class="hidden">
+    <div class="card">
+      <h2 style="font-family:Orbitron,sans-serif;font-size:0.85rem;color:#fff;margin-bottom:1rem;">Pending (this browser)</h2>
+      <p style="font-size:0.65rem;color:#6a8fa8;margin-bottom:1rem;">Visitors who submitted from this device appear here. You also get email via FormSubmit.</p>
+      <div id="pendingList"></div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-family:Orbitron,sans-serif;font-size:0.85rem;color:#fff;margin-bottom:1rem;">Approved (public on site)</h2>
+      <div id="approvedList"></div>
+      <button type="button" class="btn" id="downloadJson">Download approved-feedback.json</button>
+      <p style="font-size:0.6rem;color:#6a8fa8;margin-top:1rem;">Upload this file to GitHub (same folder as index.html) so everyone sees approved reviews.</p>
+    </div>
+
+    <div class="card">
+      <h2 style="font-family:Orbitron,sans-serif;font-size:0.85rem;color:#fff;margin-bottom:1rem;">Add approved manually</h2>
+      <label>Name</label>
+      <input type="text" id="newName">
+      <label>Message</label>
+      <textarea id="newMsg"></textarea>
+      <label>Date (optional)</label>
+      <input type="text" id="newDate" placeholder="e.g. Mar 2025">
+      <button type="button" class="btn" id="addApproved">Add to approved</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PIN = "sg2025";
+const PENDING_KEY = "sg_feedback_pending";
+const APPROVED_KEY = "sg_feedback_approved";
+
+function getPending(){try{return JSON.parse(localStorage.getItem(PENDING_KEY)||"[]");}catch(e){return[];}}
+function setPending(l){localStorage.setItem(PENDING_KEY,JSON.stringify(l));}
+function getApproved(){try{return JSON.parse(localStorage.getItem(APPROVED_KEY)||"[]");}catch(e){return[];}}
+function setApproved(l){localStorage.setItem(APPROVED_KEY,JSON.stringify(l));}
+
+async function loadApprovedFromFile(){
+  try{
+    const r=await fetch("approved-feedback.json?"+Date.now());
+    if(!r.ok)return;
+    const d=await r.json();
+    if(d.reviews&&d.reviews.length)setApproved(d.reviews);
+  }catch(e){}
+}
+
+function renderPending(){
+  const el=document.getElementById("pendingList");
+  const list=getPending();
+  if(!list.length){el.innerHTML='<p style="color:#6a8fa8;font-size:0.7rem;">No pending items on this device.</p>';return;}
+  el.innerHTML=list.map((p,i)=>`
+    <div class="item">
+      <h3>${escapeHtml(p.name)} · ${escapeHtml(p.email||"")}</h3>
+      <p>${escapeHtml(p.message)}</p>
+      <button class="btn" data-approve="${i}">Approve</button>
+      <button class="btn btn-danger" data-reject="${i}">Reject</button>
+    </div>
+  `).join("");
+  el.querySelectorAll("[data-approve]").forEach(b=>b.onclick=()=>approveItem(+b.dataset.approve));
+  el.querySelectorAll("[data-reject]").forEach(b=>b.onclick=()=>rejectItem(+b.dataset.reject));
+}
+
+function renderApproved(){
+  const el=document.getElementById("approvedList");
+  const list=getApproved();
+  if(!list.length){el.innerHTML='<p style="color:#6a8fa8;font-size:0.7rem;">No approved yet.</p>';return;}
+  el.innerHTML=list.map((p,i)=>`
+    <div class="item">
+      <h3>${escapeHtml(p.name)}</h3>
+      <p>${escapeHtml(p.message)}</p>
+      <button class="btn btn-danger" data-del="${i}">Remove</button>
+    </div>
+  `).join("");
+  el.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
+    const l=getApproved();l.splice(+b.dataset.del,1);setApproved(l);renderApproved();
+  });
+}
+
+function escapeHtml(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+function approveItem(i){
+  const pending=getPending();
+  const item=pending.splice(i,1)[0];
+  setPending(pending);
+  const approved=getApproved();
+  approved.unshift({name:item.name,message:item.message,date:new Date().toLocaleDateString("en-PK",{month:"short",year:"numeric"})});
+  setApproved(approved);
+  renderPending();renderApproved();
+}
+
+function rejectItem(i){
+  const pending=getPending();pending.splice(i,1);setPending(pending);renderPending();
+}
+
+document.getElementById("loginBtn").onclick=()=>{
+  if(document.getElementById("adminPin").value===PIN){
+    sessionStorage.setItem("sg_admin","1");
+    document.getElementById("loginBox").classList.add("hidden");
+    document.getElementById("dash").classList.remove("hidden");
+    loadApprovedFromFile().then(()=>{renderPending();renderApproved();});
+  }else document.getElementById("loginErr").style.display="block";
+};
+
+document.getElementById("addApproved").onclick=()=>{
+  const name=document.getElementById("newName").value.trim();
+  const message=document.getElementById("newMsg").value.trim();
+  const date=document.getElementById("newDate").value.trim();
+  if(!name||!message)return alert("Name and message required");
+  const l=getApproved();
+  l.unshift({name,message,date:date||""});
+  setApproved(l);
+  document.getElementById("newName").value="";
+  document.getElementById("newMsg").value="";
+  document.getElementById("newDate").value="";
+  renderApproved();
+};
+
+document.getElementById("downloadJson").onclick=()=>{
+  const blob=new Blob([JSON.stringify({reviews:getApproved()},null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="approved-feedback.json";
+  a.click();
+};
+
+if(sessionStorage.getItem("sg_admin")==="1"){
+  document.getElementById("loginBox").classList.add("hidden");
+  document.getElementById("dash").classList.remove("hidden");
+  loadApprovedFromFile().then(()=>{renderPending();renderApproved();});
+}
+</script>
+</body>
+</html>

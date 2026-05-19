@@ -1,0 +1,14 @@
+{
+  "reviews": [
+    {
+      "name": "Ahmed Khan",
+      "message": "Clean cybersecurity portfolio with useful learning resources.",
+      "date": "Jan 2025"
+    },
+    {
+      "name": "Ali Raza",
+      "message": "Professional design and impressive cybersecurity journey.",
+      "date": "Feb 2025"
+    }
+  ]
+}
