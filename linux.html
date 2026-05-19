@@ -1,24 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Linux Notes</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Linux Notes Hub</title>
+
+<style>
+
+body{
+  margin:0;
+  padding:0;
+  background:#050816;
+  color:white;
+  font-family:Arial, sans-serif;
+}
+
+.container{
+  width:90%;
+  max-width:1100px;
+  margin:auto;
+  padding:60px 0;
+}
+
+.title{
+  text-align:center;
+  font-size:50px;
+  margin-bottom:50px;
+  color:#00f0ff;
+}
+
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+}
+
+.note-card{
+  background:#0d1326;
+  border:1px solid rgba(0,240,255,0.2);
+  border-radius:18px;
+  padding:25px;
+  transition:0.3s;
+}
+
+.note-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 0 20px rgba(0,240,255,0.3);
+}
+
+.note-card h2{
+  color:#00f0ff;
+}
+
+.note-card p{
+  color:#cbd5e1;
+  line-height:1.6;
+}
+
+.btns{
+  margin-top:20px;
+  display:flex;
+  gap:10px;
+}
+
+.btn{
+  padding:10px 18px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:bold;
+  transition:0.3s;
+}
+
+.read-btn{
+  background:#00f0ff;
+  color:black;
+}
+
+.pdf-btn{
+  border:1px solid #00f0ff;
+  color:#00f0ff;
+}
+
+.btn:hover{
+  opacity:0.8;
+}
+
+</style>
 </head>
-<body style="background:black;color:white;font-family:Arial;">
 
-  <h1>Linux Notes Hub</h1>
+<body>
 
-  <h2>Linux Basics</h2>
-  <button>Read Online</button>
-  <button>Download PDF</button>
+<div class="container">
 
-  <h2>Linux Commands</h2>
-  <button>Read Online</button>
-  <button>Download PDF</button>
+<h1 class="title">Linux Notes Hub</h1>
 
-  <h2>Kali Linux</h2>
-  <button>Read Online</button>
-  <button>Download PDF</button>
+<div class="notes-grid">
+
+<!-- Intro of Linux -->
+<div class="note-card">
+
+<h2>Introduction of Linux</h2>
+
+<p>
+Learn what Linux is, Linux distributions,
+open-source concepts and why Linux is important in cybersecurity.
+</p>
+
+<div class="btns">
+<a href="#" class="btn read-btn">Read Online</a>
+<a href="#" class="btn pdf-btn">⬇ PDF</a>
+</div>
+
+</div>
+
+<!-- Linux Commands -->
+<div class="note-card">
+
+<h2>Linux Commands</h2>
+
+<p>
+Learn important Linux commands like ls, cd,
+pwd, mkdir, rm and file management basics.
+</p>
+
+<div class="btns">
+<a href="#" class="btn read-btn">Read Online</a>
+<a href="#" class="btn pdf-btn">⬇ PDF</a>
+</div>
+
+</div>
+
+<!-- Kali Linux -->
+<div class="note-card">
+
+<h2>Kali Linux</h2>
+
+<p>
+Introduction to Kali Linux tools,
+ethical hacking basics and penetration testing environment.
+</p>
+
+<div class="btns">
+<a href="#" class="btn read-btn">Read Online</a>
+<a href="#" class="btn pdf-btn">⬇ PDF</a>
+</div>
+
+</div>
+
+<!-- Shell Scripting -->
+<div class="note-card">
+
+<h2>Shell Scripting</h2>
+
+<p>
+Learn bash scripting, automation,
+variables, loops and Linux scripting basics.
+</p>
+
+<div class="btns">
+<a href="#" class="btn read-btn">Read Online</a>
+<a href="#" class="btn pdf-btn">⬇ PDF</a>
+</div>
+
+</div>
+
+</div>
+</div>
 
 </body>
 </html>
