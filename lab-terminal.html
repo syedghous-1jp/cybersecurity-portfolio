@@ -3,214 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Terminal :: Secure Connection</title>
+    <title>Hacker Terminal :: Core Matrix</title>
     <style>
         :root {
-            --bg-deep: #0a0e14;
-            --bg-card: #111827;
+            --bg-dark: #080c10;
+            --bg-panel: #121820;
             --neon-blue: #00d2ff;
             --neon-green: #00ff66;
-            --text-main: #e2e8f0;
-            --border: #1f2937;
+            --text-bright: #f1f5f9;
+            --text-clean: #cbd5e1;
+            --text-darker: #64748b;
+            --border-line: #1e293b;
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: 'Courier New', monospace;
-            padding: 20px;
+            background-color: var(--bg-dark);
+            color: var(--text-clean);
+            /* Standard clean fonts for high readability */
+            font-family: 'Segoe UI', SF Pro Display, -apple-system, Roboto, monospace;
+            padding: 30px 20px;
             margin: 0;
-            opacity: 0;
-            animation: fadeInBody 1s ease-out forwards;
+            line-height: 1.6;
         }
 
         .terminal-box {
-            max-width: 850px;
-            margin: 50px auto;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            max-width: 800px;
+            margin: 40px auto;
+            background: var(--bg-panel);
+            border: 1px solid var(--border-line);
+            border-radius: 12px;
+            /* Premium soft shadow layout */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
             overflow: hidden;
-            border-top: 2px solid var(--neon-green);
+            position: relative;
+        }
+
+        /* Clean overlay style without weird tints */
+        .terminal-box::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 24, 32, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 10;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
         }
 
         .terminal-header {
-            background: rgba(31, 41, 55, 0.5);
-            padding: 15px;
+            background: rgba(30, 41, 59, 0.4);
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--border-line);
         }
 
         #lab-title {
-            font-weight: bold;
-            color: var(--neon-green);
+            font-weight: 600;
+            color: var(--neon-blue);
             font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-badge {
+            background: rgba(0, 210, 255, 0.08);
+            color: var(--neon-blue);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            border: 1px solid rgba(0, 210, 255, 0.3);
         }
         
         .lang-switch button {
-            background: none;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #8892b0;
-            padding: 5px 12px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-line);
+            color: var(--text-darker);
+            padding: 6px 14px;
             cursor: pointer;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 12px;
-            transition: all 0.3s;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
         
         .lang-switch button.active {
             border-color: var(--neon-green);
             color: var(--neon-green);
+            background: rgba(0, 255, 102, 0.05);
         }
         
-        .terminal-body { padding: 30px; }
-        
+        .terminal-body { padding: 35px; }
         .lang-content { display: none; }
         .lang-content.active { display: block; }
         
-        h3 { color: #d1d5db; font-size: 16px; margin-top: 0; }
+        h3 { 
+            color: var(--text-bright); 
+            font-size: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
         
         .instructions {
-            background: rgba(31, 41, 55, 0.3);
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 25px;
-            line-height: 1.7;
-            font-size: 14px;
-            color: #d1d5db;
+            background: rgba(15, 23, 42, 0.6);
+            padding: 22px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-size: 15px;
+            color: #cbd5e1;
+            border: 1px solid rgba(255,255,255,0.02);
         }
 
-        code { color: var(--neon-blue); }
+        code { 
+            color: var(--neon-green); 
+            background: rgba(0, 255, 102, 0.08); 
+            padding: 3px 8px; 
+            border-radius: 4px; 
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+        }
 
         .submission-area {
             margin-top: 30px;
-            border-top: 1px solid var(--border);
-            padding-top: 25px;
+            border-top: 1px solid var(--border-line);
+            padding-top: 30px;
         }
         
         input[type="text"] {
-            background: none;
-            border: 1px solid var(--border);
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-line);
             color: var(--neon-green);
-            padding: 12px 15px;
-            width: calc(100% - 30px);
-            max-width: 400px;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 14px;
+            padding: 14px 18px;
+            width: calc(100% - 36px);
+            max-width: 420px;
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 15px;
             margin-bottom: 20px;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
         }
 
-        input[type="text"]:focus {
-            border-color: rgba(255, 255, 255, 0.3);
-            outline: none;
+        input[type="text"]:focus { 
+            border-color: var(--neon-blue); 
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.1);
+            outline: none; 
         }
         
         button.submit-btn {
-            background: none;
-            border: 2px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 10px 20px;
-            font-weight: bold;
+            background: var(--neon-green);
+            color: var(--bg-dark);
+            border: none;
+            padding: 12px 28px;
+            font-weight: 700;
             cursor: pointer;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
-            font-family: inherit;
-            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
         }
         
         button.submit-btn:hover {
-            background: var(--neon-blue);
-            color: var(--bg-deep);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+            transform: translateY(-1px);
         }
         
-        .status-msg { margin-top: 15px; font-weight: bold; font-size: 14px; }
-        
-        .nav-links {
-            text-align: center;
-            margin-top: 40px;
-            font-size: 12px;
-        }
-
-        .nav-links a { color: var(--neon-blue); text-decoration: none; }
-        .nav-links a:hover { text-decoration: underline; }
-
-        /* Animations */
-        @keyframes fadeInBody {
-            to { opacity: 1; }
-        }
-        
-        /* Hidden Flag for Lab 1 */
-        /* FLAG{inspect_element_success_2026} */
+        .status-msg { margin-top: 20px; font-weight: 600; font-size: 14px; }
+        .nav-links { text-align: center; margin-top: 50px; font-size: 13px; }
+        .nav-links a { color: var(--text-darker); text-decoration: none; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--neon-blue); }
     </style>
 </head>
 <body>
 
 <div class="terminal-box">
     <div class="terminal-header">
-        <div id="lab-title">Connection Established: Loading...</div>
+        <div id="lab-title">LAB INTERFACE</div>
+        <div class="progress-badge" id="question-number">Challenge 1/10</div>
         <div class="lang-switch">
-            <button id="btn-en" class="active" onclick="switchLang('en')">ENG</button>
-            <button id="btn-ur" onclick="switchLang('ur')">ROMAN URDU</button>
+            <button id="btn-en" class="active" onclick="switchLang('en')">ENGLISH</button>
+            <button id="btn-ur" onclick="switchLang('ur')">URDU</button>
         </div>
     </div>
 
     <div class="terminal-body">
         <div id="content-en" class="lang-content active">
-            <h3>📖 OBJECTIVE ::</h3>
+            <h3>🎯 Target Instructions</h3>
             <div class="instructions" id="desc-en">Loading...</div>
         </div>
 
         <div id="content-ur" class="lang-content">
-            <h3>📖 MAQSAD ::</h3>
+            <h3>🎯 Lab Hidayat</h3>
             <div class="instructions" id="desc-ur">Loading...</div>
         </div>
 
         <div class="submission-area">
-            <input type="text" id="flag-input" placeholder="FLAG{...}">
+            <input type="text" id="flag-input" placeholder="Type answer or flag here...">
             <br>
-            <button class="submit-btn" onclick="validateFlag()">SUBMIT FLAG</button>
+            <button class="submit-btn" onclick="validateFlag()">SUBMIT ANSWER</button>
             <div id="status" class="status-msg"></div>
         </div>
     </div>
 </div>
 
 <div class="nav-links">
-    <a href="labs-hub.html">← End Connection (Back to Dashboard)</a>
+    <a href="labs-hub.html">← Return to Main Dashboard</a>
 </div>
 
 <script>
-    const labsData = {
-        "1": {
-            title: "Lab 0x01: Source Code Recon",
+    const questions = [
+        {
+            qNum: "1/10",
             correctFlag: "FLAG{inspect_element_success_2026}",
-            en: "A developer has inadvertently left a <code>FLAG{...}</code> in the source code of this page. Your primary mission is to inspect the HTML and retrieve the secret string.",
-            ur: "Hacker, is page ke source code comments mein ek hidden <code>FLAG{...}</code> chhupa hai. Tera mission hai right-click se page source inspect karna aur flag dhoondh kar yahan paste karna."
+            en: "<strong>Recon Mode:</strong> The developer left a backup key in this page's source code comments. Inspect the page code (Right-click -> View Page Source) to find the first flag.",
+            ur: "<strong>Recon Mode:</strong> Developer ne is page ke source code comments mein ek secret key chhor di hai. Page source code inspect karo (Right-click -> View Page Source) aur pehla flag nikalo."
         },
-        "2": {
-            title: "Lab 0x02: Crypto Breakout",
+        {
+            qNum: "2/10",
+            correctFlag: "22",
+            en: "<strong>Networking Fundamentals:</strong> You are doing a port scan on a secure Linux server. Which standard port number is used for <strong>SSH (Secure Shell)</strong> remote connections?",
+            ur: "<strong>Networking Fundamentals:</strong> Tum ek safe Linux server par port scan kar rahe ho. Remote access ke liye use hone wali standard <strong>SSH (Secure Shell)</strong> service kis port number par chalti hai?"
+        },
+        {
+            qNum: "3/10",
+            correctFlag: "ls -la",
+            en: "<strong>Linux Administration:</strong> You just hacked into a shell. What standard Linux command is used to list <strong>all hidden files</strong> inside the current directory?",
+            ur: "<strong>Linux Administration:</strong> Tumne ek server ka shell access liya hai. Current folder ke andar moojood saari <strong>hidden files</strong> ko dekhne ke liye konsi command use hoti hai?"
+        },
+        {
+            qNum: "4/10",
             correctFlag: "FLAG{linux_king_2026}",
-            en: "Intelligence intercepts reveal an encoded transmission: <code>RkxBR3tsaW51eF9raW5nXzIwMjZ9</code>. It appears to be standard Base64. Use your tools to decode and submit the original Flag.",
-            ur: "Ek encrypted cipher mila hai: <code>RkxBR3tsaW51eF9raW5nXzIwMjZ9</code>. Analyst reports se pata chala hai yeh standard Base64 hai. Tumhein apne terminal ya decoding tools se ise raw flag mein convert karke submit karna hai."
+            en: "<strong>Cryptography:</strong> Crack this encrypted Base64 transmission token to extract the raw flag: <code>RkxBR3tsaW51eF9raW5nXzIwMjZ9</code>. Hint: Use your Linux terminal or an online decoder.",
+            ur: "<strong>Cryptography:</strong> Is encoded Base64 cipher text ko decode karo aur asli flag nikalo: <code>RkxBR3tsaW51eF9raW5nXzIwMjZ9</code>. Hint: Linux terminal par base64 utility ya online decoder use karo."
+        },
+        {
+            qNum: "5/10",
+            correctFlag: "wireshark",
+            en: "<strong>Network Analysis:</strong> Name the highly popular open-source network packet analyzer tool used by SOC Analysts to sniff live traffic and extract data packets.",
+            ur: "<strong>Network Analysis:</strong> Us mashhoor network analyzer tool ka naam batao jise use kar ke security experts live internet traffic ko sniff aur analyze karte hain?"
+        },
+        {
+            qNum: "6/10",
+            correctFlag: "filetype:pdf",
+            en: "<strong>Google Dorking:</strong> You want to search for leaked documents on Google. What precise Google Dork operator ensures that Google only shows results that are <strong>PDF files</strong>?",
+            ur: "<strong>Google Dorking:</strong> Tum Google dorking ke zariye sensitive reports nikalna chahte ho. Google search filter par sirf <strong>PDF files</strong> dekhne ke liye konsa exact operator lagaya jata hai?"
+        },
+        {
+            qNum: "7/10",
+            correctFlag: "chmod +x script.sh",
+            en: "<strong>Linux Scripting:</strong> You wrote a bash payload named <code>script.sh</code>. What full exact command will grant it <strong>executable permissions</strong> so it can run?",
+            ur: "<strong>Linux Scripting:</strong> Tumne ek shell script payload banaya hai jiska naam <code>script.sh</code> hai. Isey <strong>run/execute hone ki permission</strong> dainay ke liye konsi poori command likhoge?"
+        },
+        {
+            qNum: "8/10",
+            correctFlag: "443",
+            en: "<strong>Web Defenses:</strong> When browsing a secure e-commerce website protected with SSL/TLS encryption, what standard port number does <strong>HTTPS</strong> use?",
+            ur: "<strong>Web Defenses:</strong> Jab tum ek secure SSL/TLS encrypted website visit karte ho, toh standard secure web protocol yaani <strong>HTTPS</strong> kis port number par data transfer karta hai?"
+        },
+        {
+            qNum: "9/10",
+            correctFlag: "cat /etc/passwd",
+            en: "<strong>Privilege Escalation:</strong> You compromised a user shell. Which Linux command will allow you to read the contents of the central user account list file stored at <code>/etc/passwd</code>?",
+            ur: "<strong>Privilege Escalation:</strong> Tumhe ek target machine ka access mila hai. Server par moojood accounts ki basic details check karne ke liye <code>/etc/passwd</code> file ko read karne ki Linux command kya hai?"
+        },
+        {
+            qNum: "10/10",
+            correctFlag: "FLAG{arena_champion_2026}",
+            en: "<strong>The Final Hack:</strong> Congratulations for reaching the final layer. Submit the definitive ultimate arena clearance key: <code>FLAG{arena_champion_2026}</code> to claim your rank!",
+            ur: "<strong>The Final Hack:</strong> Bohot zabardast, tum akhri stage par pohanch gaye ho. Apni training poori karne aur rank lock karne ke liye yahan ultimate clearance token submit karo: <code>FLAG{arena_champion_2026}</code>"
         }
-    };
+    ];
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentLabId = urlParams.get('lab') || "1";
-    const lab = labsData[currentLabId];
+    let currentStep = 0;
+    let currentLang = 'en';
 
-    if(lab) {
-        document.getElementById('lab-title').innerText = "Live Lab Connection :: " + lab.title;
-        document.getElementById('desc-en').innerHTML = lab.en;
-        document.getElementById('desc-ur').innerHTML = lab.ur;
+    function loadQuestion() {
+        const q = questions[currentStep];
+        document.getElementById('question-number').innerText = `Challenge ${q.qNum}`;
+        document.getElementById('desc-en').innerHTML = q.en;
+        document.getElementById('desc-ur').innerHTML = q.ur;
+        document.getElementById('flag-input').value = "";
+        document.getElementById('status').innerText = "";
     }
 
     function switchLang(lang) {
+        currentLang = lang;
         document.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
         document.querySelectorAll('.lang-switch button').forEach(el => el.classList.remove('active'));
         document.getElementById(`content-${lang}`).classList.add('active');
@@ -220,14 +299,26 @@
     function validateFlag() {
         const input = document.getElementById('flag-input').value.trim();
         const status = document.getElementById('status');
-        if (input === lab.correctFlag) {
-            status.innerHTML = "🎉 MISSION ACCOMPLISHED! Code recognized. Score synchronized with your profile.";
-            status.style.color = "#00ff66";
+        const q = questions[currentStep];
+
+        if (input.toLowerCase() === q.correctFlag.toLowerCase()) {
+            if (currentStep < questions.length - 1) {
+                status.innerHTML = "🎉 EXCELLENT! Answer accepted. Synchronizing next layer...";
+                status.style.color = "#00ff66";
+                currentStep++;
+                setTimeout(loadQuestion, 1200);
+            } else {
+                status.innerHTML = "🏆 PROTOCOL COMPLETE! You cleared all 10 system layers. True Arena Champion.";
+                status.style.color = "#00d2ff";
+                document.getElementById('flag-input').disabled = true;
+            }
         } else {
-            status.innerHTML = "❌ ACCESS DENIED! Invalid Flag format. Re-evaluate and try again.";
+            status.innerHTML = "❌ ACCESS DENIED! Verification failed. Check parameters and try again.";
             status.style.color = "#ff3366";
         }
     }
+
+    loadQuestion();
 </script>
 </body>
 </html>
