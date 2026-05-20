@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Practice Arena :: Dashboard</title>
+    <style>
+        :root {
+            --bg-deep: #0a0e14;
+            --bg-card: #111827;
+            --neon-blue: #00d2ff;
+            --neon-green: #00ff66;
+            --text-main: #e2e8f0;
+            --text-muted: #8892b0;
+            --border: #1f2937;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; }
+
+        /* Typography & Header */
+        h1 {
+            color: var(--neon-blue);
+            text-align: center;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+            animation: glitch 1s ease-in-out infinite alternate;
+        }
+
+        h2.section-header {
+            color: var(--text-main);
+            font-size: 20px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+            margin: 40px 0 20px 0;
+        }
+
+        /* Lab Grid Styling */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 60px; }
+        
+        .lab-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .lab-card:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transform: translateY(-5px);
+        }
+
+        .lab-card h3 { color: var(--neon-green); margin-top: 0; font-size: 18px; }
+        .lab-card .meta { color: var(--text-muted); font-size: 12px; margin-bottom: 15px; }
+        .lab-card p { color: #d1d5db; font-size: 14px; line-height: 1.6; margin-bottom: 25px; }
+
+        /* Lab Action Button */
+        .btn {
+            background: none;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--neon-green);
+            color: var(--bg-deep);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
+        }
+
+        /* Leaderboard styling (Moved to Bottom, Clean & Static) */
+        .leaderboard-minimal {
+            background: rgba(17, 24, 39, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 14px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* Global Back Button */
+        .back-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .grid { grid-template-columns: 1fr; gap: 15px; }
+            h1 { font-size: 22px; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes glitch {
+            from { text-shadow: 0.5px 0 0 #fff, -0.5px 0 0 rgba(0, 210, 255, 0.5); }
+            to { text-shadow: 1.5px 0 0 #fff, -1.5px 0 0 rgba(0, 210, 255, 0.5); }
+        }
+    </style>
+</head>
+<body>
+
+<a href="index.html" class="back-home">← Home</a>
+
+<div class="container">
+    <h1>[ Cyber Practice Arena ]</h1>
+    
+    <h2 class="section-header">// Available Hacking Labs</h2>
+    <div class="grid">
+        <div class="lab-card" style="animation-delay: 0.1s;">
+            <h3>Lab 0x01: Source Code Recon</h3>
+            <p class="meta">Difficulty: Beginner | Points: 100 XP</p>
+            <p>Developer tools ko master karo aur professional style mein websites ke source code se hidden details gather karo.</p>
+            <a href="lab-terminal.html?lab=1" class="btn">Launch Lab</a>
+        </div>
+
+        <div class="lab-card" style="animation-delay: 0.2s; border-left: 2px solid var(--neon-blue);">
+            <h3 style="color: var(--neon-blue);">Lab 0x02: Crypto Breakout</h3>
+            <p class="meta">Difficulty: Easy | Points: 100 XP</p>
+            <p>Ciphertext analysis, standard Base64 encoding aur standard Linux decoding tools ke sath cryptography fundamentals seekho.</p>
+            <a href="lab-terminal.html?lab=2" class="btn" style="border-color: var(--neon-blue); color: var(--neon-blue);">Launch Lab</a>
+        </div>
+    </div>
+
+    <h2 class="section-header">// Arena Leaderboard (Live)</h2>
+    <div class="leaderboard-minimal">
+        <p>🏆 <strong>Leaderboard Status:</strong> Database setup in progress. Scores will go live once synchronization is complete. Stay tuned, hacker!</p>
+    </div>
+
+</div>
+
+</body>
+</html>
