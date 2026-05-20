@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Terminal :: Secure Connection</title>
+    <style>
+        :root {
+            --bg-deep: #0a0e14;
+            --bg-card: #111827;
+            --neon-blue: #00d2ff;
+            --neon-green: #00ff66;
+            --text-main: #e2e8f0;
+            --border: #1f2937;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            margin: 0;
+            opacity: 0;
+            animation: fadeInBody 1s ease-out forwards;
+        }
+
+        .terminal-box {
+            max-width: 850px;
+            margin: 50px auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            overflow: hidden;
+            border-top: 2px solid var(--neon-green);
+        }
+
+        .terminal-header {
+            background: rgba(31, 41, 55, 0.5);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #lab-title {
+            font-weight: bold;
+            color: var(--neon-green);
+            font-size: 14px;
+        }
+        
+        .lang-switch button {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #8892b0;
+            padding: 5px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .lang-switch button.active {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+        
+        .terminal-body { padding: 30px; }
+        
+        .lang-content { display: none; }
+        .lang-content.active { display: block; }
+        
+        h3 { color: #d1d5db; font-size: 16px; margin-top: 0; }
+        
+        .instructions {
+            background: rgba(31, 41, 55, 0.3);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 14px;
+            color: #d1d5db;
+        }
+
+        code { color: var(--neon-blue); }
+
+        .submission-area {
+            margin-top: 30px;
+            border-top: 1px solid var(--border);
+            padding-top: 25px;
+        }
+        
+        input[type="text"] {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--neon-green);
+            padding: 12px 15px;
+            width: calc(100% - 30px);
+            max-width: 400px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+        
+        button.submit-btn {
+            background: none;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        button.submit-btn:hover {
+            background: var(--neon-blue);
+            color: var(--bg-deep);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+        
+        .status-msg { margin-top: 15px; font-weight: bold; font-size: 14px; }
+        
+        .nav-links {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 12px;
+        }
+
+        .nav-links a { color: var(--neon-blue); text-decoration: none; }
+        .nav-links a:hover { text-decoration: underline; }
+
+        /* Animations */
+        @keyframes fadeInBody {
+            to { opacity: 1; }
+        }
+        
+        /* Hidden Flag for Lab 1 */
+        /* FLAG{inspect_element_success_2026} */
+    </style>
+</head>
+<body>
+
+<div class="terminal-box">
+    <div class="terminal-header">
+        <div id="lab-title">Connection Established: Loading...</div>
+        <div class="lang-switch">
+            <button id="btn-en" class="active" onclick="switchLang('en')">ENG</button>
+            <button id="btn-ur" onclick="switchLang('ur')">ROMAN URDU</button>
+        </div>
+    </div>
+
+    <div class="terminal-body">
+        <div id="content-en" class="lang-content active">
+            <h3>📖 OBJECTIVE ::</h3>
+            <div class="instructions" id="desc-en">Loading...</div>
+        </div>
+
+        <div id="content-ur" class="lang-content">
+            <h3>📖 MAQSAD ::</h3>
+            <div class="instructions" id="desc-ur">Loading...</div>
+        </div>
+
+        <div class="submission-area">
+            <input type="text" id="flag-input" placeholder="FLAG{...}">
+            <br>
+            <button class="submit-btn" onclick="validateFlag()">SUBMIT FLAG</button>
+            <div id="status" class="status-msg"></div>
+        </div>
+    </div>
+</div>
+
+<div class="nav-links">
+    <a href="labs-hub.html">← End Connection (Back to Dashboard)</a>
+</div>
+
+<script>
+    const labsData = {
+        "1": {
+            title: "Lab 0x01: Source Code Recon",
+            correctFlag: "FLAG{inspect_element_success_2026}",
+            en: "A developer has inadvertently left a <code>FLAG{...}</code> in the source code of this page. Your primary mission is to inspect the HTML and retrieve the secret string.",
+            ur: "Hacker, is page ke source code comments mein ek hidden <code>FLAG{...}</code> chhupa hai. Tera mission hai right-click se page source inspect karna aur flag dhoondh kar yahan paste karna."
+        },
+        "2": {
+            title: "Lab 0x02: Crypto Breakout",
+            correctFlag: "FLAG{linux_king_2026}",
+            en: "Intelligence intercepts reveal an encoded transmission: <code>RkxBR3tsaW51eF9raW5nXzIwMjZ9</code>. It appears to be standard Base64. Use your tools to decode and submit the original Flag.",
+            ur: "Ek encrypted cipher mila hai: <code>RkxBR3tsaW51eF9raW5nXzIwMjZ9</code>. Analyst reports se pata chala hai yeh standard Base64 hai. Tumhein apne terminal ya decoding tools se ise raw flag mein convert karke submit karna hai."
+        }
+    };
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLabId = urlParams.get('lab') || "1";
+    const lab = labsData[currentLabId];
+
+    if(lab) {
+        document.getElementById('lab-title').innerText = "Live Lab Connection :: " + lab.title;
+        document.getElementById('desc-en').innerHTML = lab.en;
+        document.getElementById('desc-ur').innerHTML = lab.ur;
+    }
+
+    function switchLang(lang) {
+        document.querySelectorAll('.lang-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.lang-switch button').forEach(el => el.classList.remove('active'));
+        document.getElementById(`content-${lang}`).classList.add('active');
+        document.getElementById(`btn-${lang}`).classList.add('active');
+    }
+
+    function validateFlag() {
+        const input = document.getElementById('flag-input').value.trim();
+        const status = document.getElementById('status');
+        if (input === lab.correctFlag) {
+            status.innerHTML = "🎉 MISSION ACCOMPLISHED! Code recognized. Score synchronized with your profile.";
+            status.style.color = "#00ff66";
+        } else {
+            status.innerHTML = "❌ ACCESS DENIED! Invalid Flag format. Re-evaluate and try again.";
+            status.style.color = "#ff3366";
+        }
+    }
+</script>
+</body>
+</html>
