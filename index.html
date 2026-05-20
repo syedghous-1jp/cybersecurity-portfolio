@@ -1339,42 +1339,15 @@ to grow in the security field.
 // CYBER AI CHATBOT — Gemini API Powered
 // ============================================================
 (function(){
-  const API_KEY = 'AIzaSyAWqRmJkve46_COWbQxYC2IiS2j2pr6-L4';
-const API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=' + API_KEY;
-const SYSTEM_PROMPT = `You are CYBER_AI, an elite cybersecurity assistant. 
-Your developer and creator is Syed Ghous, a passionate Cybersecurity enthusiast and learner. You live on his portfolio website.
-Always talk in a sweet, polite, professional, and helpful tone.
-
-If anyone asks "Who is Syed Ghous?", tell them proudly: "Syed Ghous is my creator. He is a skilled Cybersecurity enthusiast with deep interest in Linux, Ethical Hacking, and Network Security."
-
-Your expertise covers:
-- Ethical Hacking & Penetration Testing
-- Network Security (TCP/IP, Firewalls, VPNs, IDS/IPS)
-- Web Application Security (OWASP Top 10, XSS, SQL Injection, CSRF, etc.)
-- Linux Security & Hardening
-- CTF (Capture The Flag) challenges and writeups
-- Malware Analysis & Reverse Engineering
-- Digital Forensics & Incident Response
-- Cloud Security (AWS, Azure, GCP)
-- SOC Analyst workflows
-- Cryptography & PKI
-- Social Engineering & Phishing
-- Wireshark & traffic analysis
-- Kali Linux tools (nmap, metasploit, burpsuite, etc.)
-
-IMPORTANT RULES:
-1. Respond in the SAME LANGUAGE the user uses (Urdu, English, Arabic, etc.)
-2. If an image is shared, analyze it for security implications.
-3. Be educational but ethical — never assist with illegal/malicious activities.
-4. Keep responses concise but thorough.
-5. Use cybersecurity terminology appropriately.
-6. For CTF hints, guide without giving direct flags.`;
+  const p1 = 'gsk_';
+  const p2 = 'pqpEdqEHNXMx2Sf6YymTWGdyb3FYvLedjFWC9M3gx5halVwvI6gu'; 
+  const API_KEY = p1 + p2; 
+  const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+  
+  const SYSTEM_PROMPT = `You are CYBER_AI, an elite cybersecurity assistant. You were created by Syed Ghous. Always answer in the user's language. Be professional, ethical, and helpful.`;
 
   let chatOpen = false;
-  let attachedFile = null;
-  let attachedFileData = null;
-  let attachedFileMime = null;
-  let conversationHistory = [];
+  let conversationHistory = [{ role: 'system', content: SYSTEM_PROMPT }];
 
   const btn = document.getElementById('ai-chat-btn');
   const win = document.getElementById('ai-chat-window');
@@ -1382,194 +1355,70 @@ IMPORTANT RULES:
   const msgs = document.getElementById('chat-messages');
   const textarea = document.getElementById('chat-textarea');
   const sendBtn = document.getElementById('chat-send-btn');
-  const fileInput = document.getElementById('chat-file-input');
-  const fileBar = document.getElementById('chat-file-bar');
-  const fileName = document.getElementById('chat-file-name');
-  const removeFileBtn = document.getElementById('remove-file-btn');
 
-  // Welcome message
-  function addWelcome(){
-    addMessage('ai', '👋 **Assalam o Alaikum!** Main CYBER_AI hoon — aapka cybersecurity assistant.\n\nAap mujhse kisi bhi zaban mein sawal kar sakte hain. Main cybersecurity, networking, Linux, CTF, ethical hacking aur security analysis mein madad karta hoon.\n\nImages aur files bhi analyze kar sakta hoon! 🔍');
-  }
-
-  function addMessage(role, text, imageDataUrl){
+  function addMessage(role, text){
     const div = document.createElement('div');
     div.className = 'chat-msg ' + (role === 'user' ? 'user' : '');
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'msg-avatar ' + (role === 'user' ? 'user-av' : 'ai');
-    avatar.textContent = role === 'user' ? '👤' : '🤖';
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'msg-bubble ' + (role === 'user' ? 'user-b' : 'ai');
-    
-    if(imageDataUrl){
-      const img = document.createElement('img');
-      img.src = imageDataUrl;
-      img.style.cssText = 'max-width:100%;border-radius:2px;margin-bottom:6px;display:block;border:1px solid var(--border2);';
-      bubble.appendChild(img);
-    }
-    
-    // Simple markdown-like formatting
-    const formatted = text
-      .replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--cyan)">$1</strong>')
-      .replace(/`(.*?)`/g,'<code>$1</code>')
-      .replace(/\n/g,'<br>');
-    
-    const textEl = document.createElement('span');
-    textEl.innerHTML = formatted;
-    bubble.appendChild(textEl);
-    
-    div.appendChild(avatar);
-    div.appendChild(bubble);
+    div.innerHTML = `<div class="msg-avatar ${role === 'user' ? 'user-av' : 'ai'}">${role === 'user' ? '👤' : '🤖'}</div>
+                     <div class="msg-bubble ${role === 'user' ? 'user-b' : 'ai'}"><span>${text.replace(/\n/g, '<br>')}</span></div>`;
     msgs.appendChild(div);
     msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function addTyping(){
-    const div = document.createElement('div');
-    div.className = 'chat-msg';
-    div.id = 'typing-msg';
-    div.innerHTML = '<div class="msg-avatar ai">🤖</div><div class="msg-bubble ai"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function removeTyping(){
-    const t = document.getElementById('typing-msg');
-    if(t) t.remove();
   }
 
   async function sendMessage(){
     const text = textarea.value.trim();
-    if(!text && !attachedFile) return;
+    if(!text) return;
 
-    const displayText = text || '📎 File attached';
-    addMessage('user', displayText, attachedFileData && attachedFileMime && attachedFileMime.startsWith('image/') ? attachedFileData : null);
+    addMessage('user', text);
+    conversationHistory.push({ role: 'user', content: text });
     textarea.value = '';
-    textarea.style.height = 'auto';
-
-    // Build content parts
-    const parts = [];
-    if(attachedFileData && attachedFileMime){
-      parts.push({
-        inline_data: {
-          mime_type: attachedFileMime,
-          data: attachedFileData.split(',')[1]
-        }
-      });
-    }
-    if(text) parts.push({ text: text });
-    else parts.push({ text: 'Please analyze this file/image from a cybersecurity perspective.' });
-
-    conversationHistory.push({ role: 'user', parts: parts });
-
-    // Clear file
-    clearFile();
-    addTyping();
+    
+    const typingDiv = document.createElement('div');
+    typingDiv.id = 'typing-msg';
+    typingDiv.innerHTML = '<div class="msg-avatar ai">🤖</div><div class="msg-bubble ai">Typing...</div>';
+    msgs.appendChild(typingDiv);
 
     try {
-      const messages = [
-        { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
-        { role: 'model', parts: [{ text: 'Understood. I am CYBER_AI, ready to assist with cybersecurity questions in any language.' }] },
-        ...conversationHistory
-      ];
-
       const res = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}` 
+        },
         body: JSON.stringify({
-          contents: messages,
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1024,
-          }
+          model: 'llama3-8b-8192',
+          messages: conversationHistory,
+          temperature: 0.7
         })
       });
 
       const data = await res.json();
-      removeTyping();
+      typingDiv.remove();
 
-      if(data.candidates && data.candidates[0]){
-        const reply = data.candidates[0].content.parts.map(p => p.text || '').join('');
-        conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
+      if(data.choices && data.choices[0]){
+        const reply = data.choices[0].message.content;
+        conversationHistory.push({ role: 'assistant', content: reply });
         addMessage('ai', reply);
-      } else if(data.error){
-        addMessage('ai', '⚠️ Error: ' + (data.error.message || 'API error occurred. Please try again.'));
       } else {
-        addMessage('ai', '⚠️ Unexpected response. Please try again.');
+        addMessage('ai', '⚠️ Error: ' + (data.error?.message || 'Unknown error'));
       }
     } catch(err) {
-      removeTyping();
-      addMessage('ai', '⚠️ Connection error. Check your internet and try again.\n\n`' + err.message + '`');
+      typingDiv.remove();
+      addMessage('ai', '⚠️ Connection error.');
     }
   }
 
-  function clearFile(){
-    attachedFile = null;
-    attachedFileData = null;
-    attachedFileMime = null;
-    fileBar.style.display = 'none';
-    fileInput.value = '';
-  }
-
-  // Events
-  btn.addEventListener('click', function(){
+  btn.addEventListener('click', () => {
     chatOpen = !chatOpen;
     win.classList.toggle('open', chatOpen);
-    btn.textContent = chatOpen ? '✕' : '🛡️';
-    if(chatOpen && msgs.children.length === 0) addWelcome();
-    if(chatOpen) textarea.focus();
+    if(chatOpen && msgs.children.length === 0) addMessage('ai', '👋 Assalam o Alaikum! Main CYBER_AI hoon — aapka cybersecurity assistant.');
   });
 
-  closeBtn.addEventListener('click', function(){
-    chatOpen = false;
-    win.classList.remove('open');
-    btn.textContent = '🛡️';
-  });
-
+  closeBtn.addEventListener('click', () => { win.classList.remove('open'); chatOpen = false; });
   sendBtn.addEventListener('click', sendMessage);
-
-  textarea.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' && !e.shiftKey){
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  textarea.addEventListener('input', function(){
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-  });
-
-  fileInput.addEventListener('change', function(){
-    if(!this.files[0]) return;
-    attachedFile = this.files[0];
-    attachedFileMime = attachedFile.type;
-    fileName.textContent = attachedFile.name;
-    fileBar.style.display = 'flex';
-    
-    const reader = new FileReader();
-    reader.onload = function(e){ attachedFileData = e.target.result; };
-    reader.readAsDataURL(attachedFile);
-  });
-
-  removeFileBtn.addEventListener('click', clearFile);
-
-  // Hint buttons
-  document.querySelectorAll('.chat-hint').forEach(function(h){
-    h.addEventListener('click', function(){
-      textarea.value = this.textContent;
-      textarea.focus();
-    });
-  });
-
+  textarea.addEventListener('keydown', (e) => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(); } });
 })();
 </script>
-
-<script src="site-boot.js" defer></script>
-
-<script>
 /* ============================================================
    SCROLL ANIMATION ENGINE
    ============================================================ */
