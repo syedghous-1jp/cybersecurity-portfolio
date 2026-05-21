@@ -1336,27 +1336,14 @@ to grow in the security field.
 
 <script>
 // ============================================================
-// CYBER AI CHATBOT — Hugging Face Gradio Powered
+// CYBER AI CHATBOT — Hugging Face Gradio Powered (Final Clean)
 // ============================================================
 (function(){
-  // Gemini API aur System Prompt yahan se hata diya gaya hai, ab seedha iframe chalega.
-
   let chatOpen = false;
-  let attachedFile = null;
-  let attachedFileData = null;
-  let attachedFileMime = null;
-  let conversationHistory = [];
 
   const btn = document.getElementById('ai-chat-btn');
   const win = document.getElementById('ai-chat-window');
   const closeBtn = document.getElementById('chat-close-btn');
-  const msgs = document.getElementById('chat-messages');
-  const textarea = document.getElementById('chat-textarea');
-  const sendBtn = document.getElementById('chat-send-btn');
-  const fileInput = document.getElementById('chat-file-input');
-  const fileBar = document.getElementById('chat-file-bar');
-  const fileName = document.getElementById('chat-file-name');
-  const removeFileBtn = document.getElementById('remove-file-btn');
 
   // Hugging Face Space Iframe Injection
   function loadGradioChat() {
@@ -1373,157 +1360,37 @@ to grow in the security field.
     }
   }
 
-  // Jab aap chat button pe click karenge, iframe load ho jayega
-  if (btn) {
+  // Jab chat button pe click ho to open/close ho
+  if (btn && win) {
     btn.addEventListener('click', () => {
       chatOpen = !chatOpen;
       if (chatOpen) {
+        win.style.display = 'block'; 
         win.classList.add('open');
         win.classList.remove('hidden');
         loadGradioChat();
+        btn.textContent = '✕'; // Button icon change to close
       } else {
+        win.style.display = 'none';
         win.classList.remove('open');
+        win.classList.add('hidden');
+        btn.textContent = '🛡️'; // Button icon change to shield
       }
     });
   }
 
-  // In functions ko empty chhor diya hai taake baaki bache hue code mein error na aaye
-  function addWelcome(){}
-  function addMessage(role, text, imageDataUrl){}
-  function addTyping(){}
-  function removeTyping(){}
-
-  async function sendMessage(){
-    const text = textarea ? textarea.value.trim() : '';
-    if(!text && !attachedFile) return;
-
-    const displayText = text || '📎 File attached';
-    addMessage('user', displayText, attachedFileData && attachedFileMime && attachedFileMime.startsWith('image/') ? attachedFileData : null);
-    
-    if (textarea) {
-      textarea.value = '';
-      textarea.style.height = 'auto';
-    }
-    
-    // Yahan RETURN laga diya hai taake iske niche jo purana Gemini ka code bacha hai wo na chale aur crash na ho
-    return;
-
-    // Build content parts
-    const parts = [];
-    if(attachedFileData && attachedFileMime){
-      parts.push({
-        inline_data: {
-          mime_type: attachedFileMime,
-          data: attachedFileData.split(',')[1]
-        }
-      });
-    }
-    if(text) parts.push({ text: text });
-    else parts.push({ text: 'Please analyze this file/image from a cybersecurity perspective.' });
-
-    conversationHistory.push({ role: 'user', parts: parts });
-
-    // Clear file
-    clearFile();
-    addTyping();
-
-    try {
-      const messages = [
-        { role: 'user', parts: [{ text: SYSTEM_PROMPT }] },
-        { role: 'model', parts: [{ text: 'Understood. I am CYBER_AI, ready to assist with cybersecurity questions in any language.' }] },
-        ...conversationHistory
-      ];
-
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: messages,
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1024,
-          }
-        })
-      });
-
-      const data = await res.json();
-      removeTyping();
-
-      if(data.candidates && data.candidates[0]){
-        const reply = data.candidates[0].content.parts.map(p => p.text || '').join('');
-        conversationHistory.push({ role: 'model', parts: [{ text: reply }] });
-        addMessage('ai', reply);
-      } else if(data.error){
-        addMessage('ai', '⚠️ Error: ' + (data.error.message || 'API error occurred. Please try again.'));
-      } else {
-        addMessage('ai', '⚠️ Unexpected response. Please try again.');
-      }
-    } catch(err) {
-      removeTyping();
-      addMessage('ai', '⚠️ Connection error. Check your internet and try again.\n\n`' + err.message + '`');
-    }
-  }
-
-  function clearFile(){
-    attachedFile = null;
-    attachedFileData = null;
-    attachedFileMime = null;
-    fileBar.style.display = 'none';
-    fileInput.value = '';
-  }
-
-  // Events
-  btn.addEventListener('click', function(){
-    chatOpen = !chatOpen;
-    win.classList.toggle('open', chatOpen);
-    btn.textContent = chatOpen ? '✕' : '🛡️';
-    if(chatOpen && msgs.children.length === 0) addWelcome();
-    if(chatOpen) textarea.focus();
-  });
-
-  closeBtn.addEventListener('click', function(){
-    chatOpen = false;
-    win.classList.remove('open');
-    btn.textContent = '🛡️';
-  });
-
-  sendBtn.addEventListener('click', sendMessage);
-
-  textarea.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' && !e.shiftKey){
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-
-  textarea.addEventListener('input', function(){
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-  });
-
-  fileInput.addEventListener('change', function(){
-    if(!this.files[0]) return;
-    attachedFile = this.files[0];
-    attachedFileMime = attachedFile.type;
-    fileName.textContent = attachedFile.name;
-    fileBar.style.display = 'flex';
-    
-    const reader = new FileReader();
-    reader.onload = function(e){ attachedFileData = e.target.result; };
-    reader.readAsDataURL(attachedFile);
-  });
-
-  removeFileBtn.addEventListener('click', clearFile);
-
-  // Hint buttons
-  document.querySelectorAll('.chat-hint').forEach(function(h){
-    h.addEventListener('click', function(){
-      textarea.value = this.textContent;
-      textarea.focus();
+  // Jab close (X) button pe click ho to band ho jaye
+  if (closeBtn && win) {
+    closeBtn.addEventListener('click', () => {
+      chatOpen = false;
+      win.style.display = 'none';
+      win.classList.remove('open');
+      win.classList.add('hidden');
+      if(btn) btn.textContent = '🛡️';
     });
-  });
-
+  }
 })();
+
 </script>
 
 <script src="site-boot.js" defer></script>
