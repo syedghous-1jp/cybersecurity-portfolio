@@ -1,121 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Python Notes | Syed Ghous</title>
+
+<title>Python Notes | Cybersecurity</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#020510;color:#d0e8f8;font-family:'Rajdhani',sans-serif;overflow-x:hidden;}
-  header{text-align:center;padding:4rem 1rem 3rem;}
-  header h1{color:#00f0ff;font-family:'Orbitron';letter-spacing:6px;font-size:42px;margin-bottom:15px;text-shadow:0 0 20px rgba(0,240,255,0.3);}
-  header p{color:#7cb6d8;font-size:17px;max-width:700px;margin:auto;}
-  .container{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:20px;padding:20px;max-width:1200px;margin:auto;}
-  .card{background:#050a18;border:1px solid #0d1628;padding:20px;display:flex;flex-direction:column;justify-content:space-between;transition:0.3s;}
-  .card:hover{border-color:#00f0ff;box-shadow:0 0 15px rgba(0,240,255,0.1);}
-  .card h2{color:#00f0ff;margin-bottom:10px;}
-  .buttons{display:flex;gap:10px;margin-top:20px;}
-  .btn{padding:8px 15px;border:1px solid #00f0ff;color:#00f0ff;text-decoration:none;font-family:'Space Mono';font-size:12px;cursor:pointer;}
-  .btn:hover{background:#00f0ff;color:#020510;}
-  footer{text-align:center;padding:4rem;color:#7cb6d8;font-family:'Space Mono';font-size:12px;}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#020510;
+  color:#d0e8f8;
+  font-family:'Rajdhani',sans-serif;
+  overflow-x:hidden;
+}
+
+/* HEADER */
+
+header{
+  text-align:center;
+  padding:4rem 1rem 3rem;
+}
+
+header h1{
+  color:#00f0ff;
+  font-family:'Orbitron';
+  letter-spacing:6px;
+  font-size:42px;
+  margin-bottom:15px;
+  text-shadow:0 0 20px rgba(0,240,255,0.3);
+}
+
+header p{
+  color:#7cb6d8;
+  font-size:17px;
+  max-width:700px;
+  margin:auto;
+  line-height:1.7;
+}
+
+/* CONTAINER */
+
+.container{
+  width:90%;
+  max-width:1200px;
+  margin:auto;
+  padding-bottom:5rem;
+
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
+}
+
+/* CARD */
+
+.card{
+  background:linear-gradient(180deg,#09101f,#0c1730);
+  border:1px solid rgba(0,240,255,0.15);
+  border-radius:18px;
+  padding:1.7rem;
+  transition:0.35s;
+  min-height:260px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:2px;
+  background:#00f0ff;
+  transition:0.5s;
+}
+
+.card:hover::before{
+  left:0;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  border-color:#00f0ff66;
+  box-shadow:0 0 30px rgba(0,240,255,0.12);
+}
+
+/* CARD TEXT */
+
+.card h2{
+  color:#00f0ff;
+  font-family:'Space Mono';
+  font-size:19px;
+  margin-bottom:14px;
+}
+
+.card p{
+  color:#bfdbea;
+  font-size:15px;
+  line-height:1.7;
+}
+
+/* BUTTONS */
+
+.buttons{
+  margin-top:25px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid #00f0ff;
+  color:#00f0ff;
+  text-decoration:none;
+  padding:10px 18px;
+  border-radius:8px;
+  transition:0.3s;
+  font-size:14px;
+  font-weight:600;
+}
+
+.btn:hover{
+  background:#00f0ff;
+  color:#000;
+  box-shadow:0 0 15px rgba(0,240,255,0.4);
+}
+
+/* FOOTER */
+
+footer{
+  text-align:center;
+  padding:2rem;
+  color:#6f9ab3;
+  font-size:14px;
+  border-top:1px solid rgba(0,240,255,0.08);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  header h1{
+    font-size:30px;
+    letter-spacing:3px;
+  }
+
+  header p{
+    font-size:15px;
+  }
+
+}
+
 </style>
 </head>
+
 <body>
 
 <header>
-  <h1>PYTHON BASICS</h1>
-  <p>Comprehensive roadmap from installation to advanced cybersecurity automation.</p>
+
+  <h1>PYTHON NOTES</h1>
+
+  <p>
+    Learn Python fundamentals, automation and cybersecurity scripting concepts.
+  </p>
+
 </header>
 
 <div class="container">
-  <div class="card">
-    <h2>Introduction</h2>
-    <div class="buttons">
-      <a href="intro-python.pdf" target="_blank" class="btn">Read</a>
-      <a href="intro-python.pdf" download class="btn">Download</a>
-    </div>
-  </div>
+
+  <!-- INTRODUCTION -->
 
   <div class="card">
-    <h2>Python Basics</h2>
-    <div class="buttons">
-      <a href="Python-basics.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python-basics.pdf" download class="btn">Download</a>
+
+    <div>
+
+      <h2>Introduction to Python</h2>
+
+      <p>
+        Learn what Python is, why it is popular and how it is used in programming,
+        automation and cybersecurity.
+      </p>
+
     </div>
+
+    <div class="buttons">
+
+      <a href="intro-python.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="intro-python.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2>Loops & Flow</h2>
-    <div class="buttons">
-      <a href="Python_Loops.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python_Loops.pdf" download class="btn">Download</a>
-    </div>
-  </div>
+  <!-- PYTHON BASICS -->
 
   <div class="card">
-    <h2>Functions</h2>
-    <div class="buttons">
-      <a href="Python_Functions.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python_Functions.pdf" download class="btn">Download</a>
+
+    <div>
+
+      <h2>Python Basics</h2>
+
+      <p>
+        Learn Python syntax, variables, data types and beginner programming concepts.
+      </p>
+
     </div>
+
+    <div class="buttons">
+
+      <a href="Python-basics.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python-basics.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2>File Handling</h2>
-    <div class="buttons">
-      <a href="Python_File_Handling.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python_File_Handling.pdf" download class="btn">Download</a>
-    </div>
-  </div>
+  <!-- LOOPS -->
 
   <div class="card">
-    <h2>Requests Library</h2>
-    <div class="buttons">
-      <a href="python-Requests-Library.pdf" target="_blank" class="btn">Read</a>
-      <a href="python-Requests-Library.pdf" download class="btn">Download</a>
+
+    <div>
+
+      <h2>Loops & Conditions</h2>
+
+      <p>
+        Learn if else statements, for loops and while loops with practical examples.
+      </p>
+
     </div>
+
+    <div class="buttons">
+
+      <a href="Python_Loops.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python_Loops.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2>Socket Programming</h2>
-    <div class="buttons">
-      <a href="Python-Socket-Programming.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python-Socket-Programming.pdf" download class="btn">Download</a>
-    </div>
-  </div>
+  <!-- FUNCTIONS -->
 
   <div class="card">
-    <h2>Port Scanner</h2>
-    <div class="buttons">
-      <a href="Python-Port-Scanner.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python-Port-Scanner.pdf" download class="btn">Download</a>
+
+    <div>
+
+      <h2>Functions</h2>
+
+      <p>
+        Understand functions, arguments and reusable code in Python programming.
+      </p>
+
     </div>
+
+    <div class="buttons">
+
+      <a href="Python_Functions.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python_Functions.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
-  <div class="card">
-    <h2>Automation</h2>
-    <div class="buttons">
-      <a href="Python-Automation-Scripts.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python-Automation-Scripts.pdf" download class="btn">Download</a>
-    </div>
-  </div>
+  <!-- FILE HANDLING -->
 
   <div class="card">
-    <h2>Regex Basics</h2>
-    <div class="buttons">
-      <a href="Python-Regex-Basics.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python-Regex-Basics.pdf" download class="btn">Download</a>
+
+    <div>
+
+      <h2>File Handling</h2>
+
+      <p>
+        Learn how to read, write and manage files using Python scripts.
+      </p>
+
     </div>
+
+    <div class="buttons">
+
+      <a href="Python_File_Handling.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python_File_Handling.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
 
+  <!-- REQUESTS -->
+
   <div class="card">
-    <h2>API Requests</h2>
-    <div class="buttons">
-      <a href="Python-API-Requests.pdf" target="_blank" class="btn">Read</a>
-      <a href="Python-API-Requests.pdf" download class="btn">Download</a>
+
+    <div>
+
+      <h2>Requests Library</h2>
+
+      <p>
+        Learn HTTP requests, APIs and web communication using Python requests module.
+      </p>
+
     </div>
+
+    <div class="buttons">
+
+      <a href="python-Requests-Library.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="python-Requests-Library.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
   </div>
+
+  <!-- SOCKET -->
+
+  <div class="card">
+
+    <div>
+
+      <h2>Socket Programming</h2>
+
+      <p>
+        Understand sockets, client server communication and networking basics.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <a href="Python-Socket-Programming.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python-Socket-Programming.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- PORT SCANNER -->
+
+  <div class="card">
+
+    <div>
+
+      <h2>Port Scanner</h2>
+
+      <p>
+        Build a basic Python port scanner and understand open network ports.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <a href="Python-Port-Scanner.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python-Port-Scanner.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- AUTOMATION -->
+
+  <div class="card">
+
+    <div>
+
+      <h2>Automation Scripts</h2>
+
+      <p>
+        Learn automation concepts and create useful Python scripts for daily tasks.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <a href="Python-Automation-Scripts.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python-Automation-Scripts.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- REGEX -->
+
+  <div class="card">
+
+    <div>
+
+      <h2>Regex Basics</h2>
+
+      <p>
+        Learn regular expressions for pattern matching and text searching in Python.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <a href="Python-Regex-Basics.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python-Regex-Basics.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
+  </div>
+
+  <!-- API -->
+
+  <div class="card">
+
+    <div>
+
+      <h2>API Requests</h2>
+
+      <p>
+        Learn how APIs work and send GET POST requests using Python.
+      </p>
+
+    </div>
+
+    <div class="buttons">
+
+      <a href="Python-API-Requests.pdf" target="_blank" class="btn">
+        Read
+      </a>
+
+      <a href="Python-API-Requests.pdf" download class="btn">
+        Download
+      </a>
+
+    </div>
+
+  </div>
+
 </div>
 
 <footer>
