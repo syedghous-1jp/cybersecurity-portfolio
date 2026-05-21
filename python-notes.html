@@ -2,47 +2,79 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Python Notes | Syed Ghous</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body style="background: var(--bg);">
 
-<section style="padding: 8rem 2rem; max-width: 800px; margin: 0 auto;">
-    <a href="index.html" class="sa-fade" style="color:var(--cyan); text-decoration:none; display:inline-block; margin-bottom:2rem; font-family:'Space Mono',monospace;">← BACK TO PORTFOLIO</a>
+<section style="padding: 8rem 2rem; max-width: 900px; margin: 0 auto;">
+    <a href="index.html" class="sa-fade" style="color:var(--cyan); text-decoration:none; display:inline-block; margin-bottom:3rem; font-family:'Space Mono',monospace;">← BACK TO PORTFOLIO</a>
     
-    <h1 class="sa-fade" style="color:var(--text); margin-bottom:2rem; font-family:'Orbitron',monospace;">PYTHON BASICS</h1>
+    <h1 class="sa-fade" style="color:var(--text); margin-bottom:1rem; font-family:'Orbitron',monospace; border-left: 4px solid var(--cyan); padding-left: 1rem;">PYTHON BASICS</h1>
+    <p class="sa-fade" style="color:var(--text3); margin-bottom:3rem;">Complete roadmap for Python programming & Cybersecurity automation.</p>
     
     <ul class="python-list" style="list-style:none;">
-        <li class="sa-fade sa-d1"><a href="pdfs/intro.pdf">Introduction to Python</a></li>
-        <li class="sa-fade sa-d2"><a href="pdfs/install.pdf">Installing Python</a></li>
-        <li class="sa-fade sa-d3"><a href="pdfs/vscode.pdf">VS Code Setup</a></li>
-        <li class="sa-fade sa-d4"><a href="pdfs/first-prog.pdf">First Python Program</a></li>
-        <li class="sa-fade sa-d5"><a href="pdfs/print.pdf">Print Function</a></li>
-        </ul>
+        <li class="sa-fade sa-d1"><a href="#">Introduction to Python<span>PDF</span></a></li>
+        <li class="sa-fade sa-d2"><a href="#">Installing Python<span>PDF</span></a></li>
+        <li class="sa-fade sa-d3"><a href="#">VS Code Setup<span>PDF</span></a></li>
+        <li class="sa-fade sa-d4"><a href="#">Python Syntax<span>PDF</span></a></li>
+        <li class="sa-fade sa-d5"><a href="#">Variables<span>PDF</span></a></li>
+        <li class="sa-fade sa-d1"><a href="#">Data Types<span>PDF</span></a></li>
+        <li class="sa-fade sa-d2"><a href="#">User Input<span>PDF</span></a></li>
+        <li class="sa-fade sa-d3"><a href="#">Print Function<span>PDF</span></a></li>
+        <li class="sa-fade sa-d4"><a href="#">Comments in Python<span>PDF</span></a></li>
+        <li class="sa-fade sa-d5"><a href="#">Type Conversion<span>PDF</span></a></li>
+        <li class="sa-fade sa-d1"><a href="#">Operators<span>PDF</span></a></li>
+        <li class="sa-fade sa-d2"><a href="#">If Else Statements<span>PDF</span></a></li>
+        <li class="sa-fade sa-d3"><a href="#">Nested Conditions<span>PDF</span></a></li>
+        <li class="sa-fade sa-d4"><a href="#">Loops (For & While)<span>PDF</span></a></li>
+        <li class="sa-fade sa-d5"><a href="#">Break & Continue<span>PDF</span></a></li>
+        <li class="sa-fade sa-d1"><a href="#">Lists, Tuples & Dictionaries<span>PDF</span></a></li>
+        <li class="sa-fade sa-d2"><a href="#">Sets & String Methods<span>PDF</span></a></li>
+        <li class="sa-fade sa-d3"><a href="#">Functions, Arguments & Return<span>PDF</span></a></li>
+        <li class="sa-fade sa-d4"><a href="#">Modules & Pip Packages<span>PDF</span></a></li>
+        <li class="sa-fade sa-d5"><a href="#">File Handling & Exceptions<span>PDF</span></a></li>
+        <li class="sa-fade sa-d1"><a href="#">OOP: Classes & Objects<span>PDF</span></a></li>
+        <li class="sa-fade sa-d2"><a href="#">APIs, JSON & Regular Expressions<span>PDF</span></a></li>
+        <li class="sa-fade sa-d3"><a href="#">Python Automation Basics<span>PDF</span></a></li>
+        <li class="sa-fade sa-d4"><a href="#">Socket Programming Basics<span>PDF</span></a></li>
+        <li class="sa-fade sa-d5"><a href="#">Python for Cybersecurity<span>PDF</span></a></li>
+        <li class="sa-fade sa-d1"><a href="#">Port Scanner Project<span>PDF</span></a></li>
+        <li class="sa-fade sa-d2"><a href="#">Password Generator Project<span>PDF</span></a></li>
+        <li class="sa-fade sa-d3"><a href="#">Web Scraper (Requests & BeautifulSoup)<span>PDF</span></a></li>
+    </ul>
 </section>
 
 <style>
     .python-list li {
-        margin-bottom: 0.8rem;
+        margin-bottom: 1rem;
         border: 1px solid var(--border2);
-        background: rgba(0,240,255,0.02);
-        padding: 1.2rem;
-        transition: 0.3s;
+        background: rgba(0,240,255,0.03);
+        padding: 1.5rem;
+        transition: all 0.3s ease;
     }
     .python-list li:hover {
-        background: rgba(0,240,255,0.05);
+        background: rgba(0,240,255,0.08);
         border-color: var(--cyan);
         transform: translateX(10px);
     }
     .python-list a {
-        color: var(--text2);
+        color: var(--text);
         text-decoration: none;
         display: flex;
         justify-content: space-between;
         font-family: 'Space Mono',monospace;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
     }
-    .python-list a:hover { color: var(--cyan); }
+    .python-list a span {
+        color: var(--cyan);
+        font-size: 0.7rem;
+        border: 1px solid var(--cyan);
+        padding: 2px 8px;
+        border-radius: 4px;
+    }
 </style>
 
 <script src="site-boot.js" defer></script>
