@@ -1336,37 +1336,10 @@ to grow in the security field.
 
 <script>
 // ============================================================
-// CYBER AI CHATBOT — Gemini API Powered
+// CYBER AI CHATBOT — Hugging Face Gradio Powered
 // ============================================================
 (function(){
-  const API_KEY = 'AIzaSyAnv2oIXrgfKnFPmVSGOykllparWjQR85A';
-  const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=' + API_KEY;
-
-  const SYSTEM_PROMPT = `You are CYBER_AI, an elite cybersecurity assistant embedded in Syed Ghous's cybersecurity portfolio website. 
-
-Your expertise covers:
-- Ethical Hacking & Penetration Testing
-- Network Security (TCP/IP, Firewalls, VPNs, IDS/IPS)
-- Web Application Security (OWASP Top 10, XSS, SQL Injection, CSRF, etc.)
-- Linux Security & Hardening
-- CTF (Capture The Flag) challenges and writeups
-- Malware Analysis & Reverse Engineering
-- Digital Forensics & Incident Response
-- Cloud Security (AWS, Azure, GCP)
-- SOC Analyst workflows
-- Cryptography & PKI
-- Social Engineering & Phishing
-- Wireshark & traffic analysis
-- Kali Linux tools (nmap, metasploit, burpsuite, etc.)
-
-IMPORTANT RULES:
-1. Respond in the SAME LANGUAGE the user uses (Urdu, English, Arabic, French, etc.)
-2. If an image is shared, analyze it for security implications, CVEs, or educational insights
-3. Be educational but ethical — never assist with illegal/malicious activities
-4. Keep responses concise but thorough
-5. Use cybersecurity terminology appropriately
-6. For CTF hints, guide without giving direct flags
-7. Format technical info clearly with code blocks when needed`;
+  // Gemini API aur System Prompt yahan se hata diya gaya hai, ab seedha iframe chalega.
 
   let chatOpen = false;
   let attachedFile = null;
@@ -1385,67 +1358,55 @@ IMPORTANT RULES:
   const fileName = document.getElementById('chat-file-name');
   const removeFileBtn = document.getElementById('remove-file-btn');
 
-  // Welcome message
-  function addWelcome(){
-    addMessage('ai', '👋 **Assalam o Alaikum!** Main CYBER_AI hoon — aapka cybersecurity assistant.\n\nAap mujhse kisi bhi zaban mein sawal kar sakte hain. Main cybersecurity, networking, Linux, CTF, ethical hacking aur security analysis mein madad karta hoon.\n\nImages aur files bhi analyze kar sakta hoon! 🔍');
-  }
-
-  function addMessage(role, text, imageDataUrl){
-    const div = document.createElement('div');
-    div.className = 'chat-msg ' + (role === 'user' ? 'user' : '');
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'msg-avatar ' + (role === 'user' ? 'user-av' : 'ai');
-    avatar.textContent = role === 'user' ? '👤' : '🤖';
-    
-    const bubble = document.createElement('div');
-    bubble.className = 'msg-bubble ' + (role === 'user' ? 'user-b' : 'ai');
-    
-    if(imageDataUrl){
-      const img = document.createElement('img');
-      img.src = imageDataUrl;
-      img.style.cssText = 'max-width:100%;border-radius:2px;margin-bottom:6px;display:block;border:1px solid var(--border2);';
-      bubble.appendChild(img);
+  // Hugging Face Space Iframe Injection
+  function loadGradioChat() {
+    if (win && !document.getElementById('cyber-bot-frame')) {
+      win.innerHTML = `
+        <iframe 
+          id="cyber-bot-frame"
+          src="https://ghous1ss-cyber-assistant.hf.space"
+          frameborder="0"
+          width="100%"
+          height="100%"
+          style="border: none; background: #020510;">
+        </iframe>`;
     }
-    
-    // Simple markdown-like formatting
-    const formatted = text
-      .replace(/\*\*(.*?)\*\*/g,'<strong style="color:var(--cyan)">$1</strong>')
-      .replace(/`(.*?)`/g,'<code>$1</code>')
-      .replace(/\n/g,'<br>');
-    
-    const textEl = document.createElement('span');
-    textEl.innerHTML = formatted;
-    bubble.appendChild(textEl);
-    
-    div.appendChild(avatar);
-    div.appendChild(bubble);
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
   }
 
-  function addTyping(){
-    const div = document.createElement('div');
-    div.className = 'chat-msg';
-    div.id = 'typing-msg';
-    div.innerHTML = '<div class="msg-avatar ai">🤖</div><div class="msg-bubble ai"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
-    msgs.appendChild(div);
-    msgs.scrollTop = msgs.scrollHeight;
+  // Jab aap chat button pe click karenge, iframe load ho jayega
+  if (btn) {
+    btn.addEventListener('click', () => {
+      chatOpen = !chatOpen;
+      if (chatOpen) {
+        win.classList.add('open');
+        win.classList.remove('hidden');
+        loadGradioChat();
+      } else {
+        win.classList.remove('open');
+      }
+    });
   }
 
-  function removeTyping(){
-    const t = document.getElementById('typing-msg');
-    if(t) t.remove();
-  }
+  // In functions ko empty chhor diya hai taake baaki bache hue code mein error na aaye
+  function addWelcome(){}
+  function addMessage(role, text, imageDataUrl){}
+  function addTyping(){}
+  function removeTyping(){}
 
   async function sendMessage(){
-    const text = textarea.value.trim();
+    const text = textarea ? textarea.value.trim() : '';
     if(!text && !attachedFile) return;
 
     const displayText = text || '📎 File attached';
     addMessage('user', displayText, attachedFileData && attachedFileMime && attachedFileMime.startsWith('image/') ? attachedFileData : null);
-    textarea.value = '';
-    textarea.style.height = 'auto';
+    
+    if (textarea) {
+      textarea.value = '';
+      textarea.style.height = 'auto';
+    }
+    
+    // Yahan RETURN laga diya hai taake iske niche jo purana Gemini ka code bacha hai wo na chale aur crash na ho
+    return;
 
     // Build content parts
     const parts = [];
