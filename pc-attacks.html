@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PC Hacking | Attack Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#050505; color:#ff1a1a; font-family:'Rajdhani',sans-serif; text-align:center; padding:50px 20px; }
+        h1 { font-family:'Orbitron'; font-size:40px; margin-bottom:50px; text-shadow:0 0 15px #ff1a1a; }
+        
+        .section-title { font-family:'Orbitron'; color:#fff; margin:40px 0 20px; border-bottom:2px solid #ff1a1a; display:inline-block; padding:0 20px; }
+        
+        .grid { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; perspective: 1000px; }
+        
+        .card { 
+            width: 250px; height: 120px; background:rgba(10,0,0,0.8); 
+            border: 2px solid #ff1a1a; display:flex; align-items:center; justify-content:center;
+            padding:15px; transition:0.5s; cursor:pointer; font-weight:bold; font-family:'Orbitron';
+        }
+        .card:hover { transform:scale(1.1); box-shadow:0 0 20px #ff1a1a; border-color:#fff; }
+        
+        .back-btn { margin-top:60px; padding:15px 40px; border:2px solid #ff1a1a; color:#ff1a1a; text-decoration:none; font-family:'Orbitron'; display:inline-block; }
+    </style>
+</head>
+<body>
+
+    <h1>PC HACKING OPERATIONS</h1>
+
+    <h2 class="section-title">INITIAL ACCESS</h2>
+    <div class="grid">
+        <div class="card">PHISHING</div>
+        <div class="card">DRIVE-BY</div>
+        <div class="card">USB/HID</div>
+    </div>
+
+    <h2 class="section-title">EXECUTION & PERSISTENCE</h2>
+    <div class="grid">
+        <div class="card">TROJANS / RATS</div>
+        <div class="card">MEMORY INJECTION</div>
+        <div class="card">BROWSER EXPLOIT</div>
+        <div class="card">PERSISTENCE</div>
+        <div class="card">ROOTKITS</div>
+    </div>
+
+    <h2 class="section-title">ESCALATION & EXFILTRATION</h2>
+    <div class="grid">
+        <div class="card">PRIVILEGE ESC</div>
+        <div class="card">AD HACKING</div>
+        <div class="card">DATA EXFIL</div>
+        <div class="card">ANTI-FORENSICS</div>
+    </div>
+
+    <br><br><a href="attacking.html" class="back-btn">← BACK TO TARGETS</a>
+
+</body>
+</html>
