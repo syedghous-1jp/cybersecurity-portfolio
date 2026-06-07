@@ -990,7 +990,8 @@ to grow in the security field.
   </div>
 
 </div>
-<div class="note-card reveal reveal-delay-1" data-cat="security">
+Malware
+     <div class="note-card reveal reveal-delay-1" data-cat="security">
   <div class="nc-top">
     <div class="nc-badge-row">
       <span class="nc-badge" style="background-color: #e74c3c;">Security</span>
@@ -1003,7 +1004,7 @@ to grow in the security field.
     <span class="nc-meta">PROFESSIONAL SERIES</span>
     <div class="nc-actions">
       <a href="#" onclick="checkPassword()" class="nc-btn primary">Read</a>
-      <a href="Malware_Detailed_20_Page_Guide_Final.pdf" download class="nc-btn">⬇ PDF</a>
+      <a href="Malware_Analysis_Cyber_Defense.pdf" download class="nc-btn">⬇ PDF</a>
     </div>
   </div>
 </div>
@@ -1012,8 +1013,9 @@ to grow in the security field.
 function checkPassword() {
     var password = prompt("Access Restricted: This section is secure. Please enter the password to proceed.");
     
+    // Yahan malware.html ka path set hai
     if (password === "cyberghous177") {
-        window.location.href = "malware-analysis.html";
+        window.location.href = "malware.html";
     } else if (password !== null) {
         alert("Access Denied! Incorrect password. If you need access, please contact the administrator via the email provided at the bottom of the website.");
     }
