@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Threat Operations | Attack Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#020510; color:#ff4d4d; font-family:'Rajdhani',sans-serif; text-align:center; padding:50px 20px; }
+        h1 { font-family:'Orbitron'; margin-bottom:50px; }
+
+        .container { display:flex; justify-content:center; gap:30px; flex-wrap:wrap; perspective: 1000px; }
+        
+        .attack-box { 
+            width: 350px; height: 220px; background:#0a0000; border:2px solid #ff4d4d;
+            display:flex; flex-direction:column; align-items:center; justify-content:center;
+            transition: 0.4s; cursor:pointer;
+        }
+        .attack-box:hover { transform: scale(1.05); box-shadow: 0 0 20px #ff4d4d; }
+        
+        .btn { margin-top:20px; padding:10px 20px; border:1px solid #ff4d4d; color:#ff4d4d; text-decoration:none; font-weight:bold; }
+        .btn:hover { background:#ff4d4d; color:#fff; }
+    </style>
+</head>
+<body>
+
+    <h1>SELECT ATTACK TARGET</h1>
+
+    <div class="container">
+        <div class="attack-box">
+            <h2>PC HACKING</h2>
+            <a href="pc-attacks.html" class="btn">VIEW METHODS</a>
+        </div>
+
+        <div class="attack-box">
+            <h2>MOBILE HACKING</h2>
+            <a href="mobile-attacks.html" class="btn">VIEW METHODS</a>
+        </div>
+
+        <div class="attack-box">
+            <h2>NETWORK HACKING</h2>
+            <a href="network-attacks.html" class="btn">VIEW METHODS</a>
+        </div>
+    </div>
+
+    <a href="malware.html" class="btn" style="margin-top:50px; display:inline-block;">⬅ BACK TO LAB</a>
+
+</body>
+</html>
