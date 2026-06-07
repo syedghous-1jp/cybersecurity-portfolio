@@ -990,24 +990,36 @@ to grow in the security field.
   </div>
 
 </div>
-      
-<div class="note-card sa-fade" data-cat="python">
+<div class="note-card reveal reveal-delay-1" data-cat="security">
   <div class="nc-top">
     <div class="nc-badge-row">
-      <span class="nc-badge" style="border-color:var(--cyan);">PYTHON</span>
-      <span class="nc-type">📚 NOTES</span>
+      <span class="nc-badge" style="background-color: #e74c3c;">Security</span>
+      <span class="nc-type">📄 PDF</span>
     </div>
-    <h3>Python Basics</h3>
-    <p>A complete roadmap from installation to object-oriented programming with PDF notes.</p>
+    <h3>Malware Analysis Guide</h3>
+    <p>Malware anatomy, propagation, lifecycle, static/dynamic analysis aur digital defense — Syed Ghous ki tarf se mukammal guide.</p>
   </div>
   <div class="nc-bottom">
-    <span class="nc-meta">22 TOPICS</span>
+    <span class="nc-meta">PROFESSIONAL SERIES</span>
     <div class="nc-actions">
-      <a href="python-notes.html" class="nc-btn">Read</a>
+      <a href="#" onclick="checkPassword()" class="nc-btn primary">Read</a>
+      <a href="Malware_Detailed_20_Page_Guide_Final.pdf" download class="nc-btn">⬇ PDF</a>
     </div>
   </div>
 </div>
-    <!-- 🔜 CTF (Coming Soon) -->
+
+<script>
+function checkPassword() {
+    var password = prompt("Access Restricted: This section is secure. Please enter the password to proceed.");
+    
+    if (password === "cyberghous177") {
+        window.location.href = "malware-analysis.html";
+    } else if (password !== null) {
+        alert("Access Denied! Incorrect password. If you need access, please contact the administrator via the email provided at the bottom of the website.");
+    }
+}
+</script>
+<!-- 🔜 CTF (Coming Soon) -->
       <div class="note-card reveal reveal-delay-2" data-cat="ctf">
         <div class="nc-top">
           <div class="nc-badge-row"><span class="nc-badge">CTF Writeup</span><span class="nc-type">📝 Article</span></div>
