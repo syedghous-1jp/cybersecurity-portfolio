@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Threat Operations | Attack Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background:#030303;
+            color:#ff1a1a;
+            font-family:'Rajdhani',sans-serif;
+            text-align:center;
+            padding:36px 16px 50px;
+            overflow-x:hidden;
+            min-height:100vh;
+            position:relative;
+        }
+
+        #matrix-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; opacity:0.13; pointer-events:none; }
+        #network-bg    { position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:0.18; }
+        body::after {
+            content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,26,26,0.025) 2px,rgba(255,26,26,0.025) 4px);
+            z-index:2; pointer-events:none;
+        }
+
+        .page-content { position:relative; z-index:10; }
+
+        /* ── TITLE ── */
+        .main-title {
+            font-family:'Orbitron';
+            font-size:clamp(20px, 3.8vw, 48px);
+            letter-spacing:8px;
+            margin-bottom:44px;
+            text-transform:uppercase;
+            color:#ff2020;
+            text-shadow: 0 0 10px #ff0000, 0 0 30px #ff000099, 0 0 70px #ff000044;
+            animation:titlePulse 3s ease-in-out infinite;
+            position:relative;
+        }
+        .main-title::before {
+            content:attr(data-text); position:absolute; left:50%; transform:translateX(-50%);
+            color:#ff5050; filter:blur(1.5px); opacity:0.3; animation:glitch 5s infinite;
+        }
+        @keyframes glitch {
+            0%,93%,100%{clip-path:none;transform:translateX(-50%)}
+            94%{clip-path:polygon(0 15%,100% 15%,100% 35%,0 35%);transform:translateX(calc(-50% + 4px))}
+            96%{clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%);transform:translateX(calc(-50% - 4px))}
+        }
+        @keyframes titlePulse {
+            0%,100%{text-shadow:0 0 10px #ff0000,0 0 30px #ff000099,0 0 70px #ff000044}
+            50%    {text-shadow:0 0 20px #ff0000,0 0 55px #ff0000bb,0 0 100px #ff000055}
+        }
+
+        /* ── ROW — desktop: horizontal, mobile: vertical ── */
+        .container {
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+            align-items:stretch;
+            gap:18px;
+            flex-wrap:nowrap;
+            perspective:2000px;
+            margin-bottom:40px;
+            width:100%;
+            max-width:1380px;
+            margin-left:auto;
+            margin-right:auto;
+            padding:0 10px;
+        }
+
+        /* ── CARD ── */
+        .attack-box {
+            flex:1 1 0;
+            min-width:0;
+            max-width:430px;
+            height:300px;
+            position:relative;
+            cursor:pointer;
+            transform-style:preserve-3d;
+            transition:transform 0.5s cubic-bezier(0.23,1,0.32,1);
+        }
+
+        /* ── TABLET (2 columns + 1 below) ── */
+        @media(max-width:900px){
+            .container{
+                flex-wrap:wrap;
+                gap:16px;
+            }
+            .attack-box{
+                flex:1 1 calc(50% - 16px);
+                max-width:calc(50% - 8px);
+                height:260px;
+            }
+            .attack-box:last-child{
+                flex:1 1 100%;
+                max-width:480px;
+            }
+        }
+
+        /* ── MOBILE (single column, full width) ── */
+        @media(max-width:560px){
+            body{ padding:24px 12px 40px; }
+            .main-title{ font-size:clamp(14px,6vw,28px); letter-spacing:4px; margin-bottom:28px; }
+            .container{
+                flex-direction:column;
+                flex-wrap:nowrap;
+                align-items:center;
+                gap:14px;
+                padding:0;
+            }
+            .attack-box{
+                flex:none;
+                width:100%;
+                max-width:100%;
+                /* On mobile keep landscape ratio: wider than tall */
+                height:clamp(180px, 52vw, 240px);
+            }
+            .attack-box:last-child{
+                max-width:100%;
+            }
+            .card-title{ font-size:12px; letter-spacing:2px; margin-bottom:8px; }
+            .btn{ font-size:8px; padding:8px 16px; }
+            .back-btn{ font-size:9px; padding:10px 28px; letter-spacing:2px; }
+            .status-bar{ bottom:58px; }
+            .icon-area{ bottom:65px; }
+        }
+
+        /* ── CARD FRAME ── */
+        .card-frame {
+            position:absolute; inset:0;
+            border:2px solid rgba(255,26,26,0.7);
+            background:linear-gradient(160deg,rgba(18,2,2,0.97) 0%,rgba(5,0,0,0.99) 100%);
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:flex-end;
+            padding-bottom:22px;
+            overflow:hidden;
+            transition:border-color 0.4s, box-shadow 0.4s;
+        }
+        .attack-box:hover .card-frame {
+            border-color:#ff5555;
+            box-shadow:0 0 40px #ff000077,0 0 80px #ff000033,inset 0 0 40px #ff000015;
+        }
+
+        /* Corner brackets */
+        .corner { position:absolute; width:20px; height:20px; border-color:#ff1a1a; border-style:solid; transition:all 0.4s; }
+        .corner.tl{top:7px;left:7px;border-width:2px 0 0 2px}
+        .corner.tr{top:7px;right:7px;border-width:2px 2px 0 0}
+        .corner.bl{bottom:7px;left:7px;border-width:0 0 2px 2px}
+        .corner.br{bottom:7px;right:7px;border-width:0 2px 2px 0}
+        .attack-box:hover .corner{width:28px;height:28px;border-color:#ff5555}
+
+        /* Edge glow bars */
+        .edge-bar{position:absolute;left:8%;width:84%;height:4px;background:linear-gradient(90deg,transparent,#ff1a1a,transparent);box-shadow:0 0 14px #ff1a1a}
+        .edge-bar.top{top:0} .edge-bar.bottom{bottom:0}
+
+        /* Scan line */
+        .scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#ff3030,transparent);opacity:0;z-index:20;pointer-events:none}
+        .attack-box:hover .scan-line{opacity:1;animation:scanDown 1.8s linear infinite}
+        @keyframes scanDown{from{top:0}to{top:100%}}
+
+        /* ── ICON — fills card, leaves ~80px at bottom ── */
+        .icon-area {
+            position:absolute;
+            top:0; left:0; right:0;
+            bottom:78px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+        }
+        .icon-glow{
+            position:absolute;
+            width:80%;height:90%;
+            border-radius:50%;
+            background:radial-gradient(circle,rgba(255,30,30,0.12) 0%,transparent 70%);
+            animation:glowPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes glowPulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+
+        .icon-svg{
+            position:relative; z-index:2;
+            width:90%; height:90%;
+            filter:drop-shadow(0 0 10px #ff1a1a) drop-shadow(0 0 28px #ff000077);
+            animation:iconFloat 3.5s ease-in-out infinite;
+            transition:filter 0.4s;
+        }
+        .attack-box:hover .icon-svg{
+            filter:drop-shadow(0 0 18px #ff4444) drop-shadow(0 0 45px #ff0000aa);
+        }
+        @keyframes iconFloat{
+            0%,100%{transform:translateY(0) rotateY(0deg)}
+            40%{transform:translateY(-6px) rotateY(5deg)}
+            70%{transform:translateY(-3px) rotateY(-3deg)}
+        }
+
+        /* Data stream */
+        .data-stream{
+            position:absolute;right:6px;top:0;bottom:0;width:42px;
+            overflow:hidden;font-family:'Courier New',monospace;font-size:7px;
+            color:rgba(255,26,26,0.38);line-height:1.3;pointer-events:none;z-index:3;
+        }
+        .data-stream-inner{animation:streamScroll 7s linear infinite}
+        .attack-box:nth-child(2) .data-stream-inner{animation-duration:5s}
+        .attack-box:nth-child(3) .data-stream-inner{animation-duration:9s}
+        @keyframes streamScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+
+        /* Status bar */
+        .status-bar{position:absolute;bottom:68px;left:12px;right:52px;height:2px;background:rgba(255,26,26,0.1);overflow:hidden}
+        .status-bar-fill{height:100%;background:linear-gradient(90deg,#ff1a1a,#ff7070);box-shadow:0 0 6px #ff0000;animation:sbPulse 2s ease-in-out infinite}
+        .attack-box:nth-child(1) .status-bar-fill{width:76%}
+        .attack-box:nth-child(2) .status-bar-fill{width:61%;animation-delay:0.7s}
+        .attack-box:nth-child(3) .status-bar-fill{width:89%;animation-delay:1.3s}
+        @keyframes sbPulse{0%,100%{opacity:0.55}50%{opacity:1}}
+
+        /* Title inside card */
+        .card-title{
+            font-family:'Orbitron';
+            font-size:clamp(11px,1.2vw,17px);
+            letter-spacing:3px;color:#ff3333;
+            text-shadow:0 0 10px #ff000088;
+            margin-bottom:12px;z-index:5;position:relative;
+            transition:color 0.3s,text-shadow 0.3s;
+        }
+        .attack-box:hover .card-title{color:#ff7070;text-shadow:0 0 16px #ff0000,0 0 32px #ff000077}
+
+        /* Button */
+        .btn{
+            padding:9px 22px;border:1.5px solid #ff1a1a;color:#ff1a1a;
+            text-decoration:none;font-weight:700;font-family:'Orbitron';
+            font-size:9px;letter-spacing:2px;background:transparent;
+            position:relative;z-index:5;display:inline-block;
+            text-transform:uppercase;overflow:hidden;transition:color 0.3s;
+        }
+        .btn::before{content:'';position:absolute;inset:0;background:#ff1a1a;transform:scaleX(0);transform-origin:left;transition:transform 0.35s;z-index:-1}
+        .btn:hover::before{transform:scaleX(1)}
+        .btn:hover{color:#000;box-shadow:0 0 22px #ff0000,0 0 44px #ff000055}
+
+        /* Back btn */
+        .back-btn{
+            display:inline-block;margin-top:14px;padding:12px 50px;
+            border:1.5px solid rgba(255,26,26,0.4);color:rgba(255,26,26,0.7);
+            text-decoration:none;font-family:'Orbitron';letter-spacing:4px;font-size:10px;
+            transition:all 0.4s;
+        }
+        .back-btn:hover{border-color:#ff1a1a;color:#ff1a1a;box-shadow:0 0 22px #ff000033;background:rgba(255,26,26,0.05)}
+
+
+    </style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<svg id="network-bg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<div class="page-content">
+    <h1 class="main-title" data-text="SELECT ATTACK TARGET">SELECT ATTACK TARGET</h1>
+
+    <div class="container">
+
+        <!-- ══════════ PC HACKING ══════════ -->
+        <div class="attack-box">
+            <div class="card-frame">
+                <div class="edge-bar top"></div><div class="edge-bar bottom"></div>
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <div class="scan-line"></div>
+                <div class="icon-area">
+                    <div class="icon-glow"></div>
+                    <svg class="icon-svg" viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- PC TOWER CASE -->
+                        <rect x="10" y="10" width="90" height="180" rx="5" stroke="#ff2020" stroke-width="2.5" fill="rgba(255,20,20,0.05)"/>
+                        <!-- Case inner panel -->
+                        <rect x="18" y="18" width="74" height="164" rx="3" stroke="#ff202040" stroke-width="1" fill="rgba(255,10,10,0.03)"/>
+                        <!-- Vents left -->
+                        <line x1="22" y1="30" x2="22" y2="70" stroke="#ff202077" stroke-width="1.5"/>
+                        <line x1="29" y1="30" x2="29" y2="70" stroke="#ff202077" stroke-width="1.5"/>
+                        <line x1="36" y1="30" x2="36" y2="70" stroke="#ff202077" stroke-width="1.5"/>
+                        <!-- Power button -->
+                        <circle cx="72" cy="28" r="7" stroke="#ff2020" stroke-width="2" fill="rgba(255,20,20,0.1)"/>
+                        <circle cx="72" cy="28" r="3" fill="#ff2020">
+                            <animate attributeName="opacity" values="1;0.2;1" dur="1.1s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- Drive bays -->
+                        <rect x="44" y="45" width="46" height="11" rx="2" stroke="#ff202088" stroke-width="1.5" fill="rgba(255,20,20,0.07)"/>
+                        <rect x="44" y="60" width="46" height="11" rx="2" stroke="#ff202088" stroke-width="1.5" fill="rgba(255,20,20,0.07)"/>
+                        <!-- Fan -->
+                        <circle cx="55" cy="145" r="28" stroke="#ff2020" stroke-width="1.8" fill="rgba(255,20,20,0.04)"/>
+                        <circle cx="55" cy="145" r="18" stroke="#ff202066" stroke-width="1"/>
+                        <circle cx="55" cy="145" r="7"  stroke="#ff202099" stroke-width="1"/>
+                        <line x1="55" y1="117" x2="55" y2="173" stroke="#ff202055" stroke-width="1"/>
+                        <line x1="27"  y1="145" x2="83" y2="145" stroke="#ff202055" stroke-width="1"/>
+                        <line x1="35" y1="125" x2="75" y2="165" stroke="#ff202033" stroke-width="1"/>
+                        <line x1="75" y1="125" x2="35" y2="165" stroke="#ff202033" stroke-width="1"/>
+                        <!-- GPU card -->
+                        <rect x="20" y="88" width="68" height="22" rx="2" stroke="#ff2020" stroke-width="1.5" fill="rgba(255,20,20,0.07)"/>
+                        <line x1="30" y1="88" x2="30" y2="110" stroke="#ff202055" stroke-width="1"/>
+                        <line x1="44" y1="88" x2="44" y2="110" stroke="#ff202055" stroke-width="1"/>
+                        <line x1="58" y1="88" x2="58" y2="110" stroke="#ff202055" stroke-width="1"/>
+                        <line x1="72" y1="88" x2="72" y2="110" stroke="#ff202055" stroke-width="1"/>
+
+                        <!-- MONITOR -->
+                        <rect x="116" y="8" width="170" height="118" rx="5" stroke="#ff2020" stroke-width="2.5" fill="rgba(255,20,20,0.05)"/>
+                        <rect x="124" y="16" width="154" height="102" fill="rgba(255,10,10,0.08)" stroke="#ff404040" stroke-width="1"/>
+                        <!-- screen grid lines -->
+                        <line x1="124" y1="36" x2="278" y2="36" stroke="#ff202030" stroke-width="0.8"/>
+                        <line x1="124" y1="56" x2="278" y2="56" stroke="#ff202030" stroke-width="0.8"/>
+                        <line x1="124" y1="76" x2="278" y2="76" stroke="#ff202030" stroke-width="0.8"/>
+                        <line x1="124" y1="96" x2="278" y2="96" stroke="#ff202030" stroke-width="0.8"/>
+                        <line x1="170" y1="16" x2="170" y2="118" stroke="#ff202030" stroke-width="0.8"/>
+                        <line x1="220" y1="16" x2="220" y2="118" stroke="#ff202030" stroke-width="0.8"/>
+                        <!-- Terminal text on screen -->
+                        <rect x="130" y="22" width="50" height="3" rx="1" fill="#ff303099">
+                            <animate attributeName="width" values="50;70;50" dur="2.2s" repeatCount="indefinite"/>
+                        </rect>
+                        <rect x="130" y="29" width="70" height="2" rx="1" fill="#ff303066"/>
+                        <rect x="130" y="35" width="40" height="2" rx="1" fill="#ff303055"/>
+                        <rect x="130" y="41" width="60" height="2" rx="1" fill="#ff303066"/>
+                        <rect x="130" y="59" width="45" height="2" rx="1" fill="#ff303055"/>
+                        <rect x="130" y="65" width="65" height="2" rx="1" fill="#ff303066"/>
+                        <rect x="130" y="71" width="30" height="2" rx="1" fill="#ff303055"/>
+                        <rect x="130" y="79" width="55" height="2" rx="1" fill="#ff303066"/>
+                        <rect x="130" y="85" width="38" height="2" rx="1" fill="#ff303055"/>
+                        <rect x="130" y="99" width="7" height="10" rx="1" fill="#ff3030">
+                            <animate attributeName="opacity" values="1;0;1" dur="0.85s" repeatCount="indefinite"/>
+                        </rect>
+                        <!-- Monitor stand -->
+                        <rect x="191" y="126" width="14" height="18" fill="none" stroke="#ff2020" stroke-width="2"/>
+                        <rect x="172" y="143" width="52" height="5" rx="2" fill="none" stroke="#ff2020" stroke-width="2"/>
+
+                        <!-- KEYBOARD -->
+                        <rect x="116" y="158" width="170" height="38" rx="4" fill="rgba(255,20,20,0.05)" stroke="#ff202077" stroke-width="1.5"/>
+                        <rect x="122" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="134" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="146" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="158" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="170" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="182" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="194" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="206" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="218" y="163" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="230" y="163" width="16" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="126" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="138" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="150" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="162" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="174" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="186" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="198" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="210" y="173" width="9" height="6" rx="1" fill="#ff202033"/>
+                        <rect x="140" y="183" width="80" height="6" rx="1" fill="#ff202033"/>
+
+                        <!-- Cable -->
+                        <path d="M100 100 Q108 100 108 130 Q108 155 116 162" stroke="#ff202055" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
+
+                        <!-- Binary scroll right side -->
+                        <text x="300" y="30" fill="#ff202066" font-family="monospace" font-size="8">10110011</text>
+                        <text x="300" y="42" fill="#ff202044" font-family="monospace" font-size="8">01001101</text>
+                        <text x="300" y="54" fill="#ff202066" font-family="monospace" font-size="8">11010010</text>
+                        <text x="300" y="66" fill="#ff202044" font-family="monospace" font-size="8">00110101</text>
+                        <text x="300" y="78" fill="#ff202066" font-family="monospace" font-size="8">10101100</text>
+                        <text x="300" y="90" fill="#ff202044" font-family="monospace" font-size="8">01110001</text>
+                        <text x="300" y="102" fill="#ff202066" font-family="monospace" font-size="8">11001011</text>
+                        <text x="300" y="114" fill="#ff202044" font-family="monospace" font-size="8">00101110</text>
+                        <text x="300" y="126" fill="#ff202066" font-family="monospace" font-size="8">10010111</text>
+                        <text x="300" y="138" fill="#ff202044" font-family="monospace" font-size="8">01100010</text>
+                        <text x="300" y="150" fill="#ff202066" font-family="monospace" font-size="8">11100001</text>
+                        <text x="300" y="162" fill="#ff202044" font-family="monospace" font-size="8">00011101</text>
+                        <text x="300" y="174" fill="#ff202066" font-family="monospace" font-size="8">10101011</text>
+                        <text x="300" y="186" fill="#ff202044" font-family="monospace" font-size="8">01010100</text>
+                        <text x="300" y="198" fill="#ff202066" font-family="monospace" font-size="8">11110000</text>
+
+                        <!-- Glowing particles -->
+                        <circle cx="380" cy="40" r="2" fill="#ff2020" opacity="0.7">
+                            <animate attributeName="cy" values="40;25;40" dur="2.1s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2.1s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="370" cy="150" r="1.5" fill="#ff2020" opacity="0.5">
+                            <animate attributeName="cy" values="150;138;150" dur="1.7s" repeatCount="indefinite"/>
+                        </circle>
+                    </svg>
+                </div>
+                <div class="data-stream"><div class="data-stream-inner" id="ds1"></div></div>
+                <div class="status-bar"><div class="status-bar-fill"></div></div>
+                <h2 class="card-title">PC HACKING</h2>
+                <a href="pc-attacks.html" class="btn">VIEW METHODS</a>
+            </div>
+        </div>
+
+        <!-- ══════════ MOBILE HACKING ══════════ -->
+        <div class="attack-box">
+            <div class="card-frame">
+                <div class="edge-bar top"></div><div class="edge-bar bottom"></div>
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <div class="scan-line"></div>
+                <div class="icon-area">
+                    <div class="icon-glow"></div>
+                    <svg class="icon-svg" viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                        <!-- SIGNAL WAVE (audio/radio waveform) below tower area -->
+                        <!-- left side waves -->
+                        <path d="M10 105 Q20 80 30 105 Q40 130 50 105 Q60 80 70 105 Q80 130 90 105" stroke="#ff202066" stroke-width="1.2" fill="none"/>
+                        <path d="M10 105 Q20 65 30 105 Q40 145 50 105 Q60 65 70 105 Q80 145 90 105" stroke="#ff202044" stroke-width="1" fill="none"/>
+
+                        <!-- right side waves -->
+                        <path d="M310 105 Q320 80 330 105 Q340 130 350 105 Q360 80 370 105 Q380 130 390 105" stroke="#ff202066" stroke-width="1.2" fill="none"/>
+                        <path d="M310 105 Q320 65 330 105 Q340 145 350 105 Q360 65 370 105 Q380 145 390 105" stroke="#ff202044" stroke-width="1" fill="none"/>
+
+                        <!-- CELL TOWER center -->
+                        <line x1="200" y1="8" x2="200" y2="140" stroke="#ff2020" stroke-width="2.5"/>
+                        <line x1="188" y1="22" x2="212" y2="22" stroke="#ff2020" stroke-width="2"/>
+                        <line x1="181" y1="38" x2="219" y2="38" stroke="#ff2020" stroke-width="2"/>
+                        <line x1="174" y1="56" x2="226" y2="56" stroke="#ff2020" stroke-width="2"/>
+                        <line x1="167" y1="76" x2="233" y2="76" stroke="#ff2020" stroke-width="1.5"/>
+                        <!-- Tower legs -->
+                        <line x1="200" y1="140" x2="182" y2="170" stroke="#ff2020" stroke-width="2"/>
+                        <line x1="200" y1="140" x2="218" y2="170" stroke="#ff2020" stroke-width="2"/>
+                        <line x1="175" y1="170" x2="225" y2="170" stroke="#ff2020" stroke-width="1.5"/>
+                        <!-- cross support -->
+                        <line x1="184" y1="155" x2="216" y2="155" stroke="#ff202077" stroke-width="1"/>
+
+                        <!-- Signal arcs from tower -->
+                        <path d="M185 28 Q167 52 185 76" stroke="#ff2020" stroke-width="1.8" fill="none">
+                            <animate attributeName="opacity" values="1;0.15;1" dur="1.3s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M176 18 Q150 52 176 86" stroke="#ff2020" stroke-width="1.5" fill="none" opacity="0.7">
+                            <animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.3s" begin="0.22s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M166 10 Q132 52 166 94" stroke="#ff202066" stroke-width="1.2" fill="none">
+                            <animate attributeName="opacity" values="0.6;0.05;0.6" dur="1.3s" begin="0.44s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M215 28 Q233 52 215 76" stroke="#ff2020" stroke-width="1.8" fill="none">
+                            <animate attributeName="opacity" values="1;0.15;1" dur="1.3s" begin="0.1s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M224 18 Q250 52 224 86" stroke="#ff2020" stroke-width="1.5" fill="none" opacity="0.7">
+                            <animate attributeName="opacity" values="0.7;0.1;0.7" dur="1.3s" begin="0.32s" repeatCount="indefinite"/>
+                        </path>
+                        <path d="M234 10 Q268 52 234 94" stroke="#ff202066" stroke-width="1.2" fill="none">
+                            <animate attributeName="opacity" values="0.6;0.05;0.6" dur="1.3s" begin="0.54s" repeatCount="indefinite"/>
+                        </path>
+
+                        <!-- PHONE LEFT (main, slightly tilted) -->
+                        <g transform="rotate(-8,100,110)">
+                            <rect x="60" y="38" width="64" height="118" rx="8" stroke="#ff2020" stroke-width="2.5" fill="rgba(255,20,20,0.06)"/>
+                            <rect x="68" y="50" width="48" height="88" fill="rgba(255,10,10,0.1)" stroke="#ff404040" stroke-width="1"/>
+                            <circle cx="92" cy="44" r="3" fill="#ff2020" opacity="0.6"/>
+                            <rect x="74" y="58" width="32" height="2.5" rx="1" fill="#ff303077"/>
+                            <rect x="74" y="65" width="22" height="2" rx="1" fill="#ff303055"/>
+                            <rect x="74" y="71" width="36" height="2" rx="1" fill="#ff303066"/>
+                            <rect x="74" y="82" width="10" height="10" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="1"/>
+                            <rect x="87" y="82" width="10" height="10" rx="2" fill="rgba(255,30,30,0.35)" stroke="#ff2020" stroke-width="1"/>
+                            <rect x="100" y="82" width="10" height="10" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="1"/>
+                            <text x="89" y="91" fill="#ff3030" font-size="8" font-family="monospace">!</text>
+                            <rect x="74" y="96" width="10" height="10" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="1"/>
+                            <rect x="87" y="96" width="10" height="10" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="1"/>
+                            <rect x="100" y="96" width="10" height="10" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="1"/>
+                            <rect x="80" y="148" width="24" height="3" rx="1.5" fill="#ff202077"/>
+                        </g>
+
+                        <!-- PHONE RIGHT (tilted other way) -->
+                        <g transform="rotate(10,290,110)">
+                            <rect x="258" y="42" width="60" height="112" rx="8" stroke="#ff202099" stroke-width="2" fill="rgba(255,20,20,0.05)"/>
+                            <rect x="265" y="53" width="46" height="82" fill="rgba(255,10,10,0.08)" stroke="#ff303030" stroke-width="0.8"/>
+                            <circle cx="288" cy="47" r="2.5" fill="#ff2020" opacity="0.5"/>
+                            <rect x="270" y="60" width="30" height="2" rx="1" fill="#ff303066"/>
+                            <rect x="270" y="67" width="20" height="2" rx="1" fill="#ff303044"/>
+                            <rect x="270" y="74" width="28" height="2" rx="1" fill="#ff303055"/>
+                            <rect x="272" y="84" width="9" height="9" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="0.8"/>
+                            <rect x="284" y="84" width="9" height="9" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="0.8"/>
+                            <rect x="272" y="97" width="9" height="9" rx="2" fill="rgba(255,20,20,0.2)" stroke="#ff202066" stroke-width="0.8"/>
+                            <rect x="284" y="97" width="9" height="9" rx="2" fill="rgba(255,30,30,0.3)" stroke="#ff2020" stroke-width="0.8"/>
+                            <rect x="276" y="142" width="22" height="3" rx="1.5" fill="#ff202066"/>
+                        </g>
+
+                        <!-- Dashed beam from tower to phones -->
+                        <line x1="167" y1="76" x2="130" y2="105" stroke="#ff2020" stroke-width="1.2" stroke-dasharray="5 4">
+                            <animate attributeName="stroke-dashoffset" values="0;-18" dur="0.9s" repeatCount="indefinite"/>
+                        </line>
+                        <line x1="233" y1="76" x2="268" y2="105" stroke="#ff2020" stroke-width="1.2" stroke-dasharray="5 4">
+                            <animate attributeName="stroke-dashoffset" values="0;-18" dur="0.9s" repeatCount="indefinite"/>
+                        </line>
+
+                        <!-- Binary floating -->
+                        <text x="8" y="145" fill="#ff202066" font-family="monospace" font-size="7">11010</text>
+                        <text x="8" y="156" fill="#ff202044" font-family="monospace" font-size="7">00110</text>
+                        <text x="8" y="167" fill="#ff202066" font-family="monospace" font-size="7">10101</text>
+                        <text x="345" y="145" fill="#ff202066" font-family="monospace" font-size="7">01001</text>
+                        <text x="345" y="156" fill="#ff202044" font-family="monospace" font-size="7">11100</text>
+                        <text x="345" y="167" fill="#ff202066" font-family="monospace" font-size="7">00011</text>
+                    </svg>
+                </div>
+                <div class="data-stream"><div class="data-stream-inner" id="ds2"></div></div>
+                <div class="status-bar"><div class="status-bar-fill"></div></div>
+                <h2 class="card-title">MOBILE HACKING</h2>
+                <a href="mobile-attacks.html" class="btn">VIEW METHODS</a>
+            </div>
+        </div>
+
+        <!-- ══════════ NETWORK HACKING ══════════ -->
+        <div class="attack-box">
+            <div class="card-frame">
+                <div class="edge-bar top"></div><div class="edge-bar bottom"></div>
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <div class="scan-line"></div>
+                <div class="icon-area">
+                    <div class="icon-glow"></div>
+                    <svg class="icon-svg" viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                        <!-- GLOBE center-left -->
+                        <circle cx="155" cy="100" r="80" stroke="#ff2020" stroke-width="2.5" fill="rgba(255,20,20,0.05)"/>
+                        <!-- Equator -->
+                        <ellipse cx="155" cy="100" rx="80" ry="22" stroke="#ff202055" stroke-width="1.2"/>
+                        <!-- Mid lat -->
+                        <ellipse cx="155" cy="100" rx="80" ry="48" stroke="#ff202040" stroke-width="0.9"/>
+                        <!-- Meridians -->
+                        <line x1="155" y1="20" x2="155" y2="180" stroke="#ff202055" stroke-width="1"/>
+                        <path d="M120 22 Q138 100 120 178" stroke="#ff202040" stroke-width="0.9" fill="none"/>
+                        <path d="M190 22 Q172 100 190 178" stroke="#ff202040" stroke-width="0.9" fill="none"/>
+                        <path d="M93 38 Q123 100 93 162" stroke="#ff202030" stroke-width="0.8" fill="none"/>
+                        <path d="M217 38 Q187 100 217 162" stroke="#ff202030" stroke-width="0.8" fill="none"/>
+                        <!-- Highlight arc -->
+                        <path d="M110 52 Q138 44 172 56" stroke="#ff303055" stroke-width="1.5" fill="none"/>
+
+                        <!-- FIREWALL right side -->
+                        <rect x="268" y="60" width="78" height="90" rx="3" fill="rgba(255,20,20,0.07)" stroke="#ff2020" stroke-width="2"/>
+                        <!-- Brick rows horizontal -->
+                        <line x1="268" y1="80" x2="346" y2="80" stroke="#ff202077" stroke-width="1.2"/>
+                        <line x1="268" y1="100" x2="346" y2="100" stroke="#ff202077" stroke-width="1.2"/>
+                        <line x1="268" y1="120" x2="346" y2="120" stroke="#ff202077" stroke-width="1.2"/>
+                        <line x1="268" y1="140" x2="346" y2="140" stroke="#ff202077" stroke-width="1.2"/>
+                        <!-- vertical brick dividers row 1 -->
+                        <line x1="294" y1="60" x2="294" y2="80" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="320" y1="60" x2="320" y2="80" stroke="#ff202044" stroke-width="1"/>
+                        <!-- row 2 offset -->
+                        <line x1="282" y1="80" x2="282" y2="100" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="308" y1="80" x2="308" y2="100" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="334" y1="80" x2="334" y2="100" stroke="#ff202044" stroke-width="1"/>
+                        <!-- row 3 -->
+                        <line x1="294" y1="100" x2="294" y2="120" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="320" y1="100" x2="320" y2="120" stroke="#ff202044" stroke-width="1"/>
+                        <!-- row 4 -->
+                        <line x1="282" y1="120" x2="282" y2="140" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="308" y1="120" x2="308" y2="140" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="334" y1="120" x2="334" y2="140" stroke="#ff202044" stroke-width="1"/>
+                        <!-- row 5 -->
+                        <line x1="294" y1="140" x2="294" y2="150" stroke="#ff202044" stroke-width="1"/>
+                        <line x1="320" y1="140" x2="320" y2="150" stroke="#ff202044" stroke-width="1"/>
+                        <!-- Lock icon on firewall -->
+                        <rect x="294" y="154" width="14" height="11" rx="2" fill="none" stroke="#ff2020" stroke-width="1.5"/>
+                        <path d="M296 154 Q296 148 307 148 Q318 148 318 154" stroke="#ff2020" stroke-width="1.5" fill="none"/>
+                        <circle cx="301" cy="160" r="2" fill="#ff2020" opacity="0.7"/>
+
+                        <!-- Network NODES left side -->
+                        <circle cx="22" cy="80" r="12" fill="rgba(255,20,20,0.1)" stroke="#ff2020" stroke-width="2"/>
+                        <!-- Pulse ring -->
+                        <circle cx="22" cy="80" r="12" stroke="#ff2020" stroke-width="1" fill="none" opacity="0.5">
+                            <animate attributeName="r" values="12;24;12" dur="2s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.5;0;0.5" dur="2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="22" cy="130" r="9" fill="rgba(255,20,20,0.08)" stroke="#ff2020" stroke-width="1.5"/>
+                        <circle cx="22" cy="172" r="9" fill="rgba(255,20,20,0.08)" stroke="#ff2020" stroke-width="1.5"/>
+                        <circle cx="60" cy="188" r="8" fill="rgba(255,20,20,0.08)" stroke="#ff202099" stroke-width="1.5"/>
+                        <!-- Node lines -->
+                        <line x1="22" y1="92" x2="22" y2="121" stroke="#ff202088" stroke-width="1.2"/>
+                        <line x1="22" y1="139" x2="22" y2="163" stroke="#ff202088" stroke-width="1.2"/>
+                        <line x1="31" y1="172" x2="52" y2="184" stroke="#ff202088" stroke-width="1.2"/>
+                        <!-- Node to globe beam -->
+                        <line x1="34" y1="78" x2="76" y2="82" stroke="#ff2020" stroke-width="1.2" stroke-dasharray="5 3">
+                            <animate attributeName="stroke-dashoffset" values="0;-16" dur="0.9s" repeatCount="indefinite"/>
+                        </line>
+
+                        <!-- CCTV cameras (top right corner, like the image) -->
+                        <rect x="350" y="14" width="28" height="18" rx="3" fill="rgba(255,20,20,0.09)" stroke="#ff2020" stroke-width="1.8"/>
+                        <circle cx="378" cy="23" r="7" fill="rgba(255,20,20,0.12)" stroke="#ff2020" stroke-width="1.5"/>
+                        <polygon points="350,16 340,10 340,36 350,30" fill="none" stroke="#ff202088" stroke-width="1.2"/>
+                        <!-- second camera below -->
+                        <rect x="360" y="42" width="24" height="16" rx="3" fill="rgba(255,20,20,0.09)" stroke="#ff202099" stroke-width="1.5"/>
+                        <circle cx="384" cy="50" r="6" fill="rgba(255,20,20,0.1)" stroke="#ff202099" stroke-width="1.2"/>
+                        <!-- cam beam to globe -->
+                        <line x1="346" y1="26" x2="240" y2="68" stroke="#ff202055" stroke-width="1" stroke-dasharray="4 4">
+                            <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.1s" repeatCount="indefinite"/>
+                        </line>
+
+                        <!-- Satellite top left -->
+                        <circle cx="68" cy="18" r="10" fill="rgba(255,20,20,0.1)" stroke="#ff2020" stroke-width="1.8"/>
+                        <rect x="44" y="14" width="18" height="9" rx="1" fill="rgba(255,20,20,0.1)" stroke="#ff202088" stroke-width="1.2"/>
+                        <rect x="86" y="14" width="18" height="9" rx="1" fill="rgba(255,20,20,0.1)" stroke="#ff202088" stroke-width="1.2"/>
+                        <line x1="68" y1="28" x2="100" y2="52" stroke="#ff202066" stroke-width="1" stroke-dasharray="4 3">
+                            <animate attributeName="stroke-dashoffset" values="0;-14" dur="1s" repeatCount="indefinite"/>
+                        </line>
+
+                        <!-- Globe data dots -->
+                        <circle cx="175" cy="76" r="3.5" fill="#ff3030" opacity="0.9">
+                            <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.4s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="132" cy="112" r="3" fill="#ff3030" opacity="0.7">
+                            <animate attributeName="opacity" values="0.7;0.15;0.7" dur="1.8s" begin="0.4s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="178" cy="120" r="2.5" fill="#ff3030" opacity="0.6">
+                            <animate attributeName="opacity" values="0.6;0.1;0.6" dur="2s" begin="0.8s" repeatCount="indefinite"/>
+                        </circle>
+
+                        <!-- Globe to firewall connection -->
+                        <line x1="233" y1="100" x2="268" y2="105" stroke="#ff2020" stroke-width="1.5" stroke-dasharray="5 3">
+                            <animate attributeName="stroke-dashoffset" values="0;-16" dur="0.8s" repeatCount="indefinite"/>
+                        </line>
+
+                        <!-- Binary on right -->
+                        <text x="358" y="100" fill="#ff202066" font-family="monospace" font-size="7">01101</text>
+                        <text x="358" y="110" fill="#ff202044" font-family="monospace" font-size="7">10010</text>
+                        <text x="358" y="120" fill="#ff202066" font-family="monospace" font-size="7">11001</text>
+                        <text x="358" y="130" fill="#ff202044" font-family="monospace" font-size="7">00110</text>
+                        <text x="358" y="140" fill="#ff202066" font-family="monospace" font-size="7">10101</text>
+                        <text x="358" y="150" fill="#ff202044" font-family="monospace" font-size="7">01010</text>
+                    </svg>
+                </div>
+                <div class="data-stream"><div class="data-stream-inner" id="ds3"></div></div>
+                <div class="status-bar"><div class="status-bar-fill"></div></div>
+                <h2 class="card-title">NETWORK HACKING</h2>
+                <a href="network-attacks.html" class="btn">VIEW METHODS</a>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="malware.html" class="back-btn">← BACK TO LAB</a>
+</div>
+
+<script>
+// MATRIX RAIN
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+function rsz(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+rsz(); window.addEventListener('resize',()=>{rsz();drops=Array(Math.floor(canvas.width/13)).fill(1);});
+const chars='01アイウエオカキクケコサシスセソタチツテトABCDEF0123456789';
+let drops=Array(Math.floor(canvas.width/13)).fill(1);
+function dm(){
+    ctx.fillStyle='rgba(3,3,3,0.06)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#ff1a1a'; ctx.font='12px monospace';
+    drops.forEach((y,i)=>{
+        ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*13,y*13);
+        if(y*13>canvas.height&&Math.random()>0.975)drops[i]=0; drops[i]++;
+    });
+}
+setInterval(dm,48);
+
+// NETWORK BG
+const svgEl=document.getElementById('network-bg');
+const W=window.innerWidth,H=window.innerHeight;
+svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+const pts=Array.from({length:22},()=>({x:Math.random()*W,y:Math.random()*H}));
+pts.forEach((p,i)=>{
+    pts.forEach((q,j)=>{
+        if(j>i){const d=Math.hypot(p.x-q.x,p.y-q.y);
+            if(d<250){const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+                ln.setAttribute('x1',p.x);ln.setAttribute('y1',p.y);ln.setAttribute('x2',q.x);ln.setAttribute('y2',q.y);
+                ln.setAttribute('stroke','#ff1a1a');ln.setAttribute('stroke-width','0.7');
+                ln.setAttribute('opacity',(1-d/250)*0.4);svgEl.appendChild(ln);}
+        }
+    });
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r','2.5');
+    c.setAttribute('fill','#ff1a1a');c.setAttribute('opacity','0.4');svgEl.appendChild(c);
+});
+
+// DATA STREAMS
+function buildStream(id){
+    const el=document.getElementById(id);let s='';
+    for(let i=0;i<150;i++)s+=(Math.random()>.5?'1':'0')+(Math.random()>.6?Math.floor(Math.random()*9):'')+(Math.random()>.85?' ':'')+'\n';
+    el.textContent=s+s;
+}
+['ds1','ds2','ds3'].forEach(buildStream);
+
+// MOUSE TILT — desktop only
+if(window.matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.attack-box').forEach(box=>{
+        box.addEventListener('mousemove',e=>{
+            const r=box.getBoundingClientRect();
+            const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+            box.style.transform=`rotateY(${x*18}deg) rotateX(${-y*14}deg) translateZ(28px)`;
+            box.style.transition='transform 0.1s';
+        });
+        box.addEventListener('mouseleave',()=>{
+            box.style.transition='transform 0.6s cubic-bezier(0.23,1,0.32,1)';
+            box.style.transform='';
+        });
+    });
+}
+</script>
+</body>
+</html>
