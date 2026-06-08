@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>PC Hacking | Operations Lab</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript">
+        // Right-click disable
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        // Copy/Cut disable
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        // Shortcuts (Save, Source, Copy, Print) disable
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 67 || e.keyCode === 80)) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         body { 
@@ -12,6 +27,7 @@
             font-family: 'Rajdhani', sans-serif; 
             padding: 40px;
             overflow-x: hidden;
+            user-select: none; /* Text selection rokne ke liye */
         }
         
         h1 { 
