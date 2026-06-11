@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HACKERS ROOM-LIVE CHAT</title>
+    <title>HACKERS ROOM</title>
     <style>
         :root {
             --bg-deep: #0a0e14;
@@ -30,7 +30,7 @@
         }
 
         .container { 
-            max-width: 900px; 
+            max-width: 1100px; /* Layout ko thoda aur wide kiya */
             width: 100%;
             margin: 0 auto; 
             flex: 1;
@@ -46,17 +46,17 @@
             font-size: 28px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            margin-bottom: 40px;
+            margin-bottom: 25px;
         }
 
-        /* The Big Interactive Booth Controller */
+        /* Interactive Booth Gate */
         .booth-gate {
             background: var(--bg-card);
             border: 2px dashed var(--neon-blue);
             border-radius: 8px;
-            padding: 60px 40px;
+            padding: 8px 40px;
             text-align: center;
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
             box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             cursor: pointer;
@@ -95,7 +95,6 @@
             text-transform: uppercase;
             border-radius: 4px;
             display: inline-block;
-            transition: all 0.3s ease;
         }
 
         .booth-gate:hover .action-click-btn {
@@ -105,23 +104,23 @@
             box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
         }
 
-        /* Hidden Core Chat Section - Opens on Click */
+        /* MASSIVE CHAT WINDOW SCREEN */
         .chat-section {
             background: var(--bg-card);
-            border: 1px solid var(--border);
+            border: 2px solid var(--neon-blue);
             border-radius: 8px;
-            display: none; /* Shuru me chhupa rahega */
+            display: none; 
             flex-direction: column;
             overflow: hidden;
             width: 100%;
-            height: 65vh;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            height: 75vh; /* Height ko 65 se barha kar 75vh kar diya taqi screen bhari hui lage */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
         }
 
         .chat-header-node {
-            background: rgba(17, 24, 39, 0.8);
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border);
+            background: rgba(17, 24, 39, 0.9);
+            padding: 18px 24px;
+            border-bottom: 2px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -129,17 +128,17 @@
 
         #dedicated-chat-logs {
             flex: 1;
-            padding: 20px;
+            padding: 25px;
             overflow-y: auto;
-            background: #070a0f;
+            background: #06090e;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 18px;
         }
 
         .dash-msg {
-            max-width: 80%;
-            padding: 12px 16px;
+            max-width: 75%;
+            padding: 12px 18px;
             border-radius: 6px;
             font-size: 14px;
             word-wrap: break-word;
@@ -147,21 +146,21 @@
 
         .dash-msg-me {
             color: #ffffff;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.07);
             align-self: flex-end;
-            border-right: 3px solid #ffffff;
+            border-right: 4px solid #ffffff;
         }
 
         .dash-msg-them {
             color: var(--neon-blue);
-            background: rgba(0, 210, 255, 0.03);
+            background: rgba(0, 210, 255, 0.04);
             align-self: flex-start;
-            border-left: 3px solid var(--neon-blue);
+            border-left: 4px solid var(--neon-blue);
         }
 
         .dash-input-area {
             display: flex;
-            border-top: 1px solid var(--border);
+            border-top: 2px solid var(--border);
             background: var(--bg-card);
         }
 
@@ -170,19 +169,28 @@
             background: transparent;
             border: none;
             color: #ffffff;
-            padding: 18px;
+            padding: 20px;
             font-family: 'Courier New', monospace;
+            font-size: 15px;
             outline: none;
         }
 
         .dash-send-btn {
-            background: none;
-            border-left: 1px solid var(--border);
-            color: var(--neon-green);
-            padding: 0 30px;
+            background: var(--neon-blue);
+            border: none;
+            color: #000000;
+            padding: 0 35px;
             font-weight: bold;
+            font-family: 'Courier New', monospace;
             cursor: pointer;
             text-transform: uppercase;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .dash-send-btn:hover {
+            background: var(--neon-green);
+            box-shadow: -5px 0 15px rgba(0, 255, 102, 0.3);
         }
 
         .back-home {
@@ -197,7 +205,7 @@
 </head>
 <body>
 
-    <a href="index.html" class="back-home">&lt;= RETURN_TO_DASHBOARD</a>
+    <a href="labs-hub.html" class="back-home">&lt;= RETURN_TO_DASHBOARD</a>
 
     <div class="container">
         <h1>Matrix Tactical Comms</h1>
@@ -210,8 +218,8 @@
 
         <div id="active-chat-box" class="chat-section">
             <div class="chat-header-node">
-                <span style="color: var(--neon-blue); font-weight: bold; font-size: 14px; letter-spacing: 2px;">⚡ NODE_SECURE_LIVE</span>
-                <span id="dash-user-badge" style="color: var(--neon-green); font-size: 12px;">CONNECTING...</span>
+                <span style="color: var(--neon-blue); font-weight: bold; font-size: 15px; letter-spacing: 2px;">⚡ NODE_SECURE_LIVE</span>
+                <span id="dash-user-badge" style="color: var(--neon-green); font-size: 13px; font-weight: bold;">CONNECTING...</span>
             </div>
             <div id="dedicated-chat-logs"></div>
             <div class="dash-input-area">
@@ -241,18 +249,14 @@
         firebase.initializeApp(firebaseConfig);
         dashDatabase = firebase.database();
 
-        // Yeh function click hote hi chalega aur booth open karega
         function openLiveBooth() {
-            // Booth gate ko chhupa do aur chat box ko flex display dekar open kar do
             document.getElementById("comms-booth-gate").style.display = "none";
             document.getElementById("active-chat-box").style.display = "flex";
 
-            // Initialize Background User Stream
             const randomID = Math.floor(100 + Math.random() * 900);
             dashUsername = "HACKER_" + randomID;
-            document.getElementById("dash-user-badge").innerText = `● AGENT: ${dashUsername}`;
+            document.getElementById("dash-user-badge").innerText = "● AGENT: " + dashUsername;
 
-            // Sync Data Stream
             dashDatabase.ref('direct_messages').limitToLast(50).on('child_added', (snapshot) => {
                 const data = snapshot.val();
                 renderDashNode(data.user, data.msg, data.user === dashUsername);
@@ -272,13 +276,18 @@
             }
         }
 
+        // Fix logic for displaying clean real strings without literal code
         function renderDashNode(sender, text, isMe) {
             const logs = document.getElementById("dedicated-chat-logs");
             const node = document.createElement("div");
             node.className = isMe ? "dash-msg dash-msg-me" : "dash-msg dash-msg-them";
-            node.innerHTML = isMe ? 
-                `<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU]</span>\${text}` : 
-                `<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[\${sender}]</span>\${text}`;
+            
+            if(isMe) {
+                node.innerHTML = '<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU]</span>' + text;
+            } else {
+                node.innerHTML = '<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[' + sender + ']</span>' + text;
+            }
+            
             logs.appendChild(node);
             logs.scrollTop = logs.scrollHeight;
         }
