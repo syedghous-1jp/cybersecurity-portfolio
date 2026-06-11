@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HACKERS ROOM</title>
+    <title>Cyber Practice Arena :: Comms Booth</title>
     <style>
         :root {
             --bg-deep: #0a0e14;
@@ -30,7 +30,7 @@
         }
 
         .container { 
-            max-width: 1100px; /* Layout ko thoda aur wide kiya */
+            max-width: 1100px; 
             width: 100%;
             margin: 0 auto; 
             flex: 1;
@@ -54,7 +54,7 @@
             background: var(--bg-card);
             border: 2px dashed var(--neon-blue);
             border-radius: 8px;
-            padding: 8px 40px;
+            padding: 60px 40px;
             text-align: center;
             max-width: 600px;
             width: 100%;
@@ -113,7 +113,7 @@
             flex-direction: column;
             overflow: hidden;
             width: 100%;
-            height: 75vh; /* Height ko 65 se barha kar 75vh kar diya taqi screen bhari hui lage */
+            height: 75vh;
             box-shadow: 0 10px 40px rgba(0,0,0,0.7);
         }
 
@@ -142,6 +142,7 @@
             border-radius: 6px;
             font-size: 14px;
             word-wrap: break-word;
+            position: relative;
         }
 
         .dash-msg-me {
@@ -158,8 +159,43 @@
             border-left: 4px solid var(--neon-blue);
         }
 
+        /* Render Image Styling */
+        .chat-shared-img {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 4px;
+            border: 1px solid var(--neon-blue);
+            margin-top: 8px;
+            display: block;
+        }
+
+        .chat-url-link {
+            color: var(--neon-green);
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        .del-msg-btn {
+            background: none;
+            border: none;
+            color: #ff0055;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .del-msg-btn:hover {
+            background: #ff0055;
+            color: #ffffff;
+        }
+
         .dash-input-area {
             display: flex;
+            align-items: center;
             border-top: 2px solid var(--border);
             background: var(--bg-card);
         }
@@ -179,7 +215,7 @@
             background: var(--neon-blue);
             border: none;
             color: #000000;
-            padding: 0 35px;
+            padding: 22px 35px;
             font-weight: bold;
             font-family: 'Courier New', monospace;
             cursor: pointer;
@@ -211,19 +247,21 @@
         <h1>Matrix Tactical Comms</h1>
 
         <div id="comms-booth-gate" class="booth-gate" onclick="openLiveBooth()">
-            <div class="booth-title">[ ENTER LIVE COMMS BOOTH ]</div>
-            <div class="booth-desc">Click anywhere on this node terminal to establish a secure decentralized line with active operation agents. No installation required.</div>
+            <div class="booth-title">[ ENTER HACKERS ROOM]</div>
+            <div class="booth-desc">WELCOME HACKERS IN CHATBOOTH--SHARE YOUR KNOWLEDGE AND IDEAS WITH OTHERS.</div>
             <span class="action-click-btn">Connect Line</span>
         </div>
 
         <div id="active-chat-box" class="chat-section">
             <div class="chat-header-node">
-                <span style="color: var(--neon-blue); font-weight: bold; font-size: 15px; letter-spacing: 2px;">⚡ NODE_SECURE_LIVE</span>
+                <span style="color: var(--neon-blue); font-weight: bold; font-size: 15px; letter-spacing: 2px;">⚡ CHAT / SHARE</span>
                 <span id="dash-user-badge" style="color: var(--neon-green); font-size: 13px; font-weight: bold;">CONNECTING...</span>
             </div>
+            
             <div id="dedicated-chat-logs"></div>
+            
             <div class="dash-input-area">
-                <input type="text" id="dash-chat-input" placeholder="Type tactical message...">
+                <input type="text" id="dash-chat-input" placeholder="Type text or paste image/file URL...">
                 <button onclick="sendDashMessage()" class="dash-send-btn">Transmit</button>
             </div>
         </div>
@@ -257,9 +295,15 @@
             dashUsername = "HACKER_" + randomID;
             document.getElementById("dash-user-badge").innerText = "● AGENT: " + dashUsername;
 
-            dashDatabase.ref('direct_messages').limitToLast(50).on('child_added', (snapshot) => {
-                const data = snapshot.val();
-                renderDashNode(data.user, data.msg, data.user === dashUsername);
+            const chatRef = dashDatabase.ref('direct_messages');
+            
+            chatRef.limitToLast(50).on('child_added', (snapshot) => {
+                renderDashNode(snapshot.key, snapshot.val());
+            });
+
+            chatRef.on('child_removed', (snapshot) => {
+                const nodeToRemove = document.getElementById("msg-" + snapshot.key);
+                if(nodeToRemove) nodeToRemove.remove();
             });
         }
 
@@ -276,16 +320,45 @@
             }
         }
 
-        // Fix logic for displaying clean real strings without literal code
-        function renderDashNode(sender, text, isMe) {
+        function deleteThisMessage(msgID) {
+            dashDatabase.ref('direct_messages/' + msgID).remove();
+        }
+
+        // Auto detecting image extensions system
+        function isImageURL(url) {
+            return (url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) != null) || url.includes("images");
+        }
+
+        // Auto detecting regular standard links
+        function isStandardURL(url) {
+            return url.startsWith("http://") || url.startsWith("https://");
+        }
+
+        function renderDashNode(msgID, data) {
             const logs = document.getElementById("dedicated-chat-logs");
+            if(document.getElementById("msg-" + msgID)) return;
+
             const node = document.createElement("div");
+            node.id = "msg-" + msgID;
+            
+            const isMe = data.user === dashUsername;
             node.className = isMe ? "dash-msg dash-msg-me" : "dash-msg dash-msg-them";
             
+            let processedContent = data.msg;
+
+            // Smart Link Parser Engine
+            if (isStandardURL(data.msg)) {
+                if (isImageURL(data.msg)) {
+                    processedContent = '<img src="' + data.msg + '" class="chat-shared-img" alt="External Shared Payload"/>';
+                } else {
+                    processedContent = '<a href="' + data.msg + '" target="_blank" class="chat-url-link">[🔗 EXTERNAL LINK SOURCE]</a>';
+                }
+            }
+
             if(isMe) {
-                node.innerHTML = '<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU]</span>' + text;
+                node.innerHTML = '<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU] <button class="del-msg-btn" onclick="deleteThisMessage(\'' + msgID + '\')">[DEL]</button></span>' + processedContent;
             } else {
-                node.innerHTML = '<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[' + sender + ']</span>' + text;
+                node.innerHTML = '<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[' + data.user + ']</span>' + processedContent;
             }
             
             logs.appendChild(node);
