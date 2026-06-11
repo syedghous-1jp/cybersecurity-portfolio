@@ -3,111 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Room - Live Chat Terminal</title>
+    <title>Hacker Room - Direct Terminal Chat</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* General Reset for Full-Screen Layout */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            background-color: #0d1117;
+            background-color: #070a0f;
             font-family: 'Space Mono', monospace;
-            font-weight: 700; /* Pura general text bold rahega */
-            height: 100vh;
+            font-weight: 700;
+            height: 100vh; /* Puri viewport ki height */
+            width: 100vw; /* Puri viewport ki width */
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            padding: 15px;
         }
 
-        /* Bold Top Console Panel */
+        /* Expansive Cyber Frame Header */
         header {
-            background: rgba(0, 210, 255, 0.1); /* Background layer ko zyada dark aur visible kiya */
-            border-bottom: 3px solid #00d2ff; /* Border ko thin se heavy/bold kar diya */
+            background: rgba(0, 210, 255, 0.1);
+            border: 3px solid #00d2ff;
+            border-bottom: none;
             padding: 18px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+            width: 100%;
         }
 
         .logo-text {
             color: #00d2ff;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 900; /* Extra bold text */
-            font-size: 1.3rem;
+            font-weight: 900;
+            font-size: 1.4rem;
             letter-spacing: 4px;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6); /* Glow effect for heavy look */
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
         }
 
         .status {
             color: #00ff66;
             font-size: 14px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .back-btn {
-            color: #0d1117;
-            background: #8b949e;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 900;
-            border: 2px solid #8b949e;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: 0.3s;
             text-transform: uppercase;
         }
 
-        .back-btn:hover {
-            background: transparent;
-            color: #00d2ff;
-            border-color: #00d2ff;
-            box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
-        }
-
-        /* Maximize Main Chat Arena to fill the screen */
-        .chat-container {
-            flex: 1;
-            width: 100%;
-            height: calc(100vh - 75px);
-            background: #070a0f; /* Darker backplate to enhance grid layout */
-            padding: 10px; /* Thoda gap diya taaki cyber frame solid lage */
-        }
-
-        /* High-Impact Frame for the Chat Embed */
-        .chat-frame-wrapper {
-            width: 100%;
-            height: 100%;
-            border: 3px solid #00d2ff; /* Chat container ke charon taraf bold neon line */
-            border-radius: 4px;
-            box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.15), 0 0 15px rgba(0, 210, 255, 0.1);
-            overflow: hidden;
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+        /* Full Screen Username Overlay Screen */
+        #username-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: #0d1117;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bold-input {
+            background: #070a0f;
+            color: #00ff66;
+            border: 3px solid #00d2ff;
+            padding: 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 350px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
+            outline: none;
+        }
+
+        .bold-btn {
+            background: #00d2ff;
+            color: #0d1117;
+            border: none;
+            padding: 12px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+        }
+
+        /* Main Full Screen Chat Box */
+        .chat-main-box {
+            flex: 1; /* Baqi puri space header ke niche ye lega */
+            border: 3px solid #00d2ff;
+            background: #0d1117;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.15);
+            width: 100%;
+        }
+
+        /* Extensive Chat Log Section */
+        #chat-logs {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: linear-gradient(180deg, #070a0f 0%, #0d1117 100%);
+        }
+
+        .msg-node {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .msg-me {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.05);
+            align-self: flex-end;
+            border-right: 4px solid #ffffff;
+            text-align: right;
+        }
+
+        .msg-them {
+            color: #00d2ff;
+            background: rgba(0, 210, 255, 0.05);
+            align-self: flex-start;
+            border-left: 4px solid #00d2ff;
+        }
+
+        /* Full-Width Heavy Bottom Action Bar */
+        .input-area {
+            display: flex;
+            padding: 15px;
+            background: rgba(0, 210, 255, 0.05);
+            border-top: 3px solid #00d2ff;
+            gap: 15px;
+            width: 100%;
+        }
+
+        #user-message-input {
+            flex: 1;
+            background: #070a0f;
+            color: #ffffff;
+            border: 2px solid rgba(0, 210, 255, 0.5);
+            padding: 15px;
+            font-family: 'Space Mono', monospace;
+            font-size: 1rem;
+            outline: none;
         }
     </style>
 </head>
 <body>
 
+    <!-- Enter Nickname Screen (Fixed to cover full viewport) -->
+    <div id="username-overlay">
+        <h2 style="color: #00d2ff; font-family: 'Orbitron'; letter-spacing: 3px; font-size: 1.5rem;">ACCESSING MATRIX CHAT</h2>
+        <input type="text" id="hacker-alias" class="bold-input" placeholder="ENTER HACKER NICKNAME...">
+        <button onclick="connectToChat()" class="bold-btn">INITIALIZE</button>
+    </div>
+
+    <!-- Main Live Terminal Header (Full Width) -->
     <header>
         <div>
             <span class="logo-text">⚡ HACKERS ROOM-LIVE CHAT</span>
-            <span class="status"> ● CORE_CONNECTED</span>
+            <span class="status"> ● DIRECT_SECURE_LINK</span>
         </div>
-        <a href="index.html" class="back-btn">← Terminate Session</a>
+        <a href="index.html" style="color: #ff0055; text-decoration: none; font-size: 14px; border: 2px solid #ff0055; padding: 6px 12px; border-radius: 4px; font-weight: 900;">DISCONNECT</a>
     </header>
 
-    <div class="chat-container">
-        <div class="chat-frame-wrapper">
-            <iframe src="https://tlk.io/malware-research-lab" allow="microphone; camera"></iframe>
+    <!-- Full-Screen Chat Main Box -->
+    <div class="chat-main-box">
+        <!-- Extensive Messages Render Area -->
+        <div id="chat-logs"></div>
+
+        <!-- Full-Width Heavy Inputs Bar -->
+        <div class="input-area">
+            <input type="text" id="user-message-input" placeholder="Type direct matrix message...">
+            <button onclick="sendDirectMessage()" class="bold-btn" style="width: 150px;">BROADCAST</button>
         </div>
     </div>
 
+    <!-- Firebase Core Compatibility Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        let myUsername = "";
+        let chatDatabase;
+
+        // Aapki details integration layer mein feed kar di hain
+        const firebaseConfig = {
+            apiKey: "AIzaSyA5TbH7MzFE9bCGVMGs3qoRuyg2KeTqeBA",
+            authDomain: "malware-lab-chat.firebaseapp.com",
+            databaseURL: "https://malware-lab-chat-default-rtdb.firebaseio.com",
+            projectId: "malware-lab-chat",
+            storageBucket: "malware-lab-chat.firebasestorage.app",
+            messagingSenderId: "987488388086",
+            appId: "1:987488388086:web:86bd5d241efcb9b3483dd7"
+        };
+
+        // Initialize App
+        firebase.initializeApp(firebaseConfig);
+        chatDatabase = firebase.database();
+
+        function connectToChat() {
+            const alias = document.getElementById("hacker-alias").value.trim();
+            if(alias !== "") {
+                myUsername = alias;
+                document.getElementById("username-overlay").style.display = "none";
+                
+                // Live listener: Jaise hi database mein message aayega, page par load ho jayega
+                chatDatabase.ref('direct_messages').limitToLast(50).on('child_added', (snapshot) => {
+                    const data = snapshot.val();
+                    displayNode(data.user, data.msg, data.user === myUsername);
+                });
+            }
+        }
+
+        function sendDirectMessage() {
+            const input = document.getElementById("user-message-input");
+            const text = input.value.trim();
+            if(text !== "" && myUsername !== "") {
+                chatDatabase.ref('direct_messages').push({
+                    user: myUsername,
+                    msg: text,
+                    time: Date.now()
+                });
+                input.value = "";
+            }
+        }
+
+        function displayNode(sender, text, isMe) {
+            const logs = document.getElementById("chat-logs");
+            const box = document.createElement("div");
+            box.className = isMe ? "msg-node msg-me" : "msg-node msg-them";
+            
+            if(isMe) {
+                box.innerHTML = `<span style="color:#8b949e; font-size:0.7rem; display:block; font-weight:normal; margin-bottom:4px;">[YOU]</span>${text}`;
+            } else {
+                box.innerHTML = `<span style="color:#00ff66; font-size:0.7rem; display:block; font-weight:normal; margin-bottom:4px;">[${sender}]</span>${text}`;
+            }
+            
+            logs.appendChild(box);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        // Action triggers
+        document.getElementById("hacker-alias").addEventListener("keypress", function(e){ if(e.key === 'Enter') connectToChat(); });
+        document.getElementById("user-message-input").addEventListener("keypress", function(e){ if(e.key === 'Enter') sendDirectMessage(); });
+    </script>
 </body>
 </html>
