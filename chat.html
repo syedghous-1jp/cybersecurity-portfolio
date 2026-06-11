@@ -3,200 +3,231 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Room - Direct Terminal Chat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+    <title>HACKERS ROOM-LIVE CHAT</title>
     <style>
-        /* General Reset for Full-Screen Layout */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        :root {
+            --bg-deep: #0a0e14;
+            --bg-card: #111827;
+            --neon-blue: #00d2ff;
+            --neon-green: #00ff66;
+            --text-main: #e2e8f0;
+            --text-muted: #8892b0;
+            --border: #1f2937;
+        }
+
         body {
-            background-color: #070a0f;
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            height: 100vh; /* Puri viewport ki height */
-            width: 100vw; /* Puri viewport ki width */
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            padding: 15px;
+            box-sizing: border-box;
         }
 
-        /* Expansive Cyber Frame Header */
-        header {
-            background: rgba(0, 210, 255, 0.1);
-            border: 3px solid #00d2ff;
-            border-bottom: none;
-            padding: 18px 24px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+        .container { 
+            max-width: 900px; 
             width: 100%;
-        }
-
-        .logo-text {
-            color: #00d2ff;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 1.4rem;
-            letter-spacing: 4px;
-            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
-        }
-
-        .status {
-            color: #00ff66;
-            font-size: 14px;
-            text-transform: uppercase;
-        }
-
-        /* Full Screen Username Overlay Screen */
-        #username-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #0d1117;
-            z-index: 20;
+            margin: 0 auto; 
+            flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
         }
 
-        .bold-input {
-            background: #070a0f;
-            color: #00ff66;
-            border: 3px solid #00d2ff;
-            padding: 15px;
-            font-family: 'Space Mono', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            width: 350px;
+        h1 {
+            color: var(--neon-blue);
             text-align: center;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.1);
-            outline: none;
-        }
-
-        .bold-btn {
-            background: #00d2ff;
-            color: #0d1117;
-            border: none;
-            padding: 12px 30px;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 900;
-            font-size: 14px;
-            cursor: pointer;
+            font-size: 28px;
+            text-transform: uppercase;
             letter-spacing: 2px;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.4);
+            margin-bottom: 40px;
         }
 
-        /* Main Full Screen Chat Box */
-        .chat-main-box {
-            flex: 1; /* Baqi puri space header ke niche ye lega */
-            border: 3px solid #00d2ff;
-            background: #0d1117;
-            display: flex;
+        /* The Big Interactive Booth Controller */
+        .booth-gate {
+            background: var(--bg-card);
+            border: 2px dashed var(--neon-blue);
+            border-radius: 8px;
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .booth-gate:hover {
+            border-style: solid;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+            transform: scale(1.02);
+        }
+
+        .booth-title {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .booth-desc {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .action-click-btn {
+            background: none;
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 12px 30px;
+            font-weight: bold;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .booth-gate:hover .action-click-btn {
+            background: var(--neon-green);
+            border-color: var(--neon-green);
+            color: var(--bg-deep);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+
+        /* Hidden Core Chat Section - Opens on Click */
+        .chat-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: none; /* Shuru me chhupa rahega */
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0, 210, 255, 0.15);
             width: 100%;
+            height: 65vh;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        /* Extensive Chat Log Section */
-        #chat-logs {
+        .chat-header-node {
+            background: rgba(17, 24, 39, 0.8);
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #dedicated-chat-logs {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
+            background: #070a0f;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            background: linear-gradient(180deg, #070a0f 0%, #0d1117 100%);
         }
 
-        .msg-node {
-            max-width: 75%;
-            padding: 12px 18px;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            line-height: 1.4;
+        .dash-msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
             word-wrap: break-word;
         }
 
-        .msg-me {
+        .dash-msg-me {
             color: #ffffff;
             background: rgba(255, 255, 255, 0.05);
             align-self: flex-end;
-            border-right: 4px solid #ffffff;
-            text-align: right;
+            border-right: 3px solid #ffffff;
         }
 
-        .msg-them {
-            color: #00d2ff;
-            background: rgba(0, 210, 255, 0.05);
+        .dash-msg-them {
+            color: var(--neon-blue);
+            background: rgba(0, 210, 255, 0.03);
             align-self: flex-start;
-            border-left: 4px solid #00d2ff;
+            border-left: 3px solid var(--neon-blue);
         }
 
-        /* Full-Width Heavy Bottom Action Bar */
-        .input-area {
+        .dash-input-area {
             display: flex;
-            padding: 15px;
-            background: rgba(0, 210, 255, 0.05);
-            border-top: 3px solid #00d2ff;
-            gap: 15px;
-            width: 100%;
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
         }
 
-        #user-message-input {
+        #dash-chat-input {
             flex: 1;
-            background: #070a0f;
+            background: transparent;
+            border: none;
             color: #ffffff;
-            border: 2px solid rgba(0, 210, 255, 0.5);
-            padding: 15px;
-            font-family: 'Space Mono', monospace;
-            font-size: 1rem;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
             outline: none;
+        }
+
+        .dash-send-btn {
+            background: none;
+            border-left: 1px solid var(--border);
+            color: var(--neon-green);
+            padding: 0 30px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .back-home {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--neon-blue);
+            text-decoration: none;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Enter Nickname Screen (Fixed to cover full viewport) -->
-    <div id="username-overlay">
-        <h2 style="color: #00d2ff; font-family: 'Orbitron'; letter-spacing: 3px; font-size: 1.5rem;">ACCESSING MATRIX CHAT</h2>
-        <input type="text" id="hacker-alias" class="bold-input" placeholder="ENTER HACKER NICKNAME...">
-        <button onclick="connectToChat()" class="bold-btn">INITIALIZE</button>
-    </div>
+    <a href="labs-hub.html" class="back-home">&lt;= RETURN_TO_DASHBOARD</a>
 
-    <!-- Main Live Terminal Header (Full Width) -->
-    <header>
-        <div>
-            <span class="logo-text">⚡ HACKERS ROOM-LIVE CHAT</span>
-            <span class="status"> ● DIRECT_SECURE_LINK</span>
+    <div class="container">
+        <h1>Matrix Tactical Comms</h1>
+
+        <div id="comms-booth-gate" class="booth-gate" onclick="openLiveBooth()">
+            <div class="booth-title">[ ENTER LIVE COMMS BOOTH ]</div>
+            <div class="booth-desc">Click anywhere on this node terminal to establish a secure decentralized line with active operation agents. No installation required.</div>
+            <span class="action-click-btn">Connect Line</span>
         </div>
-        <a href="index.html" style="color: #ff0055; text-decoration: none; font-size: 14px; border: 2px solid #ff0055; padding: 6px 12px; border-radius: 4px; font-weight: 900;">DISCONNECT</a>
-    </header>
 
-    <!-- Full-Screen Chat Main Box -->
-    <div class="chat-main-box">
-        <!-- Extensive Messages Render Area -->
-        <div id="chat-logs"></div>
-
-        <!-- Full-Width Heavy Inputs Bar -->
-        <div class="input-area">
-            <input type="text" id="user-message-input" placeholder="Type direct matrix message...">
-            <button onclick="sendDirectMessage()" class="bold-btn" style="width: 150px;">BROADCAST</button>
+        <div id="active-chat-box" class="chat-section">
+            <div class="chat-header-node">
+                <span style="color: var(--neon-blue); font-weight: bold; font-size: 14px; letter-spacing: 2px;">⚡ NODE_SECURE_LIVE</span>
+                <span id="dash-user-badge" style="color: var(--neon-green); font-size: 12px;">CONNECTING...</span>
+            </div>
+            <div id="dedicated-chat-logs"></div>
+            <div class="dash-input-area">
+                <input type="text" id="dash-chat-input" placeholder="Type tactical message...">
+                <button onclick="sendDashMessage()" class="dash-send-btn">Transmit</button>
+            </div>
         </div>
     </div>
 
-    <!-- Firebase Core Compatibility Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        let myUsername = "";
-        let chatDatabase;
+        let dashUsername = "";
+        let dashDatabase;
 
-        // Aapki details integration layer mein feed kar di hain
         const firebaseConfig = {
             apiKey: "AIzaSyA5TbH7MzFE9bCGVMGs3qoRuyg2KeTqeBA",
             authDomain: "malware-lab-chat.firebaseapp.com",
@@ -207,30 +238,33 @@
             appId: "1:987488388086:web:86bd5d241efcb9b3483dd7"
         };
 
-        // Initialize App
         firebase.initializeApp(firebaseConfig);
-        chatDatabase = firebase.database();
+        dashDatabase = firebase.database();
 
-        function connectToChat() {
-            const alias = document.getElementById("hacker-alias").value.trim();
-            if(alias !== "") {
-                myUsername = alias;
-                document.getElementById("username-overlay").style.display = "none";
-                
-                // Live listener: Jaise hi database mein message aayega, page par load ho jayega
-                chatDatabase.ref('direct_messages').limitToLast(50).on('child_added', (snapshot) => {
-                    const data = snapshot.val();
-                    displayNode(data.user, data.msg, data.user === myUsername);
-                });
-            }
+        // Yeh function click hote hi chalega aur booth open karega
+        function openLiveBooth() {
+            // Booth gate ko chhupa do aur chat box ko flex display dekar open kar do
+            document.getElementById("comms-booth-gate").style.display = "none";
+            document.getElementById("active-chat-box").style.display = "flex";
+
+            // Initialize Background User Stream
+            const randomID = Math.floor(100 + Math.random() * 900);
+            dashUsername = "HACKER_" + randomID;
+            document.getElementById("dash-user-badge").innerText = `● AGENT: ${dashUsername}`;
+
+            // Sync Data Stream
+            dashDatabase.ref('direct_messages').limitToLast(50).on('child_added', (snapshot) => {
+                const data = snapshot.val();
+                renderDashNode(data.user, data.msg, data.user === dashUsername);
+            });
         }
 
-        function sendDirectMessage() {
-            const input = document.getElementById("user-message-input");
+        function sendDashMessage() {
+            const input = document.getElementById("dash-chat-input");
             const text = input.value.trim();
-            if(text !== "" && myUsername !== "") {
-                chatDatabase.ref('direct_messages').push({
-                    user: myUsername,
+            if(text !== "") {
+                dashDatabase.ref('direct_messages').push({
+                    user: dashUsername,
                     msg: text,
                     time: Date.now()
                 });
@@ -238,24 +272,18 @@
             }
         }
 
-        function displayNode(sender, text, isMe) {
-            const logs = document.getElementById("chat-logs");
-            const box = document.createElement("div");
-            box.className = isMe ? "msg-node msg-me" : "msg-node msg-them";
-            
-            if(isMe) {
-                box.innerHTML = `<span style="color:#8b949e; font-size:0.7rem; display:block; font-weight:normal; margin-bottom:4px;">[YOU]</span>${text}`;
-            } else {
-                box.innerHTML = `<span style="color:#00ff66; font-size:0.7rem; display:block; font-weight:normal; margin-bottom:4px;">[${sender}]</span>${text}`;
-            }
-            
-            logs.appendChild(box);
+        function renderDashNode(sender, text, isMe) {
+            const logs = document.getElementById("dedicated-chat-logs");
+            const node = document.createElement("div");
+            node.className = isMe ? "dash-msg dash-msg-me" : "dash-msg dash-msg-them";
+            node.innerHTML = isMe ? 
+                `<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU]</span>\${text}` : 
+                `<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[\${sender}]</span>\${text}`;
+            logs.appendChild(node);
             logs.scrollTop = logs.scrollHeight;
         }
 
-        // Action triggers
-        document.getElementById("hacker-alias").addEventListener("keypress", function(e){ if(e.key === 'Enter') connectToChat(); });
-        document.getElementById("user-message-input").addEventListener("keypress", function(e){ if(e.key === 'Enter') sendDirectMessage(); });
+        document.getElementById("dash-chat-input").addEventListener("keypress", function(e){ if(e.key === 'Enter') sendDashMessage(); });
     </script>
 </body>
 </html>
