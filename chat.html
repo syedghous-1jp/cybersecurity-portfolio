@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Practice Arena :: Comms Booth</title>
+    <title>HACKERS ROOM</title>
     <style>
         :root {
             --bg-deep: #0a0e14;
             --bg-card: #111827;
             --neon-blue: #00d2ff;
             --neon-green: #00ff66;
+            --neon-red: #ff0055;
             --text-main: #e2e8f0;
             --text-muted: #8892b0;
             --border: #1f2937;
@@ -159,7 +160,6 @@
             border-left: 4px solid var(--neon-blue);
         }
 
-        /* Render Image Styling */
         .chat-shared-img {
             max-width: 300px;
             max-height: 300px;
@@ -175,10 +175,11 @@
             font-weight: bold;
         }
 
+        /* Dual Delete Buttons System */
         .del-msg-btn {
             background: none;
             border: none;
-            color: #ff0055;
+            color: var(--neon-red);
             font-family: 'Courier New', monospace;
             font-size: 10px;
             font-weight: bold;
@@ -187,10 +188,24 @@
             padding: 2px 5px;
             border-radius: 3px;
         }
-
         .del-msg-btn:hover {
-            background: #ff0055;
+            background: var(--neon-red);
             color: #ffffff;
+        }
+
+        .del-admin-btn {
+            background: none;
+            border: none;
+            color: #4b5563; /* Subtle grey for others */
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            cursor: pointer;
+            margin-left: 10px;
+            padding: 2px 5px;
+        }
+        .del-admin-btn:hover {
+            color: var(--neon-red);
+            text-decoration: underline;
         }
 
         .dash-input-area {
@@ -247,14 +262,14 @@
         <h1>Matrix Tactical Comms</h1>
 
         <div id="comms-booth-gate" class="booth-gate" onclick="openLiveBooth()">
-            <div class="booth-title">[ ENTER HACKERS ROOM]</div>
-            <div class="booth-desc">WELCOME HACKERS IN CHATBOOTH--SHARE YOUR KNOWLEDGE AND IDEAS WITH OTHERS.</div>
+            <div class="booth-title">[ HACKERS ROOM]</div>
+            <div class="booth-desc">WELCOME HACKERS IN CYBER CHATBOOTH , SHARE YOUR KNOWLEDGE WITH OTHERS--BY SYED GHOUS.</div>
             <span class="action-click-btn">Connect Line</span>
         </div>
 
         <div id="active-chat-box" class="chat-section">
             <div class="chat-header-node">
-                <span style="color: var(--neon-blue); font-weight: bold; font-size: 15px; letter-spacing: 2px;">⚡ CHAT / SHARE</span>
+                <span style="color: var(--neon-blue); font-weight: bold; font-size: 15px; letter-spacing: 2px;">⚡ LIVE & SECURE</span>
                 <span id="dash-user-badge" style="color: var(--neon-green); font-size: 13px; font-weight: bold;">CONNECTING...</span>
             </div>
             
@@ -273,6 +288,9 @@
     <script>
         let dashUsername = "";
         let dashDatabase;
+        
+        // MASTER PASSWORD - 
+        const MASTER_ADMIN_KEY = "177"; 
 
         const firebaseConfig = {
             apiKey: "AIzaSyA5TbH7MzFE9bCGVMGs3qoRuyg2KeTqeBA",
@@ -320,16 +338,27 @@
             }
         }
 
-        function deleteThisMessage(msgID) {
-            dashDatabase.ref('direct_messages/' + msgID).remove();
+        // Modified Dynamic Deletion Engine with Key Validation
+        function deleteThisMessage(msgID, requiresPassword) {
+            if (requiresPassword) {
+                const accessKey = prompt("⚠️ CRITICAL CONTROL: Enter Admin Master Key to wipe this node:");
+                if (accessKey === MASTER_ADMIN_KEY) {
+                    dashDatabase.ref('direct_messages/' + msgID).remove();
+                } else if (accessKey !== null) {
+                    alert("❌ ACCESS DENIED: Invalid Authentication Token.");
+                }
+            } else {
+                // Own message bypass, no prompt needed
+                dashDatabase.ref('direct_messages/' + msgID).remove();
+            }
         }
 
-        // Auto detecting image extensions system
         function isImageURL(url) {
             return (url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/) != null) || url.includes("images");
         }
 
-        // Auto detecting regular standard links
+        document.getElementById("dash-chat-input").addEventListener("keypress", function(e){ if(e.key === 'Enter') sendDashMessage(); });
+
         function isStandardURL(url) {
             return url.startsWith("http://") || url.startsWith("https://");
         }
@@ -346,7 +375,6 @@
             
             let processedContent = data.msg;
 
-            // Smart Link Parser Engine
             if (isStandardURL(data.msg)) {
                 if (isImageURL(data.msg)) {
                     processedContent = '<img src="' + data.msg + '" class="chat-shared-img" alt="External Shared Payload"/>';
@@ -355,17 +383,16 @@
                 }
             }
 
+            // Interface Rendering Logic for Master Delete Control
             if(isMe) {
-                node.innerHTML = '<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU] <button class="del-msg-btn" onclick="deleteThisMessage(\'' + msgID + '\')">[DEL]</button></span>' + processedContent;
+                node.innerHTML = '<span style="color:var(--text-muted); font-size:10px; display:block; margin-bottom:3px;">[YOU] <button class="del-msg-btn" onclick="deleteThisMessage(\'' + msgID + '\', false)">[DEL]</button></span>' + processedContent;
             } else {
-                node.innerHTML = '<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[' + data.user + ']</span>' + processedContent;
+                node.innerHTML = '<span style="color:var(--neon-green); font-size:10px; display:block; margin-bottom:3px;">[' + data.user + '] <button class="del-admin-btn" onclick="deleteThisMessage(\'' + msgID + '\', true)">[DEL]</button></span>' + processedContent;
             }
             
             logs.appendChild(node);
             logs.scrollTop = logs.scrollHeight;
         }
-
-        document.getElementById("dash-chat-input").addEventListener("keypress", function(e){ if(e.key === 'Enter') sendDashMessage(); });
     </script>
 </body>
 </html>
