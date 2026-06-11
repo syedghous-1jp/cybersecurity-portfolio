@@ -3,58 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacker Room - Live Chat</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Space+Mono&display=swap" rel="stylesheet">
+    <title>Hacker Room - Live Chat Terminal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             background-color: #0d1117;
             font-family: 'Space Mono', monospace;
+            font-weight: 700; /* Pura general text bold rahega */
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
-        /* Header Styling */
+
+        /* Bold Top Console Panel */
         header {
-            background: rgba(0, 210, 255, 0.05);
-            border-bottom: 1px solid rgba(0, 210, 255, 0.2);
-            padding: 15px 20px;
+            background: rgba(0, 210, 255, 0.1); /* Background layer ko zyada dark aur visible kiya */
+            border-bottom: 3px solid #00d2ff; /* Border ko thin se heavy/bold kar diya */
+            padding: 18px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 210, 255, 0.2);
         }
+
         .logo-text {
             color: #00d2ff;
             font-family: 'Orbitron', sans-serif;
-            font-weight: bold;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
+            font-weight: 900; /* Extra bold text */
+            font-size: 1.3rem;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.6); /* Glow effect for heavy look */
         }
+
         .status {
             color: #00ff66;
-            font-size: 12px;
-            font-weight: bold;
+            font-size: 14px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         .back-btn {
-            color: #8b949e;
+            color: #0d1117;
+            background: #8b949e;
             text-decoration: none;
             font-size: 14px;
-            border: 1px solid #8b949e;
-            padding: 5px 12px;
+            font-weight: 900;
+            border: 2px solid #8b949e;
+            padding: 8px 16px;
             border-radius: 4px;
             transition: 0.3s;
+            text-transform: uppercase;
         }
+
         .back-btn:hover {
+            background: transparent;
             color: #00d2ff;
             border-color: #00d2ff;
+            box-shadow: 0 0 10px rgba(0, 210, 255, 0.4);
         }
-        /* Chat Frame Styling */
+
+        /* Maximize Main Chat Arena to fill the screen */
         .chat-container {
             flex: 1;
             width: 100%;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 75px);
+            background: #070a0f; /* Darker backplate to enhance grid layout */
+            padding: 10px; /* Thoda gap diya taaki cyber frame solid lage */
         }
+
+        /* High-Impact Frame for the Chat Embed */
+        .chat-frame-wrapper {
+            width: 100%;
+            height: 100%;
+            border: 3px solid #00d2ff; /* Chat container ke charon taraf bold neon line */
+            border-radius: 4px;
+            box-shadow: inset 0 0 20px rgba(0, 210, 255, 0.15), 0 0 15px rgba(0, 210, 255, 0.1);
+            overflow: hidden;
+        }
+
         iframe {
             width: 100%;
             height: 100%;
@@ -67,16 +97,17 @@
 
     <header>
         <div>
-            <span class="logo-text">⚡ HACKER_ROOM v3.0</span>
-            <span class="status"> ● LIVE_NODE</span>
+            <span class="logo-text">⚡ RECON_ROOM_V3.0</span>
+            <span class="status"> ● CORE_CONNECTED</span>
         </div>
-        <a href="index.html" class="back-btn">← Back to Terminal</a>
+        <a href="index.html" class="back-btn">← Terminate Session</a>
     </header>
 
     <div class="chat-container">
-    <iframe src="https://www3.minnit.chat/MalwareLabChat?embed&&nickname=&theme=dark&transparent=1" 
-            allow="geolocation; microphone; camera; display-capture">
-    </iframe>
-</div>
+        <div class="chat-frame-wrapper">
+            <iframe src="https://tlk.io/malware-research-lab" allow="microphone; camera"></iframe>
+        </div>
+    </div>
+
 </body>
 </html>
