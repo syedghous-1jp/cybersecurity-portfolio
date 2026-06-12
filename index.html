@@ -717,7 +717,325 @@ to grow in the security field.
     </div>
   </div>
 </section>
-  
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cyber AI CHATBOOTH</title>
+
+<style>
+
+/* =========================
+   AI CHATBOOTH
+========================= */
+
+:root{
+    --bg-deep:#0a0e14;
+    --bg-card:#111827;
+    --neon-blue:#00d2ff;
+    --neon-green:#00ff66;
+    --text-main:#e2e8f0;
+    --text-muted:#8892b0;
+    --border:#1f2937;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:var(--bg-deep);
+    color:var(--text-main);
+    font-family:'Courier New', monospace;
+    padding:20px;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+h1{
+    text-align:center;
+    font-size:42px;
+    color:var(--neon-blue);
+
+    text-shadow:
+    0 0 10px var(--neon-blue),
+    0 0 25px var(--neon-blue);
+
+    letter-spacing:3px;
+}
+
+.subtitle{
+    text-align:center;
+    color:var(--text-muted);
+    margin-bottom:40px;
+}
+
+/* =========================
+   HERO AI SECTION
+========================= */
+
+.ai-command-center{
+
+    background:var(--bg-card);
+    border:2px solid var(--neon-blue);
+    border-radius:16px;
+
+    margin:50px 0;
+
+    overflow:hidden;
+
+    position:relative;
+
+    animation:floatCard 6s ease-in-out infinite,
+               borderGlow 4s infinite;
+}
+
+/* scan lines */
+.ai-command-center::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background:
+    repeating-linear-gradient(
+        transparent,
+        transparent 3px,
+        rgba(255,255,255,.02) 4px
+    );
+
+    pointer-events:none;
+}
+
+/* moving light */
+.ai-command-center::after{
+    content:"";
+    position:absolute;
+
+    top:-100px;
+    left:0;
+
+    width:100%;
+    height:120px;
+
+    background:linear-gradient(
+        to bottom,
+        transparent,
+        rgba(0,210,255,.15),
+        transparent
+    );
+
+    animation:scanLine 5s linear infinite;
+
+    pointer-events:none;
+}
+
+/* terminal header */
+.terminal-header{
+    display:flex;
+    align-items:center;
+
+    padding:14px 18px;
+
+    background:#0f172a;
+    border-bottom:1px solid var(--border);
+}
+
+.terminal-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    margin-right:6px;
+}
+
+.red{background:#ff4d4d;}
+.yellow{background:#ffd633;}
+.green{background:#00ff66;}
+
+.terminal-title{
+    margin-left:10px;
+    font-size:13px;
+    color:#8892b0;
+}
+
+/* content */
+.ai-content{
+    padding:50px 30px;
+    text-align:center;
+}
+
+.ai-content h2{
+    color:var(--neon-blue);
+    font-size:38px;
+
+    animation:neonPulse 3s infinite;
+}
+
+.ai-content p{
+    color:var(--text-muted);
+    max-width:750px;
+    margin:20px auto;
+    line-height:1.7;
+}
+
+/* stats */
+.ai-stats{
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+    margin:30px 0;
+}
+
+.stat-box{
+    width:180px;
+    padding:18px;
+
+    border:1px solid var(--border);
+    background:#0a0e14;
+    border-radius:12px;
+
+    transition:.3s;
+}
+
+.stat-box:hover{
+    transform:translateY(-8px) scale(1.03);
+    border-color:var(--neon-blue);
+    box-shadow:0 0 20px rgba(0,210,255,.2);
+}
+
+.stat-box h3{
+    color:var(--neon-green);
+    font-size:26px;
+}
+
+.stat-box span{
+    color:var(--text-muted);
+}
+
+/* button */
+.launch-terminal{
+
+    display:inline-block;
+    margin-top:20px;
+
+    padding:16px 30px;
+
+    text-decoration:none;
+
+    background:var(--neon-blue);
+    color:#000;
+
+    font-weight:bold;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+    position:relative;
+    overflow:hidden;
+}
+
+.launch-terminal:hover{
+    transform:translateY(-4px);
+    box-shadow:0 0 25px var(--neon-blue);
+}
+
+/* =========================
+   KEYFRAMES
+========================= */
+
+@keyframes neonPulse{
+    0%,100%{text-shadow:0 0 10px var(--neon-blue);}
+    50%{text-shadow:0 0 25px var(--neon-blue);}
+}
+
+@keyframes floatCard{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+}
+
+@keyframes scanLine{
+    0%{transform:translateY(-100%);}
+    100%{transform:translateY(700px);}
+}
+
+@keyframes borderGlow{
+    0%,100%{box-shadow:0 0 15px rgba(0,210,255,.15);}
+    50%{box-shadow:0 0 40px rgba(0,210,255,.3);}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>⚡ CYBER  AI⚡</h1>
+
+<p class="subtitle">
+Security Intelligence • AI Assistant • Threat Analysis
+</p>
+
+<!-- =========================
+     AI COMMAND CENTER
+========================= -->
+
+<section class="ai-command-center">
+
+<!-- terminal top bar -->
+<div class="terminal-header">
+    <div class="terminal-dot red"></div>
+    <div class="terminal-dot yellow"></div>
+    <div class="terminal-dot green"></div>
+
+    <div class="terminal-title">
+        AI_COMMAND_CENTER.exe
+    </div>
+</div>
+
+<!-- content -->
+<div class="ai-content">
+
+    <h2>⚡ AI CHATBOOTH</h2>
+
+    <p>
+        Advanced cybersecurity AI assistant for vulnerability analysis,
+        exploit explanation, code review and security intelligence.
+    </p>
+
+    <!-- stats -->
+    <div class="ai-stats">
+
+        <div class="stat-box">
+            <h3>24/7</h3>
+            <span>Active AI</span>
+        </div>
+
+        <div class="stat-box">
+            <h3>100+</h3>
+            <span>Security Topics</span>
+        </div>
+
+        <div class="stat-box">
+            <h3>LIVE</h3>
+            <span>Analysis</span>
+        </div>
+
+    </div>
+
+    <!-- launch button -->
+    <a href="chat.html" class="launch-terminal">
+        ⚡ LAUNCH AI CHATBOT
+    </a>
+
+</div>
+</section>
+
 <!-- ABOUT -->
 <section id="about">
   <div class="container">
