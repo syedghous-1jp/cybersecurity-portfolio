@@ -505,6 +505,13 @@ document
     }
 
 });
+fetch("https://cybersecurity-portfolio-production.up.railway.app/chat", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({ message: msg })
+});    
 </script>
 
 </body>
