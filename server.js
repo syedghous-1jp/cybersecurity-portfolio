@@ -7,18 +7,28 @@ dotenv.config();
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// OpenAI setup (API key from Render env)
+// OpenAI setup
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-// Chat endpoint
+// Root route (optional but useful)
+app.get("/", (req, res) => {
+  res.send("AI Chatbot is running 🚀");
+});
+
+// Chat route
 app.post("/chat", async (req, res) => {
   try {
     const userMessage = req.body.message;
+
+    if (!userMessage) {
+      return res.status(400).json({ reply: "No message received" });
+    }
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
@@ -39,21 +49,17 @@ app.post("/chat", async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.json({
-      reply: "Error: AI not responding."
+    console.error("Error:", error);
+
+    res.status(500).json({
+      reply: "AI error or server issue."
     });
   }
 });
 
-// Server start
-app.get("/", (req, res) => {
-  res.send("AI Chatbot is running 🚀");
-});
-
-// Server start
+// Start server (IMPORTANT for Railway)
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
