@@ -47,11 +47,13 @@ app.post("/chat", async (req, res) => {
 });
 
 // Server start
+app.get("/", (req, res) => {
+  res.send("AI Chatbot is running 🚀");
+});
+
+// Server start
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-  app.get("/", (req, res) => {
-  res.send("AI Chatbot is running 🚀");
-});
 });
