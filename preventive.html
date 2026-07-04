@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Preventive Defence | Blue Team Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript">
+        // 1. Right-click disable
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        // 2. Copy/Cut disable
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        // 3. Shortcuts (Save, Source, Copy, Print, Inspect) disable
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 67 || e.keyCode === 80 || e.keyCode === 73)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 disable
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            background: #020202; 
+            color: #00f0ff; 
+            font-family: 'Rajdhani', sans-serif; 
+            padding: 40px;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        h1 { 
+            font-family: 'Orbitron'; 
+            font-size: 50px; 
+            text-align: center; 
+            margin-bottom: 60px; 
+            text-shadow: 0 0 20px #00f0ff;
+            letter-spacing: 5px;
+            color: #00f0ff;
+        }
+
+        .category-box { margin-bottom: 60px; }
+        
+        .section-title { 
+            font-family: 'Orbitron'; 
+            color: #fff; 
+            font-size: 28px; 
+            margin-bottom: 30px; 
+            border-left: 5px solid #00f0ff; 
+            padding-left: 15px;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            perspective: 1000px;
+        }
+
+        .card { 
+            height: 160px; 
+            background: linear-gradient(145deg, #000a0f, #001520); 
+            border: 1px solid #00f0ff; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            padding: 20px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px) rotateX(10deg); 
+            box-shadow: 0 15px 30px #00f0ff; 
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .card span { 
+            font-family: 'Orbitron'; 
+            font-weight: bold; 
+            font-size: 15px; 
+            text-align: center; 
+            line-height: 1.4;
+        }
+
+        .back-btn { 
+            display: block; 
+            width: 200px; 
+            margin: 50px auto; 
+            padding: 15px; 
+            text-align: center; 
+            border: 2px solid #00f0ff; 
+            color: #00f0ff; 
+            text-decoration: none; 
+            font-family: 'Orbitron'; 
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+        .back-btn:hover { background: #00f0ff; color: #000; }
+
+        .disclaimer {
+            max-width: 900px;
+            margin: 30px auto 10px;
+            padding: 16px 24px;
+            border: 1px solid #00f0ff44;
+            color: #00f0ff77;
+            font-size: 15px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .disclaimer strong { color: #00f0ff; }
+    </style>
+</head>
+<body>
+
+    <h1>🛡️ PREVENTIVE DEFENCE</h1>
+
+    <!-- ========== SECTION 1: POLICIES & COMPLIANCE ========== -->
+    <div class="category-box">
+        <h2 class="section-title">SECURITY POLICIES &amp; COMPLIANCE</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='security_frameworks.pdf'">
+                <span>SECURITY FRAMEWORKS<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">ISO 27001 • NIST • COBIT</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='gdpr_compliance.pdf'">
+                <span>GDPR &amp; DATA PRIVACY<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Compliance • Data Protection</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='security_awareness.pdf'">
+                <span>SECURITY AWARENESS<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Training • Phishing Simulations</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='vendor_risk.pdf'">
+                <span>VENDOR RISK MANAGEMENT<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Third-Party • Supply Chain</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 2: NETWORK SECURITY ========== -->
+    <div class="category-box">
+        <h2 class="section-title">NETWORK SECURITY</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='firewalls_ngfw.pdf'">
+                <span>FIREWALLS (NGFW / WAF)<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Next-Gen • Web App Firewall</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='ids_ips.pdf'">
+                <span>IDS / IPS<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Snort • Suricata • Detection</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='network_segmentation.pdf'">
+                <span>NETWORK SEGMENTATION<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">VLANs • Micro-Segmentation</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='zero_trust.pdf'">
+                <span>ZERO TRUST ARCHITECTURE<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Never Trust • Always Verify</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 3: ENDPOINT SECURITY ========== -->
+    <div class="category-box">
+        <h2 class="section-title">ENDPOINT SECURITY</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='edr_xdr.pdf'">
+                <span>EDR / XDR<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Endpoint Detection &amp; Response</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='antivirus_ngav.pdf'">
+                <span>ANTIVIRUS &amp; NGAV<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Next-Gen Antivirus • Malware Protection</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='patch_management.pdf'">
+                <span>PATCH MANAGEMENT<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Vulnerability Remediation • Updates</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='whitelisting_hips.pdf'">
+                <span>APPLICATION WHITELISTING<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">HIPS • Allowlisting</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 4: IDENTITY & ACCESS MANAGEMENT ========== -->
+    <div class="category-box">
+        <h2 class="section-title">IDENTITY &amp; ACCESS MANAGEMENT (IAM)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='mfa_2fa.pdf'">
+                <span>MULTI-FACTOR AUTHENTICATION<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">MFA • 2FA • Biometrics</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='pam.pdf'">
+                <span>PRIVILEGED ACCESS MANAGEMENT<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">PAM • Least Privilege</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='sso_ldap.pdf'">
+                <span>SSO &amp; LDAP / SAML<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Single Sign-On • Federation</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='802_1x_nac.pdf'">
+                <span>802.1X &amp; NAC<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Network Access Control</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 5: CLOUD & CONTAINER SECURITY ========== -->
+    <div class="category-box">
+        <h2 class="section-title">CLOUD &amp; CONTAINER SECURITY</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='cspm.pdf'">
+                <span>CSPM (CLOUD SECURITY POSTURE)<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Cloud Misconfiguration • Compliance</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='container_security.pdf'">
+                <span>CONTAINER SECURITY<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Kubernetes • Docker Hardening</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='serverless_security.pdf'">
+                <span>SERVERLESS SECURITY<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Function Hardening • IAM</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='cloud_iam_rbac.pdf'">
+                <span>CLOUD IAM &amp; RBAC<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Role-Based Access Control</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 6: DATA SECURITY & CRYPTOGRAPHY ========== -->
+    <div class="category-box">
+        <h2 class="section-title">DATA SECURITY &amp; CRYPTOGRAPHY</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='encryption.pdf'">
+                <span>DATA ENCRYPTION<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">At-Rest • In-Transit • TLS</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='dlp.pdf'">
+                <span>DATA LOSS PREVENTION (DLP)<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Data Leakage • Monitoring</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='pki_certificates.pdf'">
+                <span>PKI &amp; DIGITAL CERTIFICATES<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Public Key Infrastructure</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='secure_backup.pdf'">
+                <span>SECURE BACKUP &amp; RECOVERY<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">BCDR • Disaster Recovery</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 7: PHYSICAL SECURITY ========== -->
+    <div class="category-box">
+        <h2 class="section-title">PHYSICAL SECURITY</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='access_control.pdf'">
+                <span>ACCESS CONTROL SYSTEMS<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Biometrics • Card Readers</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='cctv_surveillance.pdf'">
+                <span>CCTV &amp; SURVEILLANCE<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Video Monitoring • Analytics</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='facility_design.pdf'">
+                <span>SECURE FACILITY DESIGN<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Perimeter Security • Layered Defence</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='environmental_security.pdf'">
+                <span>ENVIRONMENTAL SECURITY<br><small style="font-family:'Rajdhani';font-size:12px;opacity:0.6;">Fire • Flood • HVAC</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <strong>📘 EDUCATIONAL PURPOSE ONLY</strong><br>
+        This section is for certification preparation (CEH/OSCP), lab testing, and defensive research.  
+        Unauthorized access is a crime under IT Act 2000 / Global Cyber Laws.
+    </div>
+
+    <a href="defense.html" class="back-btn">← BACK TO DEFENCE</a>
+
+</body>
+</html>
