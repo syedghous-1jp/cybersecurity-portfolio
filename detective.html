@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detective Defence | Blue Team Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript">
+        // 1. Right-click disable
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        // 2. Copy/Cut disable
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        // 3. Shortcuts (Save, Source, Copy, Print, Inspect) disable
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 67 || e.keyCode === 80 || e.keyCode === 73)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 disable
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            background: #020202; 
+            color: #00f0ff; 
+            font-family: 'Rajdhani', sans-serif; 
+            padding: 40px;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        h1 { 
+            font-family: 'Orbitron'; 
+            font-size: 50px; 
+            text-align: center; 
+            margin-bottom: 60px; 
+            text-shadow: 0 0 20px #00f0ff;
+            letter-spacing: 5px;
+            color: #00f0ff;
+        }
+
+        .category-box { margin-bottom: 60px; }
+        
+        .section-title { 
+            font-family: 'Orbitron'; 
+            color: #fff; 
+            font-size: 28px; 
+            margin-bottom: 30px; 
+            border-left: 5px solid #00f0ff; 
+            padding-left: 15px;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            perspective: 1000px;
+        }
+
+        .card { 
+            height: 160px; 
+            background: linear-gradient(145deg, #000a0f, #001520); 
+            border: 1px solid #00f0ff; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            padding: 20px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px) rotateX(10deg); 
+            box-shadow: 0 15px 30px #00f0ff; 
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .card span { 
+            font-family: 'Orbitron'; 
+            font-weight: bold; 
+            font-size: 15px; 
+            text-align: center; 
+            line-height: 1.4;
+        }
+
+        .card small {
+            font-family: 'Rajdhani';
+            font-size: 12px;
+            opacity: 0.6;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .back-btn { 
+            display: block; 
+            width: 200px; 
+            margin: 50px auto; 
+            padding: 15px; 
+            text-align: center; 
+            border: 2px solid #00f0ff; 
+            color: #00f0ff; 
+            text-decoration: none; 
+            font-family: 'Orbitron'; 
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+        .back-btn:hover { background: #00f0ff; color: #000; }
+
+        .disclaimer {
+            max-width: 900px;
+            margin: 30px auto 10px;
+            padding: 16px 24px;
+            border: 1px solid #00f0ff44;
+            color: #00f0ff77;
+            font-size: 15px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .disclaimer strong { color: #00f0ff; }
+    </style>
+</head>
+<body>
+
+    <h1>🔍 DETECTIVE DEFENCE</h1>
+
+    <!-- ========== SECTION 1: SIEM ========== -->
+    <div class="category-box">
+        <h2 class="section-title">SECURITY INFORMATION &amp; EVENT MANAGEMENT (SIEM)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='siem_implementation.pdf'">
+                <span>SIEM IMPLEMENTATION<small>Splunk • ELK • Azure Sentinel</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='log_collection.pdf'">
+                <span>LOG COLLECTION &amp; AGGREGATION<small>Syslog • Windows Events • Cloud Logs</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='real_time_alerting.pdf'">
+                <span>REAL-TIME ALERTING &amp; CORRELATION<small>Rule-Based • Correlation Engine</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='siem_use_cases.pdf'">
+                <span>SIEM USE CASES &amp; TUNING<small>Threat Detection • False Positive Reduction</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 2: LOG MANAGEMENT ========== -->
+    <div class="category-box">
+        <h2 class="section-title">LOG MANAGEMENT &amp; MONITORING</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='centralized_logging.pdf'">
+                <span>CENTRALIZED LOG MANAGEMENT<small>Log Aggregation • Retention Policies</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='log_analysis.pdf'">
+                <span>LOG ANALYSIS &amp; PATTERN DETECTION<small>Anomaly Detection • Pattern Matching</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='audit_logging.pdf'">
+                <span>AUDIT LOGGING &amp; RETENTION<small>Compliance Audits • Chain of Custody</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='compliance_logging.pdf'">
+                <span>COMPLIANCE LOGGING<small>GDPR • HIPAA • PCI-DSS</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 3: NETWORK TRAFFIC ANALYSIS ========== -->
+    <div class="category-box">
+        <h2 class="section-title">NETWORK TRAFFIC ANALYSIS (NTA)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='dpi.pdf'">
+                <span>DEEP PACKET INSPECTION (DPI)<small>Payload Analysis • Protocol Decoding</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='netflow_analysis.pdf'">
+                <span>NETFLOW / SFLOW ANALYSIS<small>Flow Data • Bandwidth Analysis</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='traffic_anomaly.pdf'">
+                <span>ANOMALY DETECTION IN TRAFFIC<small>Baseline Deviation • DDoS Detection</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='dns_http_analysis.pdf'">
+                <span>DNS &amp; HTTP TRAFFIC ANALYSIS<small>DNS Tunneling • Malicious Domains</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 4: UEBA ========== -->
+    <div class="category-box">
+        <h2 class="section-title">USER &amp; ENTITY BEHAVIOR ANALYTICS (UEBA)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='user_profiling.pdf'">
+                <span>USER BEHAVIOR PROFILING<small>Baseline • Behavioral Patterns</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='insider_threat.pdf'">
+                <span>INSIDER THREAT DETECTION<small>Malicious Insider • Compromised Accounts</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='peer_group_analysis.pdf'">
+                <span>PEER GROUP ANALYSIS<small>Peer Comparison • Outlier Detection</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='ml_anomaly.pdf'">
+                <span>MACHINE LEARNING FOR ANOMALY<small>AI-Based Detection • Predictive Analytics</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 5: THREAT INTELLIGENCE ========== -->
+    <div class="category-box">
+        <h2 class="section-title">THREAT INTELLIGENCE</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='threat_feeds.pdf'">
+                <span>THREAT INTELLIGENCE FEEDS<small>STIX • TAXII • MISP</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='ioc_management.pdf'">
+                <span>IOC MANAGEMENT &amp; ENRICHMENT<small>IOC Lifecycle • Contextualization</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='dark_web_monitoring.pdf'">
+                <span>DARK WEB MONITORING<small>Darknet Scans • Leaked Credentials</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='osint_research.pdf'">
+                <span>OSINT FOR THREAT RESEARCH<small>Open Source Intelligence • Threat Hunting</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 6: VULNERABILITY ASSESSMENT ========== -->
+    <div class="category-box">
+        <h2 class="section-title">VULNERABILITY ASSESSMENT</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='vulnerability_scanning.pdf'">
+                <span>VULNERABILITY SCANNING<small>Nessus • Qualys • OpenVAS</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='penetration_testing.pdf'">
+                <span>PENETRATION TESTING<small>External • Internal • Web App</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='cvss_prioritization.pdf'">
+                <span>VULNERABILITY PRIORITIZATION (CVSS)<small>Risk Scoring • Remediation Planning</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='remediation_tracking.pdf'">
+                <span>REMEDIATION TRACKING<small>Patch Status • SLA Management</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 7: HONEYPOTS & DECEPTION ========== -->
+    <div class="category-box">
+        <h2 class="section-title">HONEYPOTS &amp; DECEPTION</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='honeypot_deployment.pdf'">
+                <span>HONEYPOT DEPLOYMENT<small>Low/High Interaction • Service Emulation</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='honeynets.pdf'">
+                <span>HONEYNETS &amp; DECEPTION FARMS<small>Distributed Decoys • Attack Analysis</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='deception_tokens.pdf'">
+                <span>DECEPTION TOKENS &amp; CANARIES<small>Files • Registry • Credentials</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='attack_pattern_analysis.pdf'">
+                <span>ATTACK PATTERN ANALYSIS<small>Technique Identification • MITRE Mapping</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <strong>📘 EDUCATIONAL PURPOSE ONLY</strong><br>
+        This section is for certification preparation (CEH/OSCP), lab testing, and defensive research.  
+        Unauthorized access is a crime under IT Act 2000 / Global Cyber Laws.
+    </div>
+
+    <a href="defence.html" class="back-btn">← BACK TO DEFENCE</a>
+
+</body>
+</html>
