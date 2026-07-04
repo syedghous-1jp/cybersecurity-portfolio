@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cyber Defence | Blue Team Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background:#030303;
+            color:#00f0ff;
+            font-family:'Rajdhani',sans-serif;
+            text-align:center;
+            padding:36px 16px 50px;
+            overflow-x:hidden;
+            min-height:100vh;
+            position:relative;
+        }
+
+        #matrix-canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; opacity:0.10; pointer-events:none; }
+        #network-bg    { position:fixed; top:0; left:0; width:100%; height:100%; z-index:1; pointer-events:none; opacity:0.13; }
+        body::after {
+            content:''; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,240,255,0.02) 2px,rgba(0,240,255,0.02) 4px);
+            z-index:2; pointer-events:none;
+        }
+
+        .page-content { position:relative; z-index:10; }
+
+        /* ── TITLE ── */
+        .main-title {
+            font-family:'Orbitron';
+            font-size:clamp(20px, 3.8vw, 48px);
+            letter-spacing:8px;
+            margin-bottom:44px;
+            text-transform:uppercase;
+            color:#00f0ff;
+            text-shadow: 0 0 10px #00f0ff, 0 0 30px #00f0ff99, 0 0 70px #00f0ff44;
+            animation:titlePulse 3s ease-in-out infinite;
+            position:relative;
+        }
+        .main-title::before {
+            content:attr(data-text); position:absolute; left:50%; transform:translateX(-50%);
+            color:#66f8ff; filter:blur(1.5px); opacity:0.3; animation:glitch 5s infinite;
+        }
+        @keyframes glitch {
+            0%,93%,100%{clip-path:none;transform:translateX(-50%)}
+            94%{clip-path:polygon(0 15%,100% 15%,100% 35%,0 35%);transform:translateX(calc(-50% + 4px))}
+            96%{clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%);transform:translateX(calc(-50% - 4px))}
+        }
+        @keyframes titlePulse {
+            0%,100%{text-shadow:0 0 10px #00f0ff,0 0 30px #00f0ff99,0 0 70px #00f0ff44}
+            50%    {text-shadow:0 0 20px #00f0ff,0 0 55px #00f0ffbb,0 0 100px #00f0ff55}
+        }
+
+        /* ── ROW — desktop: horizontal, mobile: vertical ── */
+        .container {
+            display:flex;
+            flex-direction:row;
+            justify-content:center;
+            align-items:stretch;
+            gap:18px;
+            flex-wrap:nowrap;
+            perspective:2000px;
+            margin-bottom:40px;
+            width:100%;
+            max-width:1380px;
+            margin-left:auto;
+            margin-right:auto;
+            padding:0 10px;
+        }
+
+        /* ── CARD ── */
+        .defence-box {
+            flex:1 1 0;
+            min-width:0;
+            max-width:430px;
+            height:300px;
+            position:relative;
+            cursor:pointer;
+            transform-style:preserve-3d;
+            transition:transform 0.5s cubic-bezier(0.23,1,0.32,1);
+        }
+
+        /* ── TABLET (2 columns + 1 below) ── */
+        @media(max-width:900px){
+            .container{
+                flex-wrap:wrap;
+                gap:16px;
+            }
+            .defence-box{
+                flex:1 1 calc(50% - 16px);
+                max-width:calc(50% - 8px);
+                height:260px;
+            }
+            .defence-box:last-child{
+                flex:1 1 100%;
+                max-width:480px;
+            }
+        }
+
+        /* ── MOBILE (single column, full width) ── */
+        @media(max-width:560px){
+            body{ padding:24px 12px 40px; }
+            .main-title{ font-size:clamp(14px,6vw,28px); letter-spacing:4px; margin-bottom:28px; }
+            .container{
+                flex-direction:column;
+                flex-wrap:nowrap;
+                align-items:center;
+                gap:14px;
+                padding:0;
+            }
+            .defence-box{
+                flex:none;
+                width:100%;
+                max-width:100%;
+                height:clamp(180px, 52vw, 240px);
+            }
+            .defence-box:last-child{
+                max-width:100%;
+            }
+            .card-title{ font-size:12px; letter-spacing:2px; margin-bottom:8px; }
+            .btn{ font-size:8px; padding:8px 16px; }
+            .back-btn{ font-size:9px; padding:10px 28px; letter-spacing:2px; }
+            .status-bar{ bottom:58px; }
+            .icon-area{ bottom:65px; }
+        }
+
+        /* ── CARD FRAME ── */
+        .card-frame {
+            position:absolute; inset:0;
+            border:2px solid rgba(0,240,255,0.7);
+            background:linear-gradient(160deg,rgba(2,18,22,0.97) 0%,rgba(0,5,8,0.99) 100%);
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:flex-end;
+            padding-bottom:22px;
+            overflow:hidden;
+            transition:border-color 0.4s, box-shadow 0.4s;
+        }
+        .defence-box:hover .card-frame {
+            border-color:#55f8ff;
+            box-shadow:0 0 40px #00f0ff77,0 0 80px #00f0ff33,inset 0 0 40px #00f0ff15;
+        }
+
+        /* Corner brackets */
+        .corner { position:absolute; width:20px; height:20px; border-color:#00f0ff; border-style:solid; transition:all 0.4s; }
+        .corner.tl{top:7px;left:7px;border-width:2px 0 0 2px}
+        .corner.tr{top:7px;right:7px;border-width:2px 2px 0 0}
+        .corner.bl{bottom:7px;left:7px;border-width:0 0 2px 2px}
+        .corner.br{bottom:7px;right:7px;border-width:0 2px 2px 0}
+        .defence-box:hover .corner{width:28px;height:28px;border-color:#55f8ff}
+
+        /* Edge glow bars */
+        .edge-bar{position:absolute;left:8%;width:84%;height:4px;background:linear-gradient(90deg,transparent,#00f0ff,transparent);box-shadow:0 0 14px #00f0ff}
+        .edge-bar.top{top:0} .edge-bar.bottom{bottom:0}
+
+        /* Scan line */
+        .scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00f0ff,transparent);opacity:0;z-index:20;pointer-events:none}
+        .defence-box:hover .scan-line{opacity:1;animation:scanDown 1.8s linear infinite}
+        @keyframes scanDown{from{top:0}to{top:100%}}
+
+        /* ── ICON — fills card, leaves ~80px at bottom ── */
+        .icon-area {
+            position:absolute;
+            top:0; left:0; right:0;
+            bottom:78px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            overflow:hidden;
+        }
+        .icon-glow{
+            position:absolute;
+            width:80%;height:90%;
+            border-radius:50%;
+            background:radial-gradient(circle,rgba(0,240,255,0.12) 0%,transparent 70%);
+            animation:glowPulse 2.5s ease-in-out infinite;
+        }
+        @keyframes glowPulse{0%,100%{opacity:0.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+
+        .icon-svg{
+            position:relative; z-index:2;
+            width:90%; height:90%;
+            filter:drop-shadow(0 0 10px #00f0ff) drop-shadow(0 0 28px #00f0ff77);
+            animation:iconFloat 3.5s ease-in-out infinite;
+            transition:filter 0.4s;
+        }
+        .defence-box:hover .icon-svg{
+            filter:drop-shadow(0 0 18px #66f8ff) drop-shadow(0 0 45px #00f0ffaa);
+        }
+        @keyframes iconFloat{
+            0%,100%{transform:translateY(0) rotateY(0deg)}
+            40%{transform:translateY(-6px) rotateY(5deg)}
+            70%{transform:translateY(-3px) rotateY(-3deg)}
+        }
+
+        /* Data stream */
+        .data-stream{
+            position:absolute;right:6px;top:0;bottom:0;width:42px;
+            overflow:hidden;font-family:'Courier New',monospace;font-size:7px;
+            color:rgba(0,240,255,0.38);line-height:1.3;pointer-events:none;z-index:3;
+        }
+        .data-stream-inner{animation:streamScroll 7s linear infinite}
+        .defence-box:nth-child(2) .data-stream-inner{animation-duration:5s}
+        .defence-box:nth-child(3) .data-stream-inner{animation-duration:9s}
+        @keyframes streamScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+
+        /* Status bar */
+        .status-bar{position:absolute;bottom:68px;left:12px;right:52px;height:2px;background:rgba(0,240,255,0.1);overflow:hidden}
+        .status-bar-fill{height:100%;background:linear-gradient(90deg,#00f0ff,#66f8ff);box-shadow:0 0 6px #00f0ff;animation:sbPulse 2s ease-in-out infinite}
+        .defence-box:nth-child(1) .status-bar-fill{width:76%}
+        .defence-box:nth-child(2) .status-bar-fill{width:61%;animation-delay:0.7s}
+        .defence-box:nth-child(3) .status-bar-fill{width:89%;animation-delay:1.3s}
+        @keyframes sbPulse{0%,100%{opacity:0.55}50%{opacity:1}}
+
+        /* Title inside card */
+        .card-title{
+            font-family:'Orbitron';
+            font-size:clamp(11px,1.2vw,17px);
+            letter-spacing:3px;color:#00f0ff;
+            text-shadow:0 0 10px #00f0ff88;
+            margin-bottom:12px;z-index:5;position:relative;
+            transition:color 0.3s,text-shadow 0.3s;
+        }
+        .defence-box:hover .card-title{color:#66f8ff;text-shadow:0 0 16px #00f0ff,0 0 32px #00f0ff77}
+
+        /* Button */
+        .btn{
+            padding:9px 22px;border:1.5px solid #00f0ff;color:#00f0ff;
+            text-decoration:none;font-weight:700;font-family:'Orbitron';
+            font-size:9px;letter-spacing:2px;background:transparent;
+            position:relative;z-index:5;display:inline-block;
+            text-transform:uppercase;overflow:hidden;transition:color 0.3s;
+        }
+        .btn::before{content:'';position:absolute;inset:0;background:#00f0ff;transform:scaleX(0);transform-origin:left;transition:transform 0.35s;z-index:-1}
+        .btn:hover::before{transform:scaleX(1)}
+        .btn:hover{color:#000;box-shadow:0 0 22px #00f0ff,0 0 44px #00f0ff55}
+
+        /* Back btn */
+        .back-btn{
+            display:inline-block;margin-top:14px;padding:12px 50px;
+            border:1.5px solid rgba(0,240,255,0.4);color:rgba(0,240,255,0.7);
+            text-decoration:none;font-family:'Orbitron';letter-spacing:4px;font-size:10px;
+            transition:all 0.4s;
+        }
+        .back-btn:hover{border-color:#00f0ff;color:#00f0ff;box-shadow:0 0 22px #00f0ff33;background:rgba(0,240,255,0.05)}
+    </style>
+</head>
+<body>
+
+<canvas id="matrix-canvas"></canvas>
+<svg id="network-bg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+<div class="page-content">
+    <h1 class="main-title" data-text="SELECT DEFENCE STRATEGY">🛡️ SELECT DEFENCE STRATEGY</h1>
+
+    <div class="container">
+
+        <!-- ══════════ PREVENTIVE DEFENCE ══════════ -->
+        <div class="defence-box">
+            <div class="card-frame">
+                <div class="edge-bar top"></div><div class="edge-bar bottom"></div>
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <div class="scan-line"></div>
+                <div class="icon-area">
+                    <div class="icon-glow"></div>
+                    <svg class="icon-svg" viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- SHIELD CENTER -->
+                        <path d="M200 18 L260 40 L260 100 C260 130 230 170 200 190 C170 170 140 130 140 100 L140 40 L200 18Z" 
+                              stroke="#00f0ff" stroke-width="2.5" fill="rgba(0,240,255,0.05)"/>
+                        <!-- Lock on shield -->
+                        <rect x="186" y="80" width="28" height="20" rx="4" stroke="#00f0ff" stroke-width="2" fill="rgba(0,240,255,0.08)"/>
+                        <path d="M190 80 L190 68 C190 58 210 58 210 68 L210 80" stroke="#00f0ff" stroke-width="2" fill="none"/>
+                        <circle cx="200" cy="92" r="4" stroke="#00f0ff" stroke-width="1.5" fill="none"/>
+                        <line x1="200" y1="96" x2="200" y2="100" stroke="#00f0ff" stroke-width="2"/>
+                        <!-- Shield cross lines -->
+                        <line x1="160" y1="55" x2="240" y2="55" stroke="#00f0ff33" stroke-width="1"/>
+                        <line x1="160" y1="65" x2="240" y2="65" stroke="#00f0ff33" stroke-width="1"/>
+                        <!-- Pulsing ring around shield -->
+                        <circle cx="200" cy="100" r="90" stroke="#00f0ff" stroke-width="1.5" fill="none" opacity="0.3">
+                            <animate attributeName="r" values="90;110;90" dur="3s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- Binary around shield -->
+                        <text x="110" y="130" fill="#00f0ff55" font-family="monospace" font-size="8">01100101</text>
+                        <text x="280" y="130" fill="#00f0ff55" font-family="monospace" font-size="8">10110010</text>
+                        <text x="180" y="205" fill="#00f0ff55" font-family="monospace" font-size="8">11010011</text>
+                        <!-- Checkmark inside lock -->
+                        <path d="M195 102 L198 105 L206 95" stroke="#00f0ff" stroke-width="2" fill="none" opacity="0.7"/>
+                    </svg>
+                </div>
+                <div class="data-stream"><div class="data-stream-inner" id="ds1"></div></div>
+                <div class="status-bar"><div class="status-bar-fill"></div></div>
+                <h2 class="card-title">PREVENTIVE DEFENCE</h2>
+                <a href="preventive.html" class="btn">VIEW METHODS</a>
+            </div>
+        </div>
+
+        <!-- ══════════ DETECTIVE DEFENCE ══════════ -->
+        <div class="defence-box">
+            <div class="card-frame">
+                <div class="edge-bar top"></div><div class="edge-bar bottom"></div>
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <div class="scan-line"></div>
+                <div class="icon-area">
+                    <div class="icon-glow"></div>
+                    <svg class="icon-svg" viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- RADAR / SONAR DISH -->
+                        <ellipse cx="200" cy="180" rx="120" ry="15" stroke="#00f0ff66" stroke-width="1.5" fill="none"/>
+                        <!-- Radar sweep arc -->
+                        <path d="M200 170 L200 60" stroke="#00f0ff" stroke-width="2.5"/>
+                        <path d="M200 170 L260 80" stroke="#00f0ff55" stroke-width="2"/>
+                        <path d="M200 170 L290 140" stroke="#00f0ff44" stroke-width="1.5"/>
+                        <!-- Sweeping beam -->
+                        <path d="M200 170 L145 90" stroke="#00f0ff" stroke-width="1.5" opacity="0.6">
+                            <animate attributeName="d" 
+                                     values="M200 170 L145 90;M200 170 L260 80;M200 170 L145 90" 
+                                     dur="3s" repeatCount="indefinite"/>
+                        </path>
+                        <!-- Radar rings -->
+                        <circle cx="200" cy="170" r="30" stroke="#00f0ff44" stroke-width="1" fill="none"/>
+                        <circle cx="200" cy="170" r="60" stroke="#00f0ff33" stroke-width="1" fill="none"/>
+                        <circle cx="200" cy="170" r="90" stroke="#00f0ff22" stroke-width="1" fill="none"/>
+                        <!-- Pulsing ring -->
+                        <circle cx="200" cy="170" r="30" stroke="#00f0ff" stroke-width="1.5" fill="none" opacity="0.5">
+                            <animate attributeName="r" values="30;90;30" dur="2.5s" repeatCount="indefinite"/>
+                            <animate attributeName="opacity" values="0.5;0;0.5" dur="2.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- Blips -->
+                        <circle cx="230" cy="120" r="4" fill="#00f0ff" opacity="0.8">
+                            <animate attributeName="opacity" values="0.8;0.1;0.8" dur="1.2s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="160" cy="140" r="3" fill="#00f0ff" opacity="0.6">
+                            <animate attributeName="opacity" values="0.6;0.1;0.6" dur="1.8s" begin="0.5s" repeatCount="indefinite"/>
+                        </circle>
+                        <circle cx="250" cy="160" r="2.5" fill="#00f0ff" opacity="0.5">
+                            <animate attributeName="opacity" values="0.5;0;0.5" dur="2.2s" begin="1s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- Signal waves from blips -->
+                        <path d="M230 120 Q238 112 230 104" stroke="#00f0ff44" stroke-width="1" fill="none">
+                            <animate attributeName="opacity" values="0.4;0;0.4" dur="0.8s" repeatCount="indefinite"/>
+                        </path>
+                        <text x="130" y="80" fill="#00f0ff44" font-family="monospace" font-size="7">SCAN</text>
+                        <text x="280" y="95" fill="#00f0ff44" font-family="monospace" font-size="7">DETECT</text>
+                    </svg>
+                </div>
+                <div class="data-stream"><div class="data-stream-inner" id="ds2"></div></div>
+                <div class="status-bar"><div class="status-bar-fill"></div></div>
+                <h2 class="card-title">DETECTIVE DEFENCE</h2>
+                <a href="detective.html" class="btn">VIEW METHODS</a>
+            </div>
+        </div>
+
+        <!-- ══════════ RESPONSIVE DEFENCE ══════════ -->
+        <div class="defence-box">
+            <div class="card-frame">
+                <div class="edge-bar top"></div><div class="edge-bar bottom"></div>
+                <div class="corner tl"></div><div class="corner tr"></div>
+                <div class="corner bl"></div><div class="corner br"></div>
+                <div class="scan-line"></div>
+                <div class="icon-area">
+                    <div class="icon-glow"></div>
+                    <svg class="icon-svg" viewBox="0 0 400 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Incident Response center: Fire extinguisher / Response symbol -->
+                        <!-- Shield with lightning -->
+                        <path d="M200 20 L250 40 L250 90 C250 120 230 155 200 175 C170 155 150 120 150 90 L150 40 L200 20Z" 
+                              stroke="#00f0ff" stroke-width="2" fill="rgba(0,240,255,0.05)"/>
+                        <!-- Lightning bolt inside shield -->
+                        <path d="M190 80 L205 80 L200 100 L215 100 L185 130 L195 105 L180 105 L190 80Z" 
+                              stroke="#00f0ff" stroke-width="1.8" fill="rgba(0,240,255,0.15)"/>
+                        <!-- Exclamation mark -->
+                        <circle cx="200" cy="150" r="12" stroke="#00f0ff" stroke-width="2" fill="rgba(0,240,255,0.08)"/>
+                        <text x="197" y="155" fill="#00f0ff" font-family="monospace" font-size="14" font-weight="bold">!</text>
+                        <!-- Circular response arrows -->
+                        <circle cx="200" cy="100" r="85" stroke="#00f0ff33" stroke-width="1.5" fill="none" stroke-dasharray="8 6">
+                            <animate attributeName="stroke-dashoffset" values="0;-28" dur="3s" repeatCount="indefinite"/>
+                        </circle>
+                        <!-- Arrow heads on circle -->
+                        <polygon points="280,30 290,18 295,32" fill="#00f0ff55"/>
+                        <polygon points="120,30 110,18 105,32" fill="#00f0ff55"/>
+                        <!-- Plus cross (first aid) -->
+                        <rect x="310" y="150" width="8" height="20" rx="2" fill="#00f0ff66"/>
+                        <rect x="298" y="158" width="32" height="4" rx="2" fill="#00f0ff66"/>
+                        <!-- Timer text -->
+                        <text x="145" y="195" fill="#00f0ff55" font-family="monospace" font-size="8">RESPONSE</text>
+                        <text x="260" y="195" fill="#00f0ff55" font-family="monospace" font-size="8">RECOVERY</text>
+                    </svg>
+                </div>
+                <div class="data-stream"><div class="data-stream-inner" id="ds3"></div></div>
+                <div class="status-bar"><div class="status-bar-fill"></div></div>
+                <h2 class="card-title">RESPONSIVE DEFENCE</h2>
+                <a href="responsive.html" class="btn">VIEW METHODS</a>
+            </div>
+        </div>
+
+    </div>
+
+    <a href="defence-lab.html" class="back-btn">← BACK TO LAB</a>
+</div>
+
+<script>
+// MATRIX RAIN
+const canvas = document.getElementById('matrix-canvas');
+const ctx = canvas.getContext('2d');
+function rsz(){ canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+rsz(); window.addEventListener('resize',()=>{rsz();drops=Array(Math.floor(canvas.width/13)).fill(1);});
+const chars='01アイウエオカキクケコサシスセソタチツテトABCDEF0123456789';
+let drops=Array(Math.floor(canvas.width/13)).fill(1);
+function dm(){
+    ctx.fillStyle='rgba(3,3,3,0.06)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle='#00f0ff'; ctx.font='12px monospace';
+    drops.forEach((y,i)=>{
+        ctx.fillText(chars[Math.floor(Math.random()*chars.length)],i*13,y*13);
+        if(y*13>canvas.height&&Math.random()>0.975)drops[i]=0; drops[i]++;
+    });
+}
+setInterval(dm,48);
+
+// NETWORK BG
+const svgEl=document.getElementById('network-bg');
+const W=window.innerWidth,H=window.innerHeight;
+svgEl.setAttribute('viewBox',`0 0 ${W} ${H}`);
+const pts=Array.from({length:22},()=>({x:Math.random()*W,y:Math.random()*H}));
+pts.forEach((p,i)=>{
+    pts.forEach((q,j)=>{
+        if(j>i){const d=Math.hypot(p.x-q.x,p.y-q.y);
+            if(d<250){const ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+                ln.setAttribute('x1',p.x);ln.setAttribute('y1',p.y);ln.setAttribute('x2',q.x);ln.setAttribute('y2',q.y);
+                ln.setAttribute('stroke','#00f0ff');ln.setAttribute('stroke-width','0.7');
+                ln.setAttribute('opacity',(1-d/250)*0.4);svgEl.appendChild(ln);}
+        }
+    });
+    const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+    c.setAttribute('cx',p.x);c.setAttribute('cy',p.y);c.setAttribute('r','2.5');
+    c.setAttribute('fill','#00f0ff');c.setAttribute('opacity','0.4');svgEl.appendChild(c);
+});
+
+// DATA STREAMS
+function buildStream(id){
+    const el=document.getElementById(id);let s='';
+    for(let i=0;i<150;i++)s+=(Math.random()>.5?'1':'0')+(Math.random()>.6?Math.floor(Math.random()*9):'')+(Math.random()>.85?' ':'')+'\n';
+    el.textContent=s+s;
+}
+['ds1','ds2','ds3'].forEach(buildStream);
+
+// MOUSE TILT — desktop only
+if(window.matchMedia('(hover:hover)').matches){
+    document.querySelectorAll('.defence-box').forEach(box=>{
+        box.addEventListener('mousemove',e=>{
+            const r=box.getBoundingClientRect();
+            const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+            box.style.transform=`rotateY(${x*18}deg) rotateX(${-y*14}deg) translateZ(28px)`;
+            box.style.transition='transform 0.1s';
+        });
+        box.addEventListener('mouseleave',()=>{
+            box.style.transition='transform 0.6s cubic-bezier(0.23,1,0.32,1)';
+            box.style.transform='';
+        });
+    });
+}
+</script>
+</body>
+</html>
