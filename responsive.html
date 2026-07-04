@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Responsive Defence | Blue Team Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript">
+        // 1. Right-click disable
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        // 2. Copy/Cut disable
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        // 3. Shortcuts (Save, Source, Copy, Print, Inspect) disable
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 67 || e.keyCode === 80 || e.keyCode === 73)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 disable
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            background: #020202; 
+            color: #00f0ff; 
+            font-family: 'Rajdhani', sans-serif; 
+            padding: 40px;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        h1 { 
+            font-family: 'Orbitron'; 
+            font-size: 50px; 
+            text-align: center; 
+            margin-bottom: 60px; 
+            text-shadow: 0 0 20px #00f0ff;
+            letter-spacing: 5px;
+            color: #00f0ff;
+        }
+
+        .category-box { margin-bottom: 60px; }
+        
+        .section-title { 
+            font-family: 'Orbitron'; 
+            color: #fff; 
+            font-size: 28px; 
+            margin-bottom: 30px; 
+            border-left: 5px solid #00f0ff; 
+            padding-left: 15px;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            perspective: 1000px;
+        }
+
+        .card { 
+            height: 160px; 
+            background: linear-gradient(145deg, #000a0f, #001520); 
+            border: 1px solid #00f0ff; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            padding: 20px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px) rotateX(10deg); 
+            box-shadow: 0 15px 30px #00f0ff; 
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .card span { 
+            font-family: 'Orbitron'; 
+            font-weight: bold; 
+            font-size: 15px; 
+            text-align: center; 
+            line-height: 1.4;
+        }
+
+        .card small {
+            font-family: 'Rajdhani';
+            font-size: 12px;
+            opacity: 0.6;
+            display: block;
+            margin-top: 4px;
+        }
+
+        .back-btn { 
+            display: block; 
+            width: 200px; 
+            margin: 50px auto; 
+            padding: 15px; 
+            text-align: center; 
+            border: 2px solid #00f0ff; 
+            color: #00f0ff; 
+            text-decoration: none; 
+            font-family: 'Orbitron'; 
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+        .back-btn:hover { background: #00f0ff; color: #000; }
+
+        .disclaimer {
+            max-width: 900px;
+            margin: 30px auto 10px;
+            padding: 16px 24px;
+            border: 1px solid #00f0ff44;
+            color: #00f0ff77;
+            font-size: 15px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .disclaimer strong { color: #00f0ff; }
+    </style>
+</head>
+<body>
+
+    <h1>⚡ RESPONSIVE DEFENCE</h1>
+
+    <!-- ========== SECTION 1: INCIDENT RESPONSE LIFECYCLE ========== -->
+    <div class="category-box">
+        <h2 class="section-title">INCIDENT RESPONSE LIFECYCLE</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='nist_ir_framework.pdf'">
+                <span>NIST INCIDENT RESPONSE<small>Prepare • Detect • Respond • Recover</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='sans_picerl.pdf'">
+                <span>SANS PICERL MODEL<small>Preparation • Identification • Containment • Eradication • Recovery • Lessons</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='incident_classification.pdf'">
+                <span>INCIDENT CLASSIFICATION &amp; TRIAGE<small>Priority Assessment • Severity Levels</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='communication_stakeholder.pdf'">
+                <span>COMMUNICATION &amp; STAKEHOLDERS<small>Crisis Communication • Legal • PR</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 2: CONTAINMENT STRATEGIES ========== -->
+    <div class="category-box">
+        <h2 class="section-title">CONTAINMENT STRATEGIES</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='network_isolation.pdf'">
+                <span>NETWORK SEGMENTATION &amp; ISOLATION<small>Quarantine VLANs • Network Segmentation</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='system_quarantine.pdf'">
+                <span>SYSTEM QUARANTINE &amp; SHUTDOWN<small>Disconnect • Power Off • Forensic Preservation</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='blocking_iocs.pdf'">
+                <span>BLOCKING INDICATORS (IPs/DOMAINS)<small>Firewall Blocks • DNS Sinkhole</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='ransomware_containment.pdf'">
+                <span>RANSOMWARE CONTAINMENT PLAYBOOK<small>Emergency Response • Isolation Steps</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 3: ERADICATION & REMEDIATION ========== -->
+    <div class="category-box">
+        <h2 class="section-title">ERADICATION &amp; REMEDIATION</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='malware_removal.pdf'">
+                <span>MALWARE REMOVAL &amp; CLEANUP<small>Anti-Malware Scan • Registry Cleanup</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='vulnerability_patching.pdf'">
+                <span>VULNERABILITY PATCHING &amp; HARDENING<small>Patch Management • System Hardening</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='system_rebuild.pdf'">
+                <span>REBUILDING COMPROMISED SYSTEMS<small>Fresh Install • Gold Image Deployment</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='remediation_verification.pdf'">
+                <span>ERADICATION VERIFICATION (RE-SCANNING)<small>Vulnerability Scan • Validation</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 4: SYSTEM RECOVERY & BCDR ========== -->
+    <div class="category-box">
+        <h2 class="section-title">SYSTEM RECOVERY &amp; BCDR</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='disaster_recovery.pdf'">
+                <span>DISASTER RECOVERY PLANNING<small>DRP Documentation • RTO/RPO</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='data_restoration.pdf'">
+                <span>DATA RESTORATION (BACKUPS)<small>Backup Integrity • Restoration Process</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='business_continuity.pdf'">
+                <span>BUSINESS CONTINUITY EXECUTION<small>BCP Activation • Failover Procedure</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='recovery_validation.pdf'">
+                <span>POST-RECOVERY VALIDATION<small>System Testing • Security Assurance</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 5: DIGITAL FORENSICS ========== -->
+    <div class="category-box">
+        <h2 class="section-title">DIGITAL FORENSICS</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='evidence_acquisition.pdf'">
+                <span>FORENSIC EVIDENCE ACQUISITION<small>Chain of Custody • Imaging</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='memory_forensics.pdf'">
+                <span>MEMORY FORENSICS (RAM ANALYSIS)<small>Volatility • Memory Dumps</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='disk_forensics.pdf'">
+                <span>DISK FORENSICS &amp; FILE CARVING<small>File Recovery • Slack Space Analysis</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='network_forensics.pdf'">
+                <span>NETWORK FORENSICS &amp; LOG ANALYSIS<small>PCAP Analysis • Log Correlation</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 6: THREAT HUNTING ========== -->
+    <div class="category-box">
+        <h2 class="section-title">THREAT HUNTING</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='hypothesis_hunting.pdf'">
+                <span>HYPOTHESIS-DRIVEN THREAT HUNTING<small>Threat Hunting Methodology</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='mitre_attack_mapping.pdf'">
+                <span>MITRE ATT&CK MAPPING<small>Tactics • Techniques • Procedures</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='yara_rules.pdf'">
+                <span>YARA RULES &amp; DETECTION<small>Rule Writing • Signature Detection</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='advanced_threat_detection.pdf'">
+                <span>ADVANCED THREAT DETECTION<small>APTs • Zero-Day • Sandboxing</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== SECTION 7: EXERCISES & SIMULATIONS ========== -->
+    <div class="category-box">
+        <h2 class="section-title">EXERCISES &amp; SIMULATIONS</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='red_blue_exercises.pdf'">
+                <span>RED VS BLUE TEAM EXERCISES<small>Purple Team • Breach Simulation</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='tabletop_simulations.pdf'">
+                <span>TABLETOP INCIDENT SIMULATIONS<small>Scenario-Based Training</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='phishing_drills.pdf'">
+                <span>PHISHING CAMPAIGNS &amp; DRILLS<small>Simulated Attacks • Awareness Testing</small></span>
+            </div>
+            <div class="card" onclick="window.location.href='lessons_learned.pdf'">
+                <span>POST-INCIDENT REVIEW (LESSONS LEARNED)<small>Root Cause Analysis • Documentation</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer">
+        <strong>📘 EDUCATIONAL PURPOSE ONLY</strong><br>
+        This section is for certification preparation (CEH/OSCP), lab testing, and defensive research.  
+        Unauthorized access is a crime under IT Act 2000 / Global Cyber Laws.
+    </div>
+
+    <a href="defence.html" class="back-btn">← BACK TO DEFENCE</a>
+
+</body>
+</html>
