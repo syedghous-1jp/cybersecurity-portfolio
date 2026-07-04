@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Hacking | Operations Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script type="text/javascript">
+        // 1. Right-click disable
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        // 2. Copy/Cut disable
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        // 3. Shortcuts (Save, Source, Copy, Print, Inspect) disable
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.keyCode === 83 || e.keyCode === 85 || e.keyCode === 67 || e.keyCode === 80 || e.keyCode === 73)) {
+                e.preventDefault();
+                return false;
+            }
+            // F12 disable
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { 
+            background: #020202; 
+            color: #ff1a1a; 
+            font-family: 'Rajdhani', sans-serif; 
+            padding: 40px;
+            overflow-x: hidden;
+            /* TEXT SELECTION LOCK */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        h1 { 
+            font-family: 'Orbitron'; 
+            font-size: 50px; 
+            text-align: center; 
+            margin-bottom: 60px; 
+            text-shadow: 0 0 20px #ff1a1a;
+            letter-spacing: 5px;
+        }
+
+        .category-box { margin-bottom: 60px; }
+        
+        .section-title { 
+            font-family: 'Orbitron'; 
+            color: #fff; 
+            font-size: 28px; 
+            margin-bottom: 30px; 
+            border-left: 5px solid #ff1a1a; 
+            padding-left: 15px;
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+            perspective: 1000px;
+        }
+
+        .card { 
+            height: 160px; 
+            background: linear-gradient(145deg, #0a0000, #150000); 
+            border: 1px solid #ff1a1a; 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            padding: 20px; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            position: relative;
+            text-align: center;
+        }
+
+        .card:hover { 
+            transform: translateY(-10px) rotateX(10deg); 
+            box-shadow: 0 15px 30px #ff1a1a; 
+            border-color: #fff;
+            color: #fff;
+        }
+
+        .card span { font-family: 'Orbitron'; font-weight: bold; font-size: 15px; line-height: 1.4; }
+
+        .back-btn { 
+            display: block; 
+            width: 200px; 
+            margin: 50px auto; 
+            padding: 15px; 
+            text-align: center; 
+            border: 2px solid #ff1a1a; 
+            color: #ff1a1a; 
+            text-decoration: none; 
+            font-family: 'Orbitron'; 
+            transition: 0.3s;
+        }
+        .back-btn:hover { background: #ff1a1a; color: #000; }
+
+        /* small note */
+        .disclaimer-note {
+            max-width: 900px;
+            margin: 40px auto 20px;
+            padding: 20px 30px;
+            border: 1px solid #ff1a1a;
+            background: #0a0000;
+            color: #ff7777;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .disclaimer-note strong {
+            color: #ff1a1a;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🌐 NETWORK HACKING</h1>
+
+    <!-- ======= SECTION 1: NETWORK FUNDAMENTALS ======= -->
+    <div class="category-box">
+        <h2 class="section-title">NETWORK FUNDAMENTALS</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='osi_layer_attacks.pdf'">
+                <span>OSI MODEL (LAYER-WISE ATTACKS)</span>
+            </div>
+            <div class="card" onclick="window.location.href='tcp_ip_subnet.pdf'">
+                <span>TCP/IP SUITE &amp; SUBNETTING</span>
+            </div>
+            <div class="card" onclick="window.location.href='mac_arp.pdf'">
+                <span>MAC ADDRESSES &amp; ARP PROTOCOL</span>
+            </div>
+            <div class="card" onclick="window.location.href='nat_dhcp_dns.pdf'">
+                <span>NAT, DHCP &amp; DNS (WORKING)</span>
+            </div>
+            <div class="card" onclick="window.location.href='ports_sockets.pdf'">
+                <span>PORTS &amp; SOCKETS (WELL-KNOWN)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 2: RECONNAISSANCE ======= -->
+    <div class="category-box">
+        <h2 class="section-title">RECONNAISSANCE (PASSIVE &amp; ACTIVE)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='passive_osint.pdf'">
+                <span>PASSIVE: OSINT, WHOIS, SHODAN</span>
+            </div>
+            <div class="card" onclick="window.location.href='active_scanning.pdf'">
+                <span>ACTIVE: PING SWEEP, NMAP (SYN/TCP/UDP)</span>
+            </div>
+            <div class="card" onclick="window.location.href='banner_fingerprint.pdf'">
+                <span>BANNER GRABBING &amp; FINGERPRINTING</span>
+            </div>
+            <div class="card" onclick="window.location.href='network_mapping.pdf'">
+                <span>NETWORK MAPPING &amp; TOPOLOGY</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 3: SNIFFING & SPOOFING ======= -->
+    <div class="category-box">
+        <h2 class="section-title">SNIFFING &amp; SPOOFING (MITM)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='packet_sniffing.pdf'">
+                <span>PACKET SNIFFING (WIRESHARK/TCPDUMP)</span>
+            </div>
+            <div class="card" onclick="window.location.href='arp_spoofing.pdf'">
+                <span>ARP SPOOFING / POISONING</span>
+            </div>
+            <div class="card" onclick="window.location.href='dns_spoofing.pdf'">
+                <span>DNS SPOOFING &amp; PHARMING</span>
+            </div>
+            <div class="card" onclick="window.location.href='mac_flooding.pdf'">
+                <span>MAC FLOODING &amp; PORT STEALING</span>
+            </div>
+            <div class="card" onclick="window.location.href='ssl_tls_stripping.pdf'">
+                <span>SSL/TLS STRIPPING (DOWNGRADE)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 4: WIRELESS NETWORK HACKING ======= -->
+    <div class="category-box">
+        <h2 class="section-title">WIRELESS NETWORK HACKING</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='wifi_encryption.pdf'">
+                <span>WEP / WPA / WPA2 / WPA3 CRACKING</span>
+            </div>
+            <div class="card" onclick="window.location.href='deauth_attack.pdf'">
+                <span>DE-AUTHENTICATION ATTACK (DEAUTH)</span>
+            </div>
+            <div class="card" onclick="window.location.href='handshake_cracking.pdf'">
+                <span>HANDSHAKE CAPTURE (AIRCRAK-NG/HASHCAT)</span>
+            </div>
+            <div class="card" onclick="window.location.href='evil_twin.pdf'">
+                <span>EVIL TWIN (ROGUE ACCESS POINT)</span>
+            </div>
+            <div class="card" onclick="window.location.href='bluetooth_nfc.pdf'">
+                <span>BLUETOOTH &amp; NFC SNIFFING</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 5: PROTOCOLS EXPLOITATION ======= -->
+    <div class="category-box">
+        <h2 class="section-title">PROTOCOLS EXPLOITATION</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='routing_attacks.pdf'">
+                <span>ROUTING ATTACKS (RIP, OSPF, BGP)</span>
+            </div>
+            <div class="card" onclick="window.location.href='dhcp_starvation.pdf'">
+                <span>DHCP STARVATION &amp; ROGUE DHCP</span>
+            </div>
+            <div class="card" onclick="window.location.href='dns_cache_poison.pdf'">
+                <span>DNS CACHE POISONING (KAMINSKY)</span>
+            </div>
+            <div class="card" onclick="window.location.href='service_vuln.pdf'">
+                <span>SMTP, FTP, TELNET, SSH VULNS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 6: POST-EXPLOITATION & PIVOTING ======= -->
+    <div class="category-box">
+        <h2 class="section-title">POST-EXPLOITATION &amp; PIVOTING</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='pivoting_lateral.pdf'">
+                <span>PIVOTING &amp; LATERAL MOVEMENT</span>
+            </div>
+            <div class="card" onclick="window.location.href='tunneling.pdf'">
+                <span>TUNNELING: SSH, VPN, SOCKS PROXY</span>
+            </div>
+            <div class="card" onclick="window.location.href='persistence_network.pdf'">
+                <span>PERSISTENCE (ROUTERS/SWITCHES)</span>
+            </div>
+            <div class="card" onclick="window.location.href='data_exfil_network.pdf'">
+                <span>DATA EXFILTRATION TECHNIQUES</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 7: FIREWALL / IDS EVASION ======= -->
+    <div class="category-box">
+        <h2 class="section-title">FIREWALL &amp; IDS EVASION</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='firewall_bypass.pdf'">
+                <span>FIREWALL BYPASS (FRAGMENTATION)</span>
+            </div>
+            <div class="card" onclick="window.location.href='ids_evasion.pdf'">
+                <span>IDS EVASION TECHNIQUES</span>
+            </div>
+            <div class="card" onclick="window.location.href='proxy_tor.pdf'">
+                <span>PROXY CHAINING &amp; TOR / I2P</span>
+            </div>
+            <div class="card" onclick="window.location.href='packet_crafting.pdf'">
+                <span>PACKET CRAFTING (SCAPY)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 8: ADVANCED ATTACKS ======= -->
+    <div class="category-box">
+        <h2 class="section-title">ADVANCED ATTACKS (RED TEAM)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='vlan_hopping.pdf'">
+                <span>VLAN HOPPING (DOUBLE TAGGING)</span>
+            </div>
+            <div class="card" onclick="window.location.href='stp_manipulation.pdf'">
+                <span>STP (SPANNING TREE) MANIPULATION</span>
+            </div>
+            <div class="card" onclick="window.location.href='cisco_exploit.pdf'">
+                <span>CISCO IOS &amp; ROUTER EXPLOITATION</span>
+            </div>
+            <div class="card" onclick="window.location.href='fuzzing_network.pdf'">
+                <span>ZERO-DAY NETWORK FUZZING</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 9: DEFENSIVE STRATEGIES ======= -->
+    <div class="category-box">
+        <h2 class="section-title">DEFENSIVE STRATEGIES (BLUE TEAM)</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='zero_trust.pdf'">
+                <span>ZERO TRUST &amp; NETWORK SEGMENTATION</span>
+            </div>
+            <div class="card" onclick="window.location.href='802.1x.pdf'">
+                <span>802.1X AUTHENTICATION</span>
+            </div>
+            <div class="card" onclick="window.location.href='honeypots.pdf'">
+                <span>HONEYPOTS &amp; DECEPTION TECHNOLOGY</span>
+            </div>
+            <div class="card" onclick="window.location.href='siem_logs.pdf'">
+                <span>SIEM LOG ANALYSIS (SPLUNK/ELK)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= SECTION 10: LABS & TOOLS ======= -->
+    <div class="category-box">
+        <h2 class="section-title">LABS, TOOLS &amp; CTF</h2>
+        <div class="grid">
+            <div class="card" onclick="window.location.href='tool_suite.pdf'">
+                <span>TOOL SUITE: NMAP, WIRESHARK, AIRCRACK, BETTERCAP, METASPLOIT</span>
+            </div>
+            <div class="card" onclick="window.location.href='lab_setup.pdf'">
+                <span>LAB SETUP: GNS3, EVE-NG, PACKET TRACER, KALI</span>
+            </div>
+            <div class="card" onclick="window.location.href='ctf_network.pdf'">
+                <span>CTF CHALLENGES (PICOCTF, TRYHACKME, HTB)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- DISCLAIMER (educational purpose only) -->
+    <div class="disclaimer-note">
+        <strong>📘 EDUCATIONAL PURPOSE ONLY</strong><br>
+        This section is for certification preparation (CEH/OSCP), lab testing, and defensive research.  
+        Unauthorized network access is a crime under IT Act 2000 / Global Cyber Laws.
+    </div>
+
+    <a href="network-targets.html" class="back-btn">⬅ BACK TO TARGETS</a>
+
+</body>
+</html>
