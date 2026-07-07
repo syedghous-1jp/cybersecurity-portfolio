@@ -8,19 +8,6 @@
 
 Yeh repository **ethical hacking, cybersecurity, penetration testing, aur digital forensics** ke liye comprehensive notes provide karti hai. Yeh notes specially **Termux (Android)** aur **Linux** users ke liye design kiye gaye hain jo cybersecurity seekhna chahte hain.
 
----
-
-## 🔥 Key Features
-
-✅ Complete Coverage – Network Hacking, Mobile Hacking, PC Hacking, aur Cyber Defence  
-✅ Step-by-Step Guides – Har topic detail mein samjhaya gaya hai  
-✅ Commands with Examples – Har command ke saath practical examples  
-✅ Beginner Friendly – Simple language, easy to understand  
-✅ Ready-to-Use – Copy-paste commands jo direct kaam karte hain  
-✅ Mobile Optimized – Specially Termux (Android) ke liye optimized  
-
----
-
 ## 📂 Topics Covered
 
 **Network Hacking:** Networking Fundamentals, Nmap, Wireshark, ARP/DNS Spoofing, Wi-Fi Hacking, Firewall Evasion.
