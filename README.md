@@ -8,20 +8,6 @@
 
 Yeh repository **ethical hacking, cybersecurity, penetration testing, aur digital forensics** ke liye comprehensive notes provide karti hai. Yeh notes specially **Termux (Android)** aur **Linux** users ke liye design kiye gaye hain jo cybersecurity seekhna chahte hain.
 
-## 📂 Topics Covered
-
-**Network Hacking:** Networking Fundamentals, Nmap, Wireshark, ARP/DNS Spoofing, Wi-Fi Hacking, Firewall Evasion.
-
-**PC Hacking:** Phishing, Malware Payloads, Memory Injection, Persistence, Privilege Escalation, Active Directory, Data Exfiltration, Anti-Forensics.
-
-**Mobile Hacking (Termux):** Termux Setup, Kali Linux, Linux Commands, Package Installation, Network Tools, Python for Hacking, Metasploit, Hydra, SSH Server, ADB & Fastboot.
-
-**Cyber Defence:**
-- **Preventive:** Security Policies, Firewalls, Endpoint Security, IAM, Cloud Security, Data Security, Physical Security
-- **Detective:** SIEM, Log Management, Network Traffic Analysis, UEBA, Threat Intelligence, Vulnerability Assessment, Honeypots
-- **Responsive:** Incident Response, Containment, Eradication, System Recovery, Forensics, Threat Hunting, Red/Blue Exercises
-
----
 
 ## ⚠️ Important Disclaimer
 
