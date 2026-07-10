@@ -1325,10 +1325,59 @@ Security Intelligence • AI Assistant • Threat Analysis
     </div>
   </div>
 </div>
-      <!-- ============================================
-     TEST YOUR KNOWLEDGE – CYBER QUIZ
+
+ 
+<script>
+function checkPassword() {
+    var password = prompt("Access Restricted: This section is secure. Please enter the password to proceed.");
+    
+    // Yahan malware.html ka path set hai
+    if (password === "cyberghous177") {
+        window.location.href = "malware.html";
+    } else if (password !== null) {
+        alert("Access Denied! Incorrect password. If you need access, please contact the administrator via the email provided at the bottom of the website.");
+    }
+}
+</script>
+<!-- 🔜 CTF (Coming Soon) -->
+      <div class="note-card reveal reveal-delay-2" data-cat="ctf">
+        <div class="nc-top">
+          <div class="nc-badge-row"><span class="nc-badge">CTF Writeup</span><span class="nc-type">📝 Article</span></div>
+          <h3>My First CTF Experience</h3>
+          <p>Beginner CTF walkthrough — steganography, base64 decoding, web vulns and flag capture.</p>
+        </div>
+        <div class="nc-bottom">
+          <span class="nc-meta">COMING SOON</span>
+          <div class="nc-actions">
+            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">Read</span>
+            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">⬇ PDF</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 🔜 Cloud (Coming Soon) -->
+      <div class="note-card reveal" data-cat="cloud">
+        <div class="nc-top">
+          <div class="nc-badge-row"><span class="nc-badge">Cloud</span><span class="nc-type">📄 PDF</span></div>
+          <h3>Cloud Security Fundamentals</h3>
+          <p>AWS/Azure basics, shared responsibility model, IAM, S3 misconfigs and cloud threats.</p>
+        </div>
+        <div class="nc-bottom">
+          <span class="nc-meta">COMING SOON</span>
+          <div class="nc-actions">
+            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">Read</span>
+            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">⬇ PDF</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end notes-grid -->
+  </div><!-- end container -->
+</section>
+  <!-- ============================================
+     TEST YOUR KNOWLEDGE – BUTTON + QUIZ (FIXED)
      ============================================ -->
-<section id="cyber-quiz" style="background:var(--bg);padding:4rem 1.5rem;">
+<section id="test-knowledge" style="background:var(--bg);padding:4rem 1.5rem;">
   <div class="container" style="max-width:900px;margin:0 auto;">
 
     <!-- Section Header -->
@@ -1336,101 +1385,176 @@ Security Intelligence • AI Assistant • Threat Analysis
       <div class="sec-eyebrow" style="justify-content:center;">// 05 — CHALLENGE YOURSELF</div>
       <h2 class="sec-title" style="font-size:clamp(1.6rem,3vw,2.4rem);">Test Your <em>Knowledge</em></h2>
       <p style="color:var(--text2);font-size:1rem;margin-top:0.5rem;max-width:600px;margin-left:auto;margin-right:auto;">
-        25 cybersecurity MCQ questions. Ek ek karke ayengi. Correct → Green, Wrong → Red.
+        25 cybersecurity MCQ questions. Dekhte hain kitna score karte ho!
       </p>
     </div>
 
-    <!-- Quiz Container -->
-    <div id="quiz-container" style="
-      background:var(--bg3);
-      border:1px solid var(--border2);
-      padding:2rem 1.8rem;
-      border-radius:6px;
-      margin-top:2rem;
-      position:relative;
-      overflow:hidden;
-      min-height:380px;
-    ">
-
-      <!-- Progress -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem;">
-        <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--text3);letter-spacing:1px;">
-          Question <span id="q-num">1</span>/<span id="q-total">25</span>
-        </span>
-        <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--cyan3);letter-spacing:1px;">
-          Score: <span id="q-score">0</span>/<span id="q-total-score">25</span>
-        </span>
-      </div>
-
-      <!-- Progress Bar -->
-      <div style="width:100%;height:2px;background:var(--border);margin-bottom:2rem;border-radius:2px;overflow:hidden;">
-        <div id="quiz-progress" style="height:100%;width:4%;background:var(--cyan);transition:width 0.4s ease;"></div>
-      </div>
-
-      <!-- Question -->
-      <div id="quiz-question" style="
-        font-family:'Rajdhani',sans-serif;
-        font-size:1.15rem;
-        color:var(--text);
-        line-height:1.7;
-        margin-bottom:2rem;
-        font-weight:500;
+    <!-- QUIZ BUTTON -->
+    <div style="text-align:center;margin-top:2rem;">
+      <button id="quiz-toggle-btn" style="
+        font-family:'Orbitron',monospace;
+        font-size:clamp(0.9rem,1.5vw,1.2rem);
+        letter-spacing:3px;
+        text-transform:uppercase;
+        padding:1rem 3rem;
+        border:2px solid var(--cyan);
+        color:var(--cyan);
+        background:transparent;
+        cursor:pointer;
+        transition:all 0.4s cubic-bezier(0.4,0,0.2,1);
+        border-radius:4px;
+        position:relative;
+        overflow:hidden;
+        text-shadow:0 0 10px var(--cyan);
+        box-shadow:0 0 20px rgba(0,240,255,0.1);
       ">
-        Loading question...
-      </div>
+        <span style="position:relative;z-index:2;">🧠 Test Your Knowledge</span>
+        <span style="position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan),var(--cyan3));transform:scaleX(0);transform-origin:left;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:1;"></span>
+      </button>
+      <p id="quiz-status" style="font-family:'Space Mono',monospace;font-size:0.65rem;color:var(--text3);margin-top:0.8rem;letter-spacing:1px;">
+        Click the button to start the quiz
+      </p>
+    </div>
 
-      <!-- Options -->
-      <div id="quiz-options" style="display:flex;flex-direction:column;gap:0.8rem;"></div>
+    <!-- QUIZ AREA (hidden initially) -->
+    <div id="quiz-area" style="display:none;margin-top:2.5rem;">
 
-      <!-- Next Button (hidden until answer) -->
-      <div style="text-align:right;margin-top:1.8rem;">
-        <button id="quiz-next-btn" style="
-          font-family:'Space Mono',monospace;
-          font-size:0.65rem;
-          letter-spacing:2px;
-          text-transform:uppercase;
-          padding:0.7rem 2rem;
-          border:1px solid var(--cyan);
-          color:var(--cyan);
-          background:transparent;
-          cursor:pointer;
-          transition:all 0.3s;
-          opacity:0;
-          pointer-events:none;
-        ">Next Question →</button>
-      </div>
+      <div id="quiz-container" style="
+        background:var(--bg3);
+        border:1px solid var(--border2);
+        padding:2rem 1.8rem;
+        border-radius:6px;
+        position:relative;
+        overflow:hidden;
+        min-height:380px;
+        animation:quizFadeIn 0.6s ease;
+      ">
 
-      <!-- Result Screen (hidden initially) -->
-      <div id="quiz-result" style="display:none;text-align:center;padding:1.5rem 0;">
-        <div style="font-size:3rem;margin-bottom:0.5rem;">🏆</div>
-        <h3 style="font-family:'Orbitron',monospace;color:var(--cyan);font-size:1.6rem;letter-spacing:2px;">Quiz Complete!</h3>
-        <p style="color:var(--text2);font-size:1.1rem;margin-top:0.5rem;">
-          You scored <span id="result-score" style="color:var(--cyan);font-weight:bold;font-size:1.6rem;">0</span>/25
-        </p>
-        <p id="result-message" style="color:var(--text3);margin-top:0.3rem;font-size:0.95rem;"></p>
-        <button id="quiz-restart-btn" style="
-          font-family:'Space Mono',monospace;
-          font-size:0.65rem;
-          letter-spacing:2px;
-          text-transform:uppercase;
-          padding:0.8rem 2.2rem;
-          border:1px solid var(--cyan);
-          color:var(--cyan);
-          background:transparent;
-          cursor:pointer;
-          transition:all 0.3s;
-          margin-top:1.5rem;
-        ">🔄 Retry Quiz</button>
+        <!-- Progress -->
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem;">
+          <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--text3);letter-spacing:1px;">
+            Question <span id="q-num">1</span>/<span id="q-total">25</span>
+          </span>
+          <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--cyan3);letter-spacing:1px;">
+            Score: <span id="q-score">0</span>/<span id="q-total-score">25</span>
+          </span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div style="width:100%;height:3px;background:var(--border);margin-bottom:2rem;border-radius:2px;overflow:hidden;">
+          <div id="quiz-progress" style="height:100%;width:4%;background:linear-gradient(to right,var(--cyan3),var(--cyan));transition:width 0.5s ease;"></div>
+        </div>
+
+        <!-- Question -->
+        <div id="quiz-question" style="
+          font-family:'Rajdhani',sans-serif;
+          font-size:1.15rem;
+          color:var(--text);
+          line-height:1.7;
+          margin-bottom:2rem;
+          font-weight:500;
+        ">
+          Click "Test Your Knowledge" to start!
+        </div>
+
+        <!-- Options -->
+        <div id="quiz-options" style="display:flex;flex-direction:column;gap:0.8rem;"></div>
+
+        <!-- Next Button -->
+        <div style="text-align:right;margin-top:1.8rem;">
+          <button id="quiz-next-btn" style="
+            font-family:'Space Mono',monospace;
+            font-size:0.65rem;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            padding:0.7rem 2rem;
+            border:1px solid var(--cyan);
+            color:var(--cyan);
+            background:transparent;
+            cursor:pointer;
+            transition:all 0.3s;
+            opacity:0;
+            pointer-events:none;
+            border-radius:4px;
+          ">Next Question →</button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="quiz-result" style="display:none;text-align:center;padding:2rem 0;">
+          <div style="font-size:4rem;margin-bottom:0.5rem;">🏆</div>
+          <h3 style="font-family:'Orbitron',monospace;color:var(--cyan);font-size:1.8rem;letter-spacing:2px;">Quiz Complete!</h3>
+          <p style="color:var(--text2);font-size:1.2rem;margin-top:0.8rem;">
+            You scored <span id="result-score" style="color:var(--cyan);font-weight:bold;font-size:2rem;">0</span>/25
+          </p>
+          <p style="color:var(--text2);font-size:1rem;margin-top:0.3rem;">
+            Percentage: <span id="result-percentage" style="color:var(--cyan);font-weight:bold;font-size:1.6rem;">0%</span>
+          </p>
+          <div id="result-message-box" style="
+            margin-top:1.5rem;
+            padding:1.2rem 2rem;
+            border:1px solid var(--border2);
+            border-radius:4px;
+            background:rgba(0,240,255,0.04);
+            max-width:450px;
+            margin-left:auto;
+            margin-right:auto;
+          ">
+            <p id="result-message" style="font-family:'Rajdhani',sans-serif;font-size:1.2rem;color:var(--text);font-weight:600;"></p>
+          </div>
+          <button id="quiz-restart-btn" style="
+            font-family:'Space Mono',monospace;
+            font-size:0.65rem;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            padding:0.8rem 2.2rem;
+            border:1px solid var(--cyan);
+            color:var(--cyan);
+            background:transparent;
+            cursor:pointer;
+            transition:all 0.3s;
+            margin-top:1.8rem;
+            border-radius:4px;
+          ">🔄 Retry Quiz</button>
+        </div>
       </div>
     </div>
 
-    <!-- Quiz Note -->
     <p style="text-align:center;font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--text3);letter-spacing:1px;margin-top:1.5rem;">
       ⚡ Questions based on real cybersecurity scenarios &amp; concepts
     </p>
 
   </div>
 </section>
+
+<style>
+@keyframes quizFadeIn {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+#quiz-toggle-btn:hover {
+  box-shadow:0 0 40px rgba(0,240,255,0.3), inset 0 0 40px rgba(0,240,255,0.05);
+}
+#quiz-toggle-btn:hover span:first-child {
+  color:#000;
+}
+#quiz-toggle-btn:hover span:last-child {
+  transform:scaleX(1);
+}
+.quiz-option {
+  transition: all 0.25s ease;
+}
+.quiz-option:hover:not([disabled]) {
+  background: rgba(0,240,255,0.04);
+}
+@media (max-width:480px) {
+  #test-knowledge { padding:3rem 0.8rem; }
+  #quiz-container { padding:1.2rem 1rem; }
+  #quiz-question { font-size:1rem; }
+  .quiz-option { font-size:0.9rem !important; padding:0.7rem 0.9rem !important; }
+  .quiz-option span { font-size:0.55rem !important; }
+  #quiz-toggle-btn { font-size:0.8rem !important; padding:0.8rem 1.5rem !important; }
+}
+</style>
 
 <script>
 // ============================================================
@@ -1571,7 +1695,7 @@ const totalQuestions = quizData.length;
 let currentIndex = 0;
 let score = 0;
 let answered = false;
-let selectedIndex = -1;
+let quizStarted = false;
 
 const qNum = document.getElementById('q-num');
 const qTotal = document.getElementById('q-total');
@@ -1582,9 +1706,10 @@ const qQuestion = document.getElementById('quiz-question');
 const qOptions = document.getElementById('quiz-options');
 const qNextBtn = document.getElementById('quiz-next-btn');
 const qResult = document.getElementById('quiz-result');
-const qContainer = document.getElementById('quiz-container');
+const quizArea = document.getElementById('quiz-area');
+const toggleBtn = document.getElementById('quiz-toggle-btn');
+const quizStatus = document.getElementById('quiz-status');
 
-// Set totals
 qTotal.textContent = totalQuestions;
 qTotalScore.textContent = totalQuestions;
 
@@ -1596,25 +1721,25 @@ function shuffleArray(arr) {
   return arr;
 }
 
-// Randomize option order for each question
 function randomizeOptions(questionData) {
   const optIndices = questionData.options.map((_, idx) => idx);
   const shuffled = shuffleArray([...optIndices]);
   const shuffledOptions = shuffled.map(i => questionData.options[i]);
-  // Find the new index of the correct answer
   const newCorrect = shuffled.indexOf(questionData.correct);
   return { options: shuffledOptions, correct: newCorrect };
 }
 
-// Store randomized versions
-let randomizedQuestions = quizData.map(q => {
-  const { options, correct } = randomizeOptions(q);
-  return { ...q, options, correct };
-});
+let randomizedQuestions = [];
+
+function initializeQuiz() {
+  randomizedQuestions = quizData.map(q => {
+    const { options, correct } = randomizeOptions(q);
+    return { ...q, options, correct };
+  });
+}
 
 function loadQuestion(index) {
   answered = false;
-  selectedIndex = -1;
   qNextBtn.style.opacity = '0';
   qNextBtn.style.pointerEvents = 'none';
   
@@ -1622,11 +1747,9 @@ function loadQuestion(index) {
   qNum.textContent = index + 1;
   qQuestion.textContent = `${index + 1}. ${q.question}`;
   
-  // Progress
   const pct = ((index) / totalQuestions) * 100;
   qProgress.style.width = pct + '%';
   
-  // Options
   qOptions.innerHTML = '';
   const labels = ['A', 'B', 'C', 'D'];
   q.options.forEach((opt, i) => {
@@ -1668,14 +1791,10 @@ function handleOptionClick(idx, btnEl) {
   const q = randomizedQuestions[currentIndex];
   const isCorrect = (idx === q.correct);
   
-  // Mark answered
   answered = true;
-  selectedIndex = idx;
   
-  // Disable all options
   document.querySelectorAll('.quiz-option').forEach(b => b.style.pointerEvents = 'none');
   
-  // Color feedback
   const allOpts = document.querySelectorAll('.quiz-option');
   allOpts.forEach((b, i) => {
     if (i === q.correct) {
@@ -1689,73 +1808,75 @@ function handleOptionClick(idx, btnEl) {
     }
   });
   
-  // Update score
   if (isCorrect) {
     score++;
     qScore.textContent = score;
   }
   
-  // Show next button
   qNextBtn.style.opacity = '1';
   qNextBtn.style.pointerEvents = 'auto';
 }
 
 function showResult() {
-  qContainer.querySelector('#quiz-question').style.display = 'none';
-  qContainer.querySelector('#quiz-options').style.display = 'none';
-  qContainer.querySelector('#quiz-progress').style.display = 'none';
+  // Hide question elements
+  document.querySelector('#quiz-container > div:first-child').style.display = 'none';
+  document.querySelector('#quiz-container > div:nth-child(2)').style.display = 'none';
+  document.getElementById('quiz-question').style.display = 'none';
+  document.getElementById('quiz-options').style.display = 'none';
   qNextBtn.style.display = 'none';
-  document.querySelector('#quiz-container .sec-header')?.remove();
-  // Hide question number
-  document.querySelector('#quiz-container > div:first-child')?.querySelector('span')?.style.display = 'none';
   
   qResult.style.display = 'block';
   document.getElementById('result-score').textContent = score;
   
-  let msg = '';
-  if (score >= 22) msg = '🔥 Excellent! You\'re a cybersecurity expert!';
-  else if (score >= 18) msg = '🌟 Great job! You have strong security knowledge.';
-  else if (score >= 12) msg = '📚 Good effort! Keep learning and improving.';
-  else msg = '💪 Keep studying! Review the notes and try again.';
-  document.getElementById('result-message').textContent = msg;
+  const percentage = Math.round((score / totalQuestions) * 100);
+  document.getElementById('result-percentage').textContent = percentage + '%';
   
-  // Full progress bar
+  let msg = '';
+  let msgColor = '';
+  let icon = '';
+  
+  if (percentage < 50) {
+    msg = 'Try Again! Keep Learning 💪';
+    msgColor = '#ff6666';
+    icon = '📚';
+  } else if (percentage === 50) {
+    msg = 'Better Luck Next Time! 📚';
+    msgColor = '#ffaa00';
+    icon = '😅';
+  } else {
+    msg = 'Good Job! 🔥';
+    msgColor = '#00ff66';
+    icon = '🎉';
+  }
+  
+  document.getElementById('result-message').textContent = icon + ' ' + msg;
+  document.getElementById('result-message').style.color = msgColor;
+  
+  // Show progress bar full
   qProgress.style.width = '100%';
 }
 
 function restartQuiz() {
-  // Reset
   currentIndex = 0;
   score = 0;
   answered = false;
-  selectedIndex = -1;
   qScore.textContent = '0';
   
-  // Re-randomize questions
-  randomizedQuestions = quizData.map(q => {
-    const { options, correct } = randomizeOptions(q);
-    return { ...q, options, correct };
-  });
+  initializeQuiz();
   
-  // Hide result, show question
   qResult.style.display = 'none';
-  qContainer.querySelector('#quiz-question').style.display = 'block';
-  qContainer.querySelector('#quiz-options').style.display = 'flex';
-  qContainer.querySelector('#quiz-progress').style.display = 'block';
+  document.querySelector('#quiz-container > div:first-child').style.display = 'flex';
+  document.querySelector('#quiz-container > div:nth-child(2)').style.display = 'block';
+  document.getElementById('quiz-question').style.display = 'block';
+  document.getElementById('quiz-options').style.display = 'flex';
   qNextBtn.style.display = 'inline-block';
   qNextBtn.style.opacity = '0';
   qNextBtn.style.pointerEvents = 'none';
   
-  // Reset progress bar visibility
-  document.querySelector('#quiz-container > div:first-child')?.querySelector('span')?.style.display = 'inline';
-  
-  // Reset progress width
   qProgress.style.width = '0%';
-  
   loadQuestion(0);
 }
 
-// Next button handler
 qNextBtn.addEventListener('click', () => {
   currentIndex++;
   if (currentIndex >= totalQuestions) {
@@ -1765,117 +1886,55 @@ qNextBtn.addEventListener('click', () => {
   }
 });
 
-// Restart button
 document.getElementById('quiz-restart-btn').addEventListener('click', restartQuiz);
 
-// Initialize
-loadQuestion(0);
-</script>
-
-<!-- Scroll Animation for Quiz Section -->
-<style>
-  #cyber-quiz .sec-header.reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  #cyber-quiz .sec-header.reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+// ============================================================
+//  TOGGLE QUIZ BUTTON
+// ============================================================
+toggleBtn.addEventListener('click', function() {
+  const isOpen = quizArea.style.display !== 'none';
   
-  .quiz-option {
-    transition: all 0.25s ease;
-  }
-  
-  .quiz-option:hover:not([disabled]) {
-    background: rgba(0,240,255,0.04);
-  }
-  
-  @media (max-width:480px) {
-    #cyber-quiz {
-      padding:3rem 0.8rem;
-    }
-    #quiz-container {
-      padding:1.2rem 1rem;
-    }
-    #quiz-question {
-      font-size:1rem;
-    }
-    .quiz-option {
-      font-size:0.9rem !important;
-      padding:0.7rem 0.9rem !important;
-    }
-    .quiz-option span {
-      font-size:0.55rem !important;
-    }
-  }
-</style>
-
-<script>
-  // Reveal observer for quiz header
-  document.addEventListener('DOMContentLoaded', function() {
-    const header = document.querySelector('#cyber-quiz .sec-header.reveal');
-    if (header) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      }, { threshold: 0.15 });
-      observer.observe(header);
-    }
-  });
-</script>
-
-<script>
-function checkPassword() {
-    var password = prompt("Access Restricted: This section is secure. Please enter the password to proceed.");
+  if (isOpen) {
+    quizArea.style.display = 'none';
+    toggleBtn.innerHTML = '<span style="position:relative;z-index:2;">🧠 Test Your Knowledge</span><span style="position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan),var(--cyan3));transform:scaleX(0);transform-origin:left;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:1;"></span>';
+    quizStatus.textContent = 'Click the button to start the quiz';
+    quizStatus.style.color = 'var(--text3)';
+  } else {
+    quizArea.style.display = 'block';
+    toggleBtn.innerHTML = '<span style="position:relative;z-index:2;">✕ Close Quiz</span><span style="position:absolute;inset:0;background:linear-gradient(135deg,var(--cyan),var(--cyan3));transform:scaleX(0);transform-origin:left;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);z-index:1;"></span>';
+    quizStatus.textContent = 'Quiz started! Good luck! 🍀';
+    quizStatus.style.color = 'var(--cyan)';
     
-    // Yahan malware.html ka path set hai
-    if (password === "cyberghous177") {
-        window.location.href = "malware.html";
-    } else if (password !== null) {
-        alert("Access Denied! Incorrect password. If you need access, please contact the administrator via the email provided at the bottom of the website.");
+    // Initialize quiz if first time
+    if (!quizStarted) {
+      initializeQuiz();
+      // Reset question display
+      document.querySelector('#quiz-container > div:first-child').style.display = 'flex';
+      document.querySelector('#quiz-container > div:nth-child(2)').style.display = 'block';
+      document.getElementById('quiz-question').style.display = 'block';
+      document.getElementById('quiz-options').style.display = 'flex';
+      qResult.style.display = 'none';
+      qNextBtn.style.display = 'inline-block';
+      qProgress.style.width = '0%';
+      qScore.textContent = '0';
+      score = 0;
+      currentIndex = 0;
+      loadQuestion(0);
+      quizStarted = true;
+    } else {
+      // If quiz was already started, just show current state
+      if (qResult.style.display === 'block') {
+        // Already finished, show result
+      } else {
+        loadQuestion(currentIndex);
+      }
     }
-}
+  }
+});
+
+// Initial setup - prepare but don't load until button click
+initializeQuiz();
 </script>
-<!-- 🔜 CTF (Coming Soon) -->
-      <div class="note-card reveal reveal-delay-2" data-cat="ctf">
-        <div class="nc-top">
-          <div class="nc-badge-row"><span class="nc-badge">CTF Writeup</span><span class="nc-type">📝 Article</span></div>
-          <h3>My First CTF Experience</h3>
-          <p>Beginner CTF walkthrough — steganography, base64 decoding, web vulns and flag capture.</p>
-        </div>
-        <div class="nc-bottom">
-          <span class="nc-meta">COMING SOON</span>
-          <div class="nc-actions">
-            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">Read</span>
-            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">⬇ PDF</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🔜 Cloud (Coming Soon) -->
-      <div class="note-card reveal" data-cat="cloud">
-        <div class="nc-top">
-          <div class="nc-badge-row"><span class="nc-badge">Cloud</span><span class="nc-type">📄 PDF</span></div>
-          <h3>Cloud Security Fundamentals</h3>
-          <p>AWS/Azure basics, shared responsibility model, IAM, S3 misconfigs and cloud threats.</p>
-        </div>
-        <div class="nc-bottom">
-          <span class="nc-meta">COMING SOON</span>
-          <div class="nc-actions">
-            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">Read</span>
-            <span class="nc-btn" style="opacity:0.4;cursor:not-allowed;">⬇ PDF</span>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- end notes-grid -->
-  </div><!-- end container -->
-</section>
 
 <!-- CERTIFICATES -->
 <section id="certs">
