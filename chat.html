@@ -491,7 +491,7 @@ function addMessage(text,type){
             'Authorization': 'Bearer ' + API_KEY
         },
         body: JSON.stringify({
-            model: 'mixtral-8x7b-32768', // Fast model
+            model: 'llama3-70b-8192', // Fast model
             messages: [
                 { role: 'system', content: 'You are a cybersecurity expert. Give short, accurate answers.' },
                 { role: 'user', content: text }
