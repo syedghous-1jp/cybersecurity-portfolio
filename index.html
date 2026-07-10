@@ -1325,6 +1325,509 @@ Security Intelligence • AI Assistant • Threat Analysis
     </div>
   </div>
 </div>
+      <!-- ============================================
+     TEST YOUR KNOWLEDGE – CYBER QUIZ
+     ============================================ -->
+<section id="cyber-quiz" style="background:var(--bg);padding:4rem 1.5rem;">
+  <div class="container" style="max-width:900px;margin:0 auto;">
+
+    <!-- Section Header -->
+    <div class="sec-header reveal" style="text-align:center;">
+      <div class="sec-eyebrow" style="justify-content:center;">// 05 — CHALLENGE YOURSELF</div>
+      <h2 class="sec-title" style="font-size:clamp(1.6rem,3vw,2.4rem);">Test Your <em>Knowledge</em></h2>
+      <p style="color:var(--text2);font-size:1rem;margin-top:0.5rem;max-width:600px;margin-left:auto;margin-right:auto;">
+        25 cybersecurity MCQ questions. Ek ek karke ayengi. Correct → Green, Wrong → Red.
+      </p>
+    </div>
+
+    <!-- Quiz Container -->
+    <div id="quiz-container" style="
+      background:var(--bg3);
+      border:1px solid var(--border2);
+      padding:2rem 1.8rem;
+      border-radius:6px;
+      margin-top:2rem;
+      position:relative;
+      overflow:hidden;
+      min-height:380px;
+    ">
+
+      <!-- Progress -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:0.5rem;">
+        <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--text3);letter-spacing:1px;">
+          Question <span id="q-num">1</span>/<span id="q-total">25</span>
+        </span>
+        <span style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--cyan3);letter-spacing:1px;">
+          Score: <span id="q-score">0</span>/<span id="q-total-score">25</span>
+        </span>
+      </div>
+
+      <!-- Progress Bar -->
+      <div style="width:100%;height:2px;background:var(--border);margin-bottom:2rem;border-radius:2px;overflow:hidden;">
+        <div id="quiz-progress" style="height:100%;width:4%;background:var(--cyan);transition:width 0.4s ease;"></div>
+      </div>
+
+      <!-- Question -->
+      <div id="quiz-question" style="
+        font-family:'Rajdhani',sans-serif;
+        font-size:1.15rem;
+        color:var(--text);
+        line-height:1.7;
+        margin-bottom:2rem;
+        font-weight:500;
+      ">
+        Loading question...
+      </div>
+
+      <!-- Options -->
+      <div id="quiz-options" style="display:flex;flex-direction:column;gap:0.8rem;"></div>
+
+      <!-- Next Button (hidden until answer) -->
+      <div style="text-align:right;margin-top:1.8rem;">
+        <button id="quiz-next-btn" style="
+          font-family:'Space Mono',monospace;
+          font-size:0.65rem;
+          letter-spacing:2px;
+          text-transform:uppercase;
+          padding:0.7rem 2rem;
+          border:1px solid var(--cyan);
+          color:var(--cyan);
+          background:transparent;
+          cursor:pointer;
+          transition:all 0.3s;
+          opacity:0;
+          pointer-events:none;
+        ">Next Question →</button>
+      </div>
+
+      <!-- Result Screen (hidden initially) -->
+      <div id="quiz-result" style="display:none;text-align:center;padding:1.5rem 0;">
+        <div style="font-size:3rem;margin-bottom:0.5rem;">🏆</div>
+        <h3 style="font-family:'Orbitron',monospace;color:var(--cyan);font-size:1.6rem;letter-spacing:2px;">Quiz Complete!</h3>
+        <p style="color:var(--text2);font-size:1.1rem;margin-top:0.5rem;">
+          You scored <span id="result-score" style="color:var(--cyan);font-weight:bold;font-size:1.6rem;">0</span>/25
+        </p>
+        <p id="result-message" style="color:var(--text3);margin-top:0.3rem;font-size:0.95rem;"></p>
+        <button id="quiz-restart-btn" style="
+          font-family:'Space Mono',monospace;
+          font-size:0.65rem;
+          letter-spacing:2px;
+          text-transform:uppercase;
+          padding:0.8rem 2.2rem;
+          border:1px solid var(--cyan);
+          color:var(--cyan);
+          background:transparent;
+          cursor:pointer;
+          transition:all 0.3s;
+          margin-top:1.5rem;
+        ">🔄 Retry Quiz</button>
+      </div>
+    </div>
+
+    <!-- Quiz Note -->
+    <p style="text-align:center;font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--text3);letter-spacing:1px;margin-top:1.5rem;">
+      ⚡ Questions based on real cybersecurity scenarios &amp; concepts
+    </p>
+
+  </div>
+</section>
+
+<script>
+// ============================================================
+//  QUIZ DATA – 25 Cybersecurity Questions
+// ============================================================
+const quizData = [
+  {
+    question: 'Which of the following is NOT a component of the CIA Triad?',
+    options: ['Confidentiality', 'Integrity', 'Availability', 'Authentication'],
+    correct: 3
+  },
+  {
+    question: 'What type of attack involves sending malicious SQL queries to a database?',
+    options: ['XSS', 'SQL Injection', 'CSRF', 'Buffer Overflow'],
+    correct: 1
+  },
+  {
+    question: 'Which port is commonly used for HTTPS traffic?',
+    options: ['80', '443', '8080', '8443'],
+    correct: 1
+  },
+  {
+    question: 'What is the primary purpose of a firewall?',
+    options: ['Scan for viruses', 'Block unauthorized network traffic', 'Encrypt data', 'Monitor user activity'],
+    correct: 1
+  },
+  {
+    question: 'Which of the following is an example of a symmetric encryption algorithm?',
+    options: ['RSA', 'AES', 'ECC', 'DSA'],
+    correct: 1
+  },
+  {
+    question: 'What does the acronym "XSS" stand for?',
+    options: ['Cross-Site Scripting', 'Cross-Server Scripting', 'Cross-System Scripting', 'Cross-Site Security'],
+    correct: 0
+  },
+  {
+    question: 'What is the purpose of a honeypot in cybersecurity?',
+    options: ['To encrypt data', 'To detect and trap attackers', 'To block malware', 'To backup files'],
+    correct: 1
+  },
+  {
+    question: 'Which protocol is used to securely transfer files over the internet?',
+    options: ['FTP', 'SFTP', 'HTTP', 'Telnet'],
+    correct: 1
+  },
+  {
+    question: 'What is a zero-day vulnerability?',
+    options: ['A vulnerability with no known fix', 'A vulnerability discovered on day zero', 'A vulnerability that cannot be exploited', 'A vulnerability found in zero seconds'],
+    correct: 0
+  },
+  {
+    question: 'Which of the following is a social engineering attack?',
+    options: ['Phishing', 'DDoS', 'SQL Injection', 'Brute Force'],
+    correct: 0
+  },
+  {
+    question: 'What is the primary purpose of the OSI model?',
+    options: ['To standardize network communication layers', 'To encrypt network traffic', 'To provide a firewall', 'To route packets'],
+    correct: 0
+  },
+  {
+    question: 'Which type of malware is designed to replicate itself and spread to other devices?',
+    options: ['Trojan', 'Worm', 'Ransomware', 'Spyware'],
+    correct: 1
+  },
+  {
+    question: 'What is the function of a Public Key Infrastructure (PKI)?',
+    options: ['To manage digital certificates and encryption keys', 'To scan for vulnerabilities', 'To block network traffic', 'To backup data'],
+    correct: 0
+  },
+  {
+    question: 'Which of these is a method to bypass a firewall?',
+    options: ['SSH Tunneling', 'Encryption', 'Authentication', 'Logging'],
+    correct: 0
+  },
+  {
+    question: 'What is the difference between authentication and authorization?',
+    options: ['Authentication confirms identity, authorization grants permissions', 'Authentication grants permissions, authorization confirms identity', 'They are the same thing', 'Authentication is for networks, authorization is for files'],
+    correct: 0
+  },
+  {
+    question: 'What does the term "Man-in-the-Middle" (MITM) attack refer to?',
+    options: ['An attacker intercepts communication between two parties', 'An attacker installs malware on a device', 'An attacker floods a server with traffic', 'An attacker cracks passwords'],
+    correct: 0
+  },
+  {
+    question: 'Which of the following is a key principle of Zero Trust architecture?',
+    options: ['Trust internal traffic', 'Trust only known devices', 'Never trust, always verify', 'Trust all users'],
+    correct: 2
+  },
+  {
+    question: 'What is the main function of a SIEM system?',
+    options: ['To block network traffic', 'To analyze and correlate security logs', 'To encrypt data', 'To backup files'],
+    correct: 1
+  },
+  {
+    question: 'What type of attack overwhelms a system with traffic to make it unavailable?',
+    options: ['DDoS', 'SQL Injection', 'Phishing', 'XSS'],
+    correct: 0
+  },
+  {
+    question: 'What is the purpose of SSL/TLS in web communications?',
+    options: ['To encrypt data between client and server', 'To speed up web browsing', 'To block malware', 'To manage IP addresses'],
+    correct: 0
+  },
+  {
+    question: 'Which tool is commonly used for network scanning and discovery?',
+    options: ['Wireshark', 'Nmap', 'Metasploit', 'Burp Suite'],
+    correct: 1
+  },
+  {
+    question: 'What is a common indicator of a phishing email?',
+    options: ['Unexpected attachments', 'Spelling and grammar errors', 'Suspicious sender address', 'All of the above'],
+    correct: 3
+  },
+  {
+    question: 'What is the purpose of hashing in cybersecurity?',
+    options: ['To encrypt data', 'To create a fixed-size output from variable input', 'To compress data', 'To authenticate users'],
+    correct: 1
+  },
+  {
+    question: 'Which of the following is a type of malware that encrypts files and demands payment?',
+    options: ['Trojan', 'Ransomware', 'Spyware', 'Adware'],
+    correct: 1
+  },
+  {
+    question: 'What is the concept of "defense in depth"?',
+    options: ['Using multiple layers of security', 'Using only one strong security measure', 'Focusing only on perimeter security', 'Ignoring internal threats'],
+    correct: 0
+  }
+];
+
+// ============================================================
+//  QUIZ ENGINE
+// ============================================================
+const totalQuestions = quizData.length;
+let currentIndex = 0;
+let score = 0;
+let answered = false;
+let selectedIndex = -1;
+
+const qNum = document.getElementById('q-num');
+const qTotal = document.getElementById('q-total');
+const qScore = document.getElementById('q-score');
+const qTotalScore = document.getElementById('q-total-score');
+const qProgress = document.getElementById('quiz-progress');
+const qQuestion = document.getElementById('quiz-question');
+const qOptions = document.getElementById('quiz-options');
+const qNextBtn = document.getElementById('quiz-next-btn');
+const qResult = document.getElementById('quiz-result');
+const qContainer = document.getElementById('quiz-container');
+
+// Set totals
+qTotal.textContent = totalQuestions;
+qTotalScore.textContent = totalQuestions;
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// Randomize option order for each question
+function randomizeOptions(questionData) {
+  const optIndices = questionData.options.map((_, idx) => idx);
+  const shuffled = shuffleArray([...optIndices]);
+  const shuffledOptions = shuffled.map(i => questionData.options[i]);
+  // Find the new index of the correct answer
+  const newCorrect = shuffled.indexOf(questionData.correct);
+  return { options: shuffledOptions, correct: newCorrect };
+}
+
+// Store randomized versions
+let randomizedQuestions = quizData.map(q => {
+  const { options, correct } = randomizeOptions(q);
+  return { ...q, options, correct };
+});
+
+function loadQuestion(index) {
+  answered = false;
+  selectedIndex = -1;
+  qNextBtn.style.opacity = '0';
+  qNextBtn.style.pointerEvents = 'none';
+  
+  const q = randomizedQuestions[index];
+  qNum.textContent = index + 1;
+  qQuestion.textContent = `${index + 1}. ${q.question}`;
+  
+  // Progress
+  const pct = ((index) / totalQuestions) * 100;
+  qProgress.style.width = pct + '%';
+  
+  // Options
+  qOptions.innerHTML = '';
+  const labels = ['A', 'B', 'C', 'D'];
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-option';
+    btn.dataset.idx = i;
+    btn.style.cssText = `
+      font-family:'Rajdhani',sans-serif;
+      font-size:1rem;
+      padding:0.9rem 1.2rem;
+      text-align:left;
+      border:1px solid var(--border);
+      background:rgba(5,10,24,0.6);
+      color:var(--text);
+      cursor:pointer;
+      transition:all 0.25s ease;
+      border-radius:4px;
+      display:flex;
+      align-items:center;
+      gap:0.8rem;
+    `;
+    btn.innerHTML = `<span style="font-family:'Space Mono';color:var(--cyan3);font-size:0.65rem;min-width:20px;">${labels[i]}.</span> ${opt}`;
+    
+    btn.addEventListener('mouseenter', () => {
+      if (!answered) btn.style.borderColor = '#00f0ff44';
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (!answered) btn.style.borderColor = 'var(--border)';
+    });
+    
+    btn.addEventListener('click', () => handleOptionClick(i, btn));
+    qOptions.appendChild(btn);
+  });
+}
+
+function handleOptionClick(idx, btnEl) {
+  if (answered) return;
+  
+  const q = randomizedQuestions[currentIndex];
+  const isCorrect = (idx === q.correct);
+  
+  // Mark answered
+  answered = true;
+  selectedIndex = idx;
+  
+  // Disable all options
+  document.querySelectorAll('.quiz-option').forEach(b => b.style.pointerEvents = 'none');
+  
+  // Color feedback
+  const allOpts = document.querySelectorAll('.quiz-option');
+  allOpts.forEach((b, i) => {
+    if (i === q.correct) {
+      b.style.borderColor = '#00ff66';
+      b.style.background = 'rgba(0,255,102,0.08)';
+      b.style.boxShadow = '0 0 15px rgba(0,255,102,0.15)';
+    } else if (i === idx && !isCorrect) {
+      b.style.borderColor = '#ff4444';
+      b.style.background = 'rgba(255,68,68,0.08)';
+      b.style.boxShadow = '0 0 15px rgba(255,68,68,0.15)';
+    }
+  });
+  
+  // Update score
+  if (isCorrect) {
+    score++;
+    qScore.textContent = score;
+  }
+  
+  // Show next button
+  qNextBtn.style.opacity = '1';
+  qNextBtn.style.pointerEvents = 'auto';
+}
+
+function showResult() {
+  qContainer.querySelector('#quiz-question').style.display = 'none';
+  qContainer.querySelector('#quiz-options').style.display = 'none';
+  qContainer.querySelector('#quiz-progress').style.display = 'none';
+  qNextBtn.style.display = 'none';
+  document.querySelector('#quiz-container .sec-header')?.remove();
+  // Hide question number
+  document.querySelector('#quiz-container > div:first-child')?.querySelector('span')?.style.display = 'none';
+  
+  qResult.style.display = 'block';
+  document.getElementById('result-score').textContent = score;
+  
+  let msg = '';
+  if (score >= 22) msg = '🔥 Excellent! You\'re a cybersecurity expert!';
+  else if (score >= 18) msg = '🌟 Great job! You have strong security knowledge.';
+  else if (score >= 12) msg = '📚 Good effort! Keep learning and improving.';
+  else msg = '💪 Keep studying! Review the notes and try again.';
+  document.getElementById('result-message').textContent = msg;
+  
+  // Full progress bar
+  qProgress.style.width = '100%';
+}
+
+function restartQuiz() {
+  // Reset
+  currentIndex = 0;
+  score = 0;
+  answered = false;
+  selectedIndex = -1;
+  qScore.textContent = '0';
+  
+  // Re-randomize questions
+  randomizedQuestions = quizData.map(q => {
+    const { options, correct } = randomizeOptions(q);
+    return { ...q, options, correct };
+  });
+  
+  // Hide result, show question
+  qResult.style.display = 'none';
+  qContainer.querySelector('#quiz-question').style.display = 'block';
+  qContainer.querySelector('#quiz-options').style.display = 'flex';
+  qContainer.querySelector('#quiz-progress').style.display = 'block';
+  qNextBtn.style.display = 'inline-block';
+  qNextBtn.style.opacity = '0';
+  qNextBtn.style.pointerEvents = 'none';
+  
+  // Reset progress bar visibility
+  document.querySelector('#quiz-container > div:first-child')?.querySelector('span')?.style.display = 'inline';
+  
+  // Reset progress width
+  qProgress.style.width = '0%';
+  
+  loadQuestion(0);
+}
+
+// Next button handler
+qNextBtn.addEventListener('click', () => {
+  currentIndex++;
+  if (currentIndex >= totalQuestions) {
+    showResult();
+  } else {
+    loadQuestion(currentIndex);
+  }
+});
+
+// Restart button
+document.getElementById('quiz-restart-btn').addEventListener('click', restartQuiz);
+
+// Initialize
+loadQuestion(0);
+</script>
+
+<!-- Scroll Animation for Quiz Section -->
+<style>
+  #cyber-quiz .sec-header.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  #cyber-quiz .sec-header.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .quiz-option {
+    transition: all 0.25s ease;
+  }
+  
+  .quiz-option:hover:not([disabled]) {
+    background: rgba(0,240,255,0.04);
+  }
+  
+  @media (max-width:480px) {
+    #cyber-quiz {
+      padding:3rem 0.8rem;
+    }
+    #quiz-container {
+      padding:1.2rem 1rem;
+    }
+    #quiz-question {
+      font-size:1rem;
+    }
+    .quiz-option {
+      font-size:0.9rem !important;
+      padding:0.7rem 0.9rem !important;
+    }
+    .quiz-option span {
+      font-size:0.55rem !important;
+    }
+  }
+</style>
+
+<script>
+  // Reveal observer for quiz header
+  document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('#cyber-quiz .sec-header.reveal');
+    if (header) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      observer.observe(header);
+    }
+  });
+</script>
 
 <script>
 function checkPassword() {
