@@ -480,20 +480,25 @@ function addMessage(text,type){
     chatWindow.appendChild(typingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    // 🔥 GEMINI API CALL
-    const API_KEY = 'YOUR_GEMINI_API_KEY'; // ← Apni key yahan paste karein
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AQ.Ab8RN6Ii_GUW9SF0jgL6L8zJmmM3iMa9VPil_sP2_hvL1fCWjQ}`;
+    // 🔥 GROQ API CALL (FASTEST)
+    const API_KEY = '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'; // ← Apni key yahan paste karein
+    const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
     const payload = {
-        contents: [{
-            parts: [{ text: text }]
-        }]
+        model: 'mixtral-8x7b-32768', // Fast model
+        messages: [
+            { role: 'system', content: 'You are a cybersecurity expert. Provide accurate, educational, and concise responses.' },
+            { role: 'user', content: text }
+        ],
+        temperature: 0.7,
+        max_tokens: 300
     };
 
     fetch(API_URL, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY
         },
         body: JSON.stringify(payload)
     })
@@ -503,7 +508,7 @@ function addMessage(text,type){
     })
     .then(data => {
         document.getElementById('typing-indicator')?.remove();
-        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini.';
+        const reply = data.choices?.[0]?.message?.content || 'No response from Groq.';
         addMessage(reply, 'bot');
         input.disabled = false;
     })
@@ -513,7 +518,6 @@ function addMessage(text,type){
         input.disabled = false;
     });
 }
-
 
 
 function quickPrompt(text){
