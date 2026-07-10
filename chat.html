@@ -463,30 +463,58 @@ function addMessage(text,type){
     chatWindow.scrollTop =
     chatWindow.scrollHeight;
 }
+    function sendMessage() {
+    const input = document.getElementById('userInput');
+    const text = input.value.trim();
+    if (!text) return;
 
-function sendMessage(){
+    addMessage(text, 'user');
+    input.value = '';
+    input.disabled = true;
 
-    const input =
-    document.getElementById('userInput');
+    // Typing indicator
+    const typingDiv = document.createElement('div');
+    typingDiv.className = 'bot-msg';
+    typingDiv.id = 'typing-indicator';
+    typingDiv.innerHTML = '<span class="tag ai">AI:</span> <span style="opacity:0.5;">⏳ Thinking...</span>';
+    chatWindow.appendChild(typingDiv);
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    const text =
-    input.value.trim();
+    // 🔥 GEMINI API CALL
+    const API_KEY = 'YOUR_GEMINI_API_KEY'; // ← Apni key yahan paste karein
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${AQ.Ab8RN6Ii_GUW9SF0jgL6L8zJmmM3iMa9VPil_sP2_hvL1fCWjQ}`;
 
-    if(!text) return;
+    const payload = {
+        contents: [{
+            parts: [{ text: text }]
+        }]
+    };
 
-    addMessage(text,'user');
-
-    setTimeout(() => {
-
-        addMessage(
-        'Command received. Connect this interface to your backend API for live AI responses.',
-        'bot'
-        );
-
-    },700);
-
-    input.value='';
+    fetch(API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('API error: ' + response.status);
+        return response.json();
+    })
+    .then(data => {
+        document.getElementById('typing-indicator')?.remove();
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini.';
+        addMessage(reply, 'bot');
+        input.disabled = false;
+    })
+    .catch(error => {
+        document.getElementById('typing-indicator')?.remove();
+        addMessage('⚠️ Error: ' + error.message, 'bot');
+        input.disabled = false;
+    });
 }
+
+
 
 function quickPrompt(text){
 
@@ -505,13 +533,7 @@ document
     }
 
 });
-fetch("https://cybersecurity-portfolio-production.up.railway.app/chat", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({ message: msg })
-});    
+
 </script>
 
 </body>
