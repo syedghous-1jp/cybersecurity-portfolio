@@ -480,25 +480,24 @@ function addMessage(text,type){
     chatWindow.appendChild(typingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    // 🔥 OPENROUTER API CALL (FREE TIER)
-    const API_KEY = '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'; // Get from https://openrouter.ai/keys
-    const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
+    // 🔥 GROQ API CALL
+    const API_KEY = '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'; // ← Apni key yahan paste karein
+    const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
     fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + API_KEY,
-            'HTTP-Referer': window.location.href, // Optional: for OpenRouter stats
+            'Authorization': 'Bearer ' + API_KEY
         },
         body: JSON.stringify({
-            model: 'meta-llama/llama-3.3-70b-instruct:free', // Free, powerful
+            model: 'llama-3.1-8b-instant', // Fast & free
             messages: [
                 { role: 'system', content: 'You are a cybersecurity expert. Give short, accurate answers.' },
                 { role: 'user', content: text }
             ],
             temperature: 0.7,
-            max_tokens: 256
+            max_tokens: 200
         })
     })
     .then(response => {
@@ -512,13 +511,15 @@ function addMessage(text,type){
     .then(data => {
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
-        const reply = data.choices?.[0]?.message?.content || 'No response from OpenRouter.';
+        
+        const reply = data.choices?.[0]?.message?.content || 'No response from Groq.';
         addMessage(reply, 'bot');
         input.disabled = false;
     })
     .catch(error => {
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
+        
         addMessage('⚠️ Error: ' + error.message, 'bot');
         input.disabled = false;
     });
