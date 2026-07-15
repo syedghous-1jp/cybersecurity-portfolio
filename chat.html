@@ -480,25 +480,22 @@ function addMessage(text,type){
     chatWindow.appendChild(typingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    // ✅ CORRECT GROQ API CALL
-    const API_KEY = ''; // ← Apni key paste karein
-    const API_URL = 'https://api.groq.com/openai/v1/chat/completions'; // ← COMPLETE URL
+    // 🔥 GEMINI API CALL
+    const API_KEY = 'AQ.Ab8RN6LvWa0dOclguUj0E-9BDyuxWM_6Jq0EJA83FG7gVA3P3Q'; // ← Apni key yahan paste karein
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
+
+    const payload = {
+        contents: [{
+            parts: [{ text: text }]
+        }]
+    };
 
     fetch(API_URL, {
-        method: 'POST', // ✅ POST hona chahiye, GET nahi
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + API_KEY
+            'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            model: 'llama-3.1-8b-instant', // Fast model
-            messages: [
-                { role: 'system', content: 'You are a cybersecurity expert. Give short, accurate answers.' },
-                { role: 'user', content: text }
-            ],
-            temperature: 0.7,
-            max_tokens: 250
-        })
+        body: JSON.stringify(payload)
     })
     .then(response => {
         if (!response.ok) {
@@ -512,7 +509,7 @@ function addMessage(text,type){
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
         
-        const reply = data.choices?.[0]?.message?.content || 'No response from Groq.';
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini.';
         addMessage(reply, 'bot');
         input.disabled = false;
     })
