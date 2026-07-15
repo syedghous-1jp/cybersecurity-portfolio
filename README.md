@@ -14,5 +14,6 @@ Yeh repository **ethical hacking, cybersecurity, penetration testing, aur digita
 Yeh notes **sirf educational aur learning purposes** ke liye hain. Har command, tool, aur technique ka istemal sirf apne own devices, written permission ke saath, aur legal environments mein karein. Kisi bhi network ya system par bina permission ke testing ya access karna **applicable cyber laws** ke under punishable hai.
 
 ---
+SITE OF THIS GREAT STUDY WEB------------- https://syedghous-1jp.github.io/cybersecurity-portfolio/
 
 **Happy Learning! Stay Ethical! 🛡️**
