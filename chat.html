@@ -480,22 +480,26 @@ function addMessage(text,type){
     chatWindow.appendChild(typingDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
-    // 🔥 GEMINI API CALL
-    const API_KEY = 'AQ.Ab8RN6LvWa0dOclguUj0E-9BDyuxWM_6Jq0EJA83FG7gVA3P3Q'; // ← Apni key yahan paste karein
-    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
-
-    const payload = {
-        contents: [{
-            parts: [{ text: text }]
-        }]
-    };
+    // 🔥 OPENROUTER API CALL (FREE TIER)
+    const API_KEY = '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'; // Get from https://openrouter.ai/keys
+    const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
     fetch(API_URL, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + API_KEY,
+            'HTTP-Referer': window.location.href, // Optional: for OpenRouter stats
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+            model: 'meta-llama/llama-3.3-70b-instruct:free', // Free, powerful
+            messages: [
+                { role: 'system', content: 'You are a cybersecurity expert. Give short, accurate answers.' },
+                { role: 'user', content: text }
+            ],
+            temperature: 0.7,
+            max_tokens: 256
+        })
     })
     .then(response => {
         if (!response.ok) {
@@ -508,15 +512,13 @@ function addMessage(text,type){
     .then(data => {
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
-        
-        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from Gemini.';
+        const reply = data.choices?.[0]?.message?.content || 'No response from OpenRouter.';
         addMessage(reply, 'bot');
         input.disabled = false;
     })
     .catch(error => {
         const indicator = document.getElementById('typing-indicator');
         if (indicator) indicator.remove();
-        
         addMessage('⚠️ Error: ' + error.message, 'bot');
         input.disabled = false;
     });
