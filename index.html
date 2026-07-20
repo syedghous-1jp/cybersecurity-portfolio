@@ -102,11 +102,12 @@
             text-decoration: none;
         }
 
-        .navbar .logo img {
-            height: 38px;
-            width: auto;
-            display: block;
-        }
+         .navbar .logo img {
+         max-height: 40px;
+         width: auto;
+         object-fit: contain;
+         display: block;
+       }
 
         .navbar .logo .highlight {
             background: var(--cream-dark);
@@ -1371,16 +1372,18 @@
             border-radius: 4px;
         }
 
-        .about-grid .image-placeholder {
-            background: var(--cream-dark);
-            border-radius: var(--radius);
-            height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--black);
-            overflow: hidden;
-        }
+      .about-grid .image-placeholder {
+    background: var(--cream-dark);
+    border-radius: var(--radius);
+    min-height: 300px;
+    max-height: 400px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--black);
+    overflow: hidden;
+}
 
         .about-grid .image-placeholder img {
             width: 100%;
@@ -2181,10 +2184,10 @@
     NAVBAR
     ============================================ -->
     <nav class="navbar">
-        <a href="#" class="logo">
-            <img src="logo.png" alt="HAWK" style="height: 95px; width: auto; display: block;" />
-            <img src="learning.png" alt="LEARNING WEBSITE BY HAWK" style="height: 120px; width: auto; display: block;" />
-        </a>
+       <a href="#" class="logo">
+    <img src="logo.png" alt="HAWK" style="height: 40px; width: auto; display: block;" />
+    <img src="learning.png" alt="LEARNING WEBSITE BY HAWK" style="height: 45px; width: auto; display: block;" />
+</a>
 
         <ul class="nav-links" id="navLinks">
             <li><a href="#home">Home</a></li>
@@ -2950,10 +2953,10 @@
     FOOTER
     ============================================ -->
     <footer class="footer">
-        <div class="brand">
-            <img src="logo2.png" alt="HAWK" style="height: 75px; background: transparent;" />
-            <img src="learning2.png" alt="LEARNING WEBSITE BY HAWK" style="height: 95px; width: auto; display: block;" />
-        </div>
+       <div class="brand">
+    <img src="logo2.png" alt="HAWK" style="height: 40px; background: transparent;" />
+    <img src="learning2.png" alt="LEARNING WEBSITE BY HAWK" style="height: 45px; width: auto; display: block;" />
+</div>
         <div class="links">
             <a href="#home">Home</a>
             <a href="#labs">Labs</a>
