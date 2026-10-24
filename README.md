@@ -1,11 +1,22 @@
-# Cybersecurity Portfolio — Syed Ghous
+# 🛡️ VORKNYX - Cybersecurity Learning Web
 
-A collection of practical cybersecurity labs, notes, and Python security tools focused on ethical hacking, penetration testing, and digital forensics.
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Cybersecurity](https://img.shields.io/badge/Cybersecurity-Learning-red?style=for-the-badge&logo=hackaday)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-🔗 **Live Website:** [cybersecurity-portfolio-eifm.onrender.com](https://cybersecurity-portfolio-eifm.onrender.com)
+An interactive, open-source cybersecurity learning platform containing notes, labs, PDFs, and practical guides ranging from Networking to Mobile Hacking.
 
-## 🗂️ Repository Structure
+🔗 **Live Website:** [VORKNYX Learning Web](https://cybersecurity-portfolio-eifm.onrender.com)
 
+## 📚 What's Inside?
+- **Interactive UI:** Clean HTML/CSS based web interface.
+- **Structured Notes:** PDFs covering OSI, TCP/UDP, Python, Linux, Malware Analysis, and Mobile Security.
+- **Labs Hub:** A central hub for all practical exercises.
+- **PDF Viewer:** Integrated viewer to read notes directly in the browser.
+
+## 🗂️ Core Modules
 | Module | Focus Area | Key Documents |
 | :--- | :--- | :--- |
 | [01_Networking](./01_Networking) | OSI, TCP/UDP, DNS, Subnetting | OSI Model, Subnetting Notes |
@@ -15,14 +26,9 @@ A collection of practical cybersecurity labs, notes, and Python security tools f
 | [05_Malware](./05_Malware_Analysis) | Analysis, Hooking, Anti-Forensics | Malware Defense Notes |
 | [06_Ethical_Hacking](./06_Ethical_Hacking) | Phishing, Active Directory, APK | Social Engineering Notes |
 
-## 🎯 Skills Matrix
+## 🚀 How to Run Locally
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/syedghous-1jp/cybersecurity-portfolio.git
 
-| Skill | Proficiency | Evidence |
-| :--- | :--- | :--- |
-| Network Protocol Analysis | Intermediate | [OSI & TCP/UDP Notes](./01_Networking) |
-| Python Security Automation | Advanced | [Port Scanner & Automation Scripts](./02_Python_Security) |
-| Linux & Termux Environment | Advanced | [Kali Linux Notes](./03_Linux_Termux) |
-| Mobile Application Security | Intermediate | [ADB & Frida Labs](./04_Mobile_Security) |
-
-## ⚠️ Disclaimer
-All resources here are for **educational purposes only**. Use these techniques only on your own devices or with explicit permission.
+eof
