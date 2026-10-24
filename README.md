@@ -8,7 +8,7 @@
 
 An interactive, open-source cybersecurity learning platform containing notes, labs, PDFs, and practical guides ranging from Networking to Mobile Hacking.
 
-🔗 **Live Website:** [VORKNYX Learning Web](https://cybersecurity-portfolio-eifm.onrender.com)
+🔗 **Live Website:** [VORKNYX Learning Web](https://vorknyx.online)
 
 ## 📚 What's Inside?
 - **Interactive UI:** Clean HTML/CSS based web interface.
