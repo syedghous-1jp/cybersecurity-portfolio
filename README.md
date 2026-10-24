@@ -1,19 +1,28 @@
-# 🛡️ Cyber Notes
+# Cybersecurity Portfolio — Syed Ghous
 
-## Complete Ethical Hacking & Cybersecurity Notes for Termux & Linux
+A collection of practical cybersecurity labs, notes, and Python security tools focused on ethical hacking, penetration testing, and digital forensics.
 
----
+🔗 **Live Website:** [cybersecurity-portfolio-eifm.onrender.com](https://cybersecurity-portfolio-eifm.onrender.com)
 
-## 📌 What is This Repository?
+## 🗂️ Repository Structure
 
-Yeh repository **ethical hacking, cybersecurity, penetration testing, aur digital forensics** ke liye comprehensive notes provide karti hai. Yeh notes specially **Termux (Android)** aur **Linux** users ke liye design kiye gaye hain jo cybersecurity seekhna chahte hain.
+| Module | Focus Area | Key Documents |
+| :--- | :--- | :--- |
+| [01_Networking](./01_Networking) | OSI, TCP/UDP, DNS, Subnetting | OSI Model, Subnetting Notes |
+| [02_Python](./02_Python_Security) | Automation, Sockets, API, Regex | Port Scanner, Automation Scripts |
+| [03_Linux](./03_Linux_Termux) | Kali Linux, Termux setup, Commands | Kali Notes, A to Z Notes |
+| [04_Mobile](./04_Mobile_Security) | Android/iOS, ADB, Frida, Fastboot | ADB Guides, Frida Setup |
+| [05_Malware](./05_Malware_Analysis) | Analysis, Hooking, Anti-Forensics | Malware Defense Notes |
+| [06_Ethical_Hacking](./06_Ethical_Hacking) | Phishing, Active Directory, APK | Social Engineering Notes |
 
+## 🎯 Skills Matrix
 
-## ⚠️ Important Disclaimer
+| Skill | Proficiency | Evidence |
+| :--- | :--- | :--- |
+| Network Protocol Analysis | Intermediate | [OSI & TCP/UDP Notes](./01_Networking) |
+| Python Security Automation | Advanced | [Port Scanner & Automation Scripts](./02_Python_Security) |
+| Linux & Termux Environment | Advanced | [Kali Linux Notes](./03_Linux_Termux) |
+| Mobile Application Security | Intermediate | [ADB & Frida Labs](./04_Mobile_Security) |
 
-Yeh notes **sirf educational aur learning purposes** ke liye hain. Har command, tool, aur technique ka istemal sirf apne own devices, written permission ke saath, aur legal environments mein karein. Kisi bhi network ya system par bina permission ke testing ya access karna **applicable cyber laws** ke under punishable hai.
-
----
-SITE OF THIS GREAT STUDY WEB-------------  https://cybersecurity-portfolio-eifm.onrender.com
-
-**Happy Learning! Stay Ethical! 🛡️**
+## ⚠️ Disclaimer
+All resources here are for **educational purposes only**. Use these techniques only on your own devices or with explicit permission.
